@@ -39,7 +39,7 @@
 
 \fancyfoot[L]{\footnotesize{Minkyoung Cho}}
 \fancyfoot[C]{\footnotesize{Page \thepage~of \pageref{LastPage}}}
-\fancyfoot[R]{\footnotesize{Last updated: January 30, 2021}}
+\fancyfoot[R]{\footnotesize{Last updated: February 2, 2021}}
 
 
 \urlstyle{same}
@@ -51,7 +51,7 @@
 % Sections formatting
 \titleformat{\section}{
   \vspace{-10pt}\scshape\raggedright\large
-}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+}{}{0em}{}[\color{black}\titlerule \vspace{-4pt}]
 
 %-------------------------
 % Custom commands
@@ -72,6 +72,10 @@
       \textbf{#1} & #2 \\
       \textit{\small#3} & \small #4 \\
     \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\awardsSubheading}[4]{
+  \resumeSubheading{#1}{#2}{#3}{#4}\vspace{0pt}
 }
 
 \newcommand{\resumeSubSubheading}[2]{
@@ -101,9 +105,8 @@
   \large{Curriculum Vitae} & \href{https://minkyoungcho.github.io}{https://minkyoungcho.github.io} \\
 \end{tabular*}
 
-
 \section{Research Interests}
-Neural Network Compression Algorithms, Number System, Efficient Deep Learning Models, Deep Learning Model Interpretation
+Machine Learning, Artificial Intelligence, Model Optimization, Data Generation, Zero-shot learning, Model Interpretation
 
 %-----------EDUCATION-----------------
 \section{Education}
@@ -126,6 +129,7 @@ Neural Network Compression Algorithms, Number System, Efficient Deep Learning Mo
 %-----------PUBLICATIONS-----------------
 \section{Publications}
 \begin{enumerate}[leftmargin=*, itemsep=0em]
+  \item \small Donghyun Lee$^\ast$, \textbf{Minkyoung Cho$^\ast$}, Seungwon Lee, Joonho Song, and Changkyu Choi. 2021. \textbf{{``Data-Free Mixed-Precision Quantization using Novel Sensitivity Metric''}}. \textit{Submitted to IEEE International Conference on Image Processing (IEEE ICIP) 2021}. $^\ast$Equal contribution.
   \item \small \textbf{Minkyoung Cho}, Younggi Kim, and Younghee Lee. 2016. \textbf{\href{https://dl.acm.org/doi/10.1145/3008631.3008633}{``Contextual Relationship-based Activity Segmentation on an Event Stream in the IoT Environment with Multi-user Activities''}}. \textit{Proceedings of the 3rd Workshop on Middleware for Context-Aware Applications in the IoT (\textbf{M4IoT 2016})}, December 2016.
   \item \small Dahee Jung, \textbf{Minkyoung Cho}, Omprakash Gnawali, and HyungJune Lee. 2016. \textbf{\href{https://ieeexplore.ieee.org/abstract/document/7524369}{``Proactive Patrol Dispatch Surveillance System by Inferring Mobile Trajectories of Multiple Intruders using Binary Proximity Sensors''}}. \textit{The 35th Annual IEEE International Conference on Computer Communication (\textbf{IEEE INFOCOM 2016})}, April 2016.
   \item \small Mijin Kim, \textbf{Minkyoung Cho}, Aeyoung Kim, and Sang-Ho Lee. 2013. \textbf{``A VC-based Joint Account Operation Scheme for Mobile Banking''}. \textit{Proceedings of the Korea Computer Congress (\textbf{KCC})}, August 2013.
@@ -137,8 +141,8 @@ Neural Network Compression Algorithms, Number System, Efficient Deep Learning Mo
   \item \small Wonjo Lee, Youngmin Oh, and \textbf{Minkyoung Cho}. \textbf{``Appratus and Method for Channelwise Neural Network Compression''}. \textit{Republic of Korea Patent Application No. 20200132151}. Filed Oct 13, 2020. Patent Pending.
   \item \small \textbf{Minkyoung Cho}, Searom Choi, and Seungwon Lee. \textbf{``Method for Zero-shot Pruning without Retraining''}. \textit{Republic of Korea Patent Application No. 20200128136}. Filed Oct 5, 2020. Patent Pending.
   \item \small Songyi Han, \textbf{Minkyoung Cho}, and Seungwon Lee. \textbf{``Methods for Efficient Group Convolution in Zero-skipping Devices''}. \textit{U.S. Patent Application No. 16/897461}. Filed Jun 10, 2020. Patent Pending.
-  \item \small Donghyeok Kwon, and \textbf{Minkyoung Cho}. 2020. \textbf{``Method of replacing Bilinear Interpolation with Depthwise Transposed Convolution''}. \textit{Republic of Korea Patent Application No. 20200111842}. Filed Apr 29, 2020. Patent Pending.
-  \item \small \textbf{Minkyoung Cho}, Wonjo Lee, and Seungwon Lee. 2020. \textbf{``Neural Network Method and Appratus''}. \textit{U.S. Patent Application No. 16/835532}. Filed Mar 31, 2020. Patent Pending.
+  \item \small Donghyeok Kwon and \textbf{Minkyoung Cho}. \textbf{``Method of Replacing Bilinear Interpolation with Depthwise Transposed Convolution''}. \textit{Republic of Korea Patent Application No. 20200111842}. Filed Apr 29, 2020. Patent Pending.
+  \item \small \textbf{Minkyoung Cho}, Wonjo Lee, and Seungwon Lee. \textbf{``Neural Network Method and Appratus''}. \textit{U.S. Patent Application No. 16/835532}. Filed Mar 31, 2020. Patent Pending.
 \end{enumerate}
 
 %-----------RESEARCH EXPERIENCE-----------------
@@ -148,29 +152,30 @@ Neural Network Compression Algorithms, Number System, Efficient Deep Learning Mo
       {Samsung Advanced Institute of Technology (SAIT)}{Suwon, Republic of Korea}
       {Researcher}{Mar 2018 -- Current}
       \resumeItemListStart
-        \resumeItem{Weight Pruning}{Deep learning technique that makes neural networks smaller and more efficient by eliminating unnecessary weights. Worked on Studying and developing pruning algorithm for Neural Processing Units (NPU).}
-        \resumeItem{Quantization}{Deep learning technique that reduces the number of bits that represent a number. Worked on reproducing and developing QIL algorithm published in CVPR’19.}
-        \resumeItem{Number System}{Worked on implementing number system simulation code for NPU H/W experiment, as well as studying and developing Block Floating Point optimized for the next NPU.}
-        \resumeItem{Deep Learning Frameworks}{Worked on implementing and evaluating algorithms based on Caffe and Pytorch.}
+        \resumeItem{Pruning}{Worked on studying and developing pruning algorithms in unstructured/structured ways.}
+        \resumeItem{Quantization}{Worked on studying and implementing training-based/post-training/mixed-precision quantization algorithms.}
+        \resumeItem{Data Generation}{Worked on studying and developing zero-shot learning or data-free model compression approaches based on synthetic data generation method.}
+        \resumeItem{Number System}{Worked on studying various number systems such as bfloat, TF32, and Posits.}
+        \resumeItem{Deep Learning Frameworks}{Worked on implementing and evaluating algorithms based on PyTorch, C++ Extension of PyTorch, and Caffe.}
       \resumeItemListEnd
     \resumeSubheading
       {Computer Networks Lab, KAIST}{Daejeon, Republic of Korea}
       {Graduate Research Assistant (Advisor: Dr. Younghee Lee)}{Mar 2015 -- Feb 2017}
       \resumeItemListStart
-        \resumeItem{Activity Segmentation}{Activity Segmentation is segmenting the entire event stream at the precise boundary of each activity, which is high priority task to realize the activity recognition. Working on studying and developing segmentation algorithm by using Long Short-Term Memory models (LSTM).}
-        \resumeItem{Smart Home Community Service}{Smart Home Community Service is to develop social matching and communication service technology for safe and happy life in IoT-based smart home community. worked on constructing smart home system based on MQTT, TCP protocol and analyzing IoT data collected in MongoDB.}
+        \resumeItem{Activity Segmentation}{Activity Segmentation is segmenting the entire event stream at the precise boundary of each activity, which is high priority task to realize the activity recognition. Worked on studying and developing segmentation algorithm by using Long Short-Term Memory models (LSTM).}
+        \resumeItem{Smart Home Community Service}{Smart Home Community Service is to develop social matching and communication service technology for safe and happy life in IoT-based smart home community. Worked on constructing smart home system based on MQTT, TCP protocol and analyzing IoT data collected in MongoDB.}
         \resumeItem{Machine Learning}{Worked on defining the problems in IoT event data stream and studying machine learning technique to discover the intrinsic relationships between the events in a stream.}
       \resumeItemListEnd
     \resumeSubheading
       {Intelligent Networked Systems Lab, Ewha Womans University}{Seoul, Republic of Korea}
-      {Undergraduate Research Assistant}{Nov 2013 -- Dec 2014}
+      {Undergraduate Research Assistant (Advisor: Dr. HyungJune Lee)}{Nov 2013 -- Dec 2014}
       \resumeItemListStart
         \resumeItem{Wireless Sensor Network}{Worked on implementing TinyOS-based ZigBee network consisting of TelosB motes which are binary proximity sensors and developing Android application.}
-        \resumeItem{Proactive Patrol Dispatch Surveillance System}{This system is distributing patrol officers inside a building to maximize the probability of catching multiple intruders while minimizing the distance the patrol officers travel to reach the locations of the intruders. worked on studying and implementing algorithms for inferring future trajectories and dispatching patrol to optimal location.}
+        \resumeItem{Proactive Patrol Dispatch Surveillance System}{This system is distributing patrol officers inside a building to maximize the probability of catching multiple intruders while minimizing the distance the patrol officers travel to reach the locations of the intruders. Worked on studying and implementing algorithms for inferring future trajectories and dispatching patrol to optimal location.}
       \resumeItemListEnd
     \resumeSubheading
       {Security and Theory of Computing Lab, Ewha Womans University}{Seoul, Republic of Korea}
-      {Undergraduate Research Assistant}{Dec 2012 -- Feb 2013}
+      {Undergraduate Research Assistant (Advisor: Dr. Sang-Ho Lee)}{Dec 2012 -- Feb 2013}
       \resumeItemListStart
         \resumeItem{Visual Cryptography}{Worked on studying visual cryptography and developing joint account management system which is more convenient in mobile banking based on visual cryptography.}
       \resumeItemListEnd
@@ -179,19 +184,19 @@ Neural Network Compression Algorithms, Number System, Efficient Deep Learning Mo
 %-----------AWARDS-----------------
 \section{Honors and Awards}
   \resumeSubHeadingListStart
-    \resumeSubheading{Korea National Scholarship}{Mar 2015 -- Feb 2017}
+    \awardsSubheading{Korea National Scholarship}{Mar 2015 -- Feb 2017}
     {KAIST and Korea Ministry of Science and ICT}{}
-    \resumeSubheading{Summa Cum Laude}{Feb 2015}
+    \awardsSubheading{Summa Cum Laude}{Feb 2015}
     {Ewha Womans University}{}
-    \resumeSubheading{Dean's List}{Feb 2012 -- Dec 2014}
+    \awardsSubheading{Dean's List}{Feb 2012 -- Dec 2014}
     {Ewha Womans University}{}
-    \resumeSubheading{Participation Award, 2014 Ewha Engineering Capstone Design Contest}{Dec 2014}
+    \awardsSubheading{Participation Award, 2014 Ewha Engineering Capstone Design Contest}{Dec 2014}
     {Ewha Womans University}{}
-    \resumeSubheading{Excellence Award, 2014 Ewha Engineering Student Portfolio Contest}{Dec 2014}
+    \awardsSubheading{Excellence Award, 2014 Ewha Engineering Student Portfolio Contest}{Dec 2014}
     {Ewha Womans University}{}
-    \resumeSubheading{Choice Award, University Student ICT Vision Contest}{Jul 2014}
+    \awardsSubheading{Choice Award, University Student ICT Vision Contest}{Jul 2014}
     {SK Telecom}{}
-    \resumeSubheading{Excellence Award, 2013 Ewha Programming Contest (JAVA)}{Mar 2013}
+    \awardsSubheading{Excellence Award, 2013 Ewha Programming Contest (JAVA)}{Mar 2013}
     {Ewha Womans University}{}
   \resumeSubHeadingListEnd
 
@@ -200,7 +205,7 @@ Neural Network Compression Algorithms, Number System, Efficient Deep Learning Mo
 \section{Technical Skills}
  \resumeSubHeadingListStart
   \resumeItem{Languages}{C, Python, Java, Markdown, \LaTeX}
-  \resumeItem{Frameworks}{CUDA, Caffe, Pytorch, MATLAB, Linux, TinyOS}
+  \resumeItem{Frameworks}{Pytorch, Caffe, MATLAB, Linux, TinyOS}
  \resumeSubHeadingListEnd
 
 \end{document}
