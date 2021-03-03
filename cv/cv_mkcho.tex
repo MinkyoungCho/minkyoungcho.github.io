@@ -39,7 +39,7 @@
 
 \fancyfoot[L]{\footnotesize{Minkyoung Cho}}
 \fancyfoot[C]{\footnotesize{Page \thepage~of \pageref{LastPage}}}
-\fancyfoot[R]{\footnotesize{Last updated: February 19, 2021}}
+\fancyfoot[R]{\footnotesize{Last updated: March 4, 2021}}
 
 
 \urlstyle{same}
@@ -60,10 +60,22 @@
     \textbf{#1}{: #2 \vspace{-2pt}}
   }
 }
+\newcommand{\resumeItemLarger}[2]{
+  \item\small{
+    \textbf{#1}{: #2 \vspace{0pt}}
+  }
+}
 \newcommand{\resumeItemComment}[1]{
   \item\small{
     {#1 \vspace{-2pt}}
   }
+}
+
+\newcommand{\resumeSubheadingSmall}[2]{
+  \vspace{-2pt}\item 
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+    \end{tabular*}\vspace{-6pt}
 }
 
 \newcommand{\resumeSubheading}[4]{
@@ -106,7 +118,7 @@
 \end{tabular*}
 
 \section{Research Interests}
-Machine Learning, Artificial Intelligence, Wireless Sensor Network, Internet of Things, ML Model Optimization, Data Generation, Neural Network Compression for Edge Devices
+Machine Learning, Artificial Intelligence, Wireless Sensor Network, Internet of Things, ML Model Optimization, Neural Network Compression for Edge Devices, Data Generation, Pattern Recognition
 
 %-----------EDUCATION-----------------
 \section{Education}
@@ -114,14 +126,14 @@ Machine Learning, Artificial Intelligence, Wireless Sensor Network, Internet of 
     \vspace{-1pt}\item
       \begin{tabularx}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
         \textbf{Korea Advanced Institute of Science and Technology (KAIST)} & Daejeon, Republic of Korea \\
-        \textit{\small Master of Science in Computer Science (GPA: 3.66 / 4.30)} & \small Mar 2015 -- Feb 2017 \\
+        \textit{\small Master of Science in Computer Science} & \small Mar 2015 -- Feb 2017 \\
         \small Advisor: Dr. Younghee Lee  \\
         \multicolumn{2}{X}{\small Thesis: Contextual Relationship-based Activity Segmentation on an Event Stream in the IoT Environment with Multi-user Activities} \\
     \end{tabularx}\vspace{-5pt}
     \vspace{-1pt}\item
       \begin{tabularx}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
         \textbf{Ewha Womans University} & Seoul, Republic of Korea \\
-        \textit{\small Bachelor of Science in Computer Science and Engineering (GPA: 4.03 / 4.30)} & \small Mar 2011 -- Feb 2015 \\
+        \textit{\small Bachelor of Science in Computer Science and Engineering} & \small Mar 2011 -- Feb 2015 \\
         \textbf{\small Summa Cum Laude}
     \end{tabularx}\vspace{-5pt}
   \resumeSubHeadingListEnd
@@ -146,7 +158,7 @@ Machine Learning, Artificial Intelligence, Wireless Sensor Network, Internet of 
 \end{enumerate}
 
 %-----------RESEARCH EXPERIENCE-----------------
-\section{Research Experience}
+\section{Research and Work Experience}
   \resumeSubHeadingListStart
     \resumeSubheading
       {Samsung Advanced Institute of Technology (SAIT)}{Suwon, Republic of Korea}
@@ -163,8 +175,15 @@ Machine Learning, Artificial Intelligence, Wireless Sensor Network, Internet of 
       {Graduate Research Assistant (Advisor: Dr. Younghee Lee)}{Mar 2015 -- Feb 2017}
       \resumeItemListStart
         \resumeItem{Activity Segmentation}{Activity Segmentation is segmenting the entire event stream at the precise boundary of each activity, which is high priority task to realize the activity recognition. Worked on studying and developing segmentation algorithm by using Long Short-Term Memory models (LSTM).}
-        \resumeItem{Smart Home Community Service}{Smart Home Community Service is to develop social matching and communication service technology for safe and happy life in IoT-based smart home community. Worked on constructing smart home system based on MQTT, TCP protocol and analyzing IoT data collected in MongoDB.}
+        \resumeItem{Smart Home Community Service}{Smart Home Community Service is to develop social matching and communication service technology in IoT-based smart home community. Worked on constructing smart home system based on MQTT, TCP protocol and analyzing IoT data collected in MongoDB.}
         \resumeItem{Machine Learning}{Worked on defining the problems in IoT event data stream and studying machine learning technique to discover the intrinsic relationships between the events in a stream.}
+        \resumeItem{Teaching Assistant and Counseling Assistant}{CS341 Introduction to Computer Networks}
+      \resumeItemListEnd
+    \resumeSubheadingSmall{Teaching Assistant and Mentoring}{}
+      \resumeItemListStart
+        \resumeItemLarger{Teaching Assistant}{Introduction to Computer Networks, KAIST}
+        \resumeItemLarger{Counseling Assistant}{KAIST}
+        \resumeItemLarger{Mentoring}{Data Structure, Operating Systems, Java Programming, Ewha Womans University}
       \resumeItemListEnd
     \resumeSubheading
       {Intelligent Networked Systems Lab, Ewha Womans University}{Seoul, Republic of Korea}
@@ -184,10 +203,10 @@ Machine Learning, Artificial Intelligence, Wireless Sensor Network, Internet of 
 %-----------AWARDS-----------------
 \section{Honors and Awards}
   \resumeSubHeadingListStart
-    \awardsSubheading{Korea National Scholarship}{Mar 2015 -- Feb 2017}
-    {KAIST and Korea Ministry of Science and ICT}{}
-    \awardsSubheading{Summa Cum Laude}{Feb 2015}
-    {Ewha Womans University}{}
+    % \awardsSubheading{Korea National Scholarship}{Mar 2015 -- Feb 2017}
+    % {KAIST and Korea Ministry of Science and ICT}{}
+    % \awardsSubheading{Summa Cum Laude}{Feb 2015}
+    % {Ewha Womans University}{}
     \awardsSubheading{Dean's List}{Feb 2012 -- Dec 2014}
     {Ewha Womans University}{}
     \awardsSubheading{Participation Award, 2014 Ewha Engineering Capstone Design Contest}{Dec 2014}
