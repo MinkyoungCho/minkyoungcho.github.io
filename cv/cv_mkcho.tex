@@ -37,12 +37,9 @@
 \renewcommand{\footrulewidth}{0pt}
 \setlength{\footskip}{24pt}
 
-\fancyfoot[L]{\footnotesize{{Minkyoung Cho}}}
+% \fancyfoot[L]{\footnotesize{{Minkyoung Cho}}}
 \fancyfoot[C]{\footnotesize{Page \thepage~of \pageref{LastPage}}}
-\fancyfoot[R]{\footnotesize{{Last updated: November 29, 2021}}}
-% \fancyhead[L]{{U-M ID: 26062465}}
-% \fancyhead[R]{{Computer Science \& Engineering Ph.D. Program}}
-
+\fancyfoot[R]{\footnotesize{{Last updated: October 2, 2021}}}
 
 \urlstyle{same}
 
@@ -115,17 +112,23 @@
 
 %----------HEADING-----------------
 \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
-  \textbf{{\Large Minkyoung Cho}} & cho\_omk@kaist.ac.kr\\
+  \textbf{{\Large Minkyoung Cho}} & minkycho@umich.edu\\
   \large{Curriculum Vitae} & \href{https://minkyoungcho.github.io}{https://minkyoungcho.github.io} \\
 \end{tabular*}
 
 \section{Research Interests}
-Systems for Machine Learning, Machine Learning for Systems, Neural Network Optimization for Real-time Systems, On-device AI, Hardware-efficient Machine Learning Algorithms
+Autonomous Driving, Collaborative Perception, 3D Object Detection, 3D Scene Understanding, Anomaly Detection, Machine Learning, Neural Network Optimization
 
 %-----------EDUCATION-----------------
 \section{Education}
   \resumeSubHeadingListStart
-    \vspace{-1pt}\item
+  \vspace{-1pt}\item
+    \begin{tabularx}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{The University of Michigan} & Ann Arbor, MI, USA \\
+      \textit{\small Ph.D. Student in Computer Science and Engineering} & \small Aug 2022 -- Present \\
+      \small Advisor: Prof. Z. Morley Mao  \\
+  \end{tabularx}\vspace{-5pt}
+  \vspace{-1pt}\item
       \begin{tabularx}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
         \textbf{Korea Advanced Institute of Science and Technology (KAIST)} & Daejeon, Republic of Korea \\
         \textit{\small Master of Science in Computer Science} & \small Mar 2015 -- Feb 2017 \\
@@ -158,25 +161,19 @@ Systems for Machine Learning, Machine Learning for Systems, Neural Network Optim
   \item \small \textbf{Minkyoung Cho}, Searom Choi, and Seungwon Lee. \textbf{``Method for Zero-shot Pruning without Retraining.''} \textit{Republic of Korea Patent Application No. 20200128136}. Filed Oct 5, 2020.
   \item \small Donghyeok Kwon, and \textbf{Minkyoung Cho}. \textbf{``Method of replacing Bilinear Interpolation with Depthwise Transposed Convolution.''} \textit{Republic of Korea Patent Application No. 20200111842}. Filed Apr 29, 2020.
 \end{enumerate}
-
-%-----------INDUSTRIAL RESEARCH EXPERIENCE-----------------
-\section{Industrial Research Experience}
-\resumeSubHeadingListStart
-    \resumeSubheading
-      {Artificial Intelligence Researcher}{Suwon, Republic of Korea}
-      {Samsung Advanced Institute of Technology @ Samsung Electronics}{Mar 2018 -- Present}
-      \resumeItemListStart
-        \resumeItem{Neural Network Optimization}{Designed and implemented hardware-efficient model optimization algorithms for Samsung Exynos NPU \& released on Samsung AI SDK.}
-        \resumeItem{Software/hardware Co-design}{Designed and implemented a new number system for the next-generation NPU architecture.}
-      \resumeItemListEnd
-  \resumeSubHeadingListEnd
   
 %-----------ACADEMIC RESEARCH EXPERIENCE-----------------
 \section{Academic Research Experience}
   \resumeSubHeadingListStart
     \resumeSubheading
-      {Research Intern}{Remote @ Suwon, Republic of Korea}
-      {The University of Michigan (Advisor: Prof. Kang G. Shin)}{Feb 2021 -- Present}
+    {Graduate Student Research Assistant (GSRA)}{Ann Arbor, MI, USA}
+    {The University of Michigan (Advisor: Prof. Z. Morley Mao)}{Aug 2022 -- Present}
+    \resumeItemListStart
+      \resumeItem{Anomaly Detection on Autonomous Driving}{Designed anomaly detection algorithm by checking temporal consistency of 3D point clouds.}
+    \resumeItemListEnd
+    \resumeSubheading
+      {Research Intern}{Ann Arbor, MI, USA}
+      {The University of Michigan (Advisor: Prof. Kang G. Shin)}{Feb 2021 -- Aug 2022}
       \resumeItemListStart
         \resumeItem{Resource allocation on embedded systems}{Found a problem in running vision apps on a multi-tenant system. Designed a resource allocation algorithm to satisfy apps' timing requirements.}
         \resumeItem{Neural Network Optimization}{Reduced resource and computational cost of NN models via mixed-precision quantization.}
@@ -203,6 +200,17 @@ Systems for Machine Learning, Machine Learning for Systems, Neural Network Optim
       \resumeItemListEnd
   \resumeSubHeadingListEnd
 
+%-----------INDUSTRIAL RESEARCH EXPERIENCE-----------------
+\section{Industrial Research Experience}
+\resumeSubHeadingListStart
+    \resumeSubheading
+      {Artificial Intelligence Researcher}{Suwon, Republic of Korea}
+      {Samsung Advanced Institute of Technology @ Samsung Electronics}{Mar 2018 -- Apr 2021}
+      \resumeItemListStart
+        \resumeItem{Neural Network Optimization}{Designed and implemented hardware-efficient model optimization algorithms for Samsung Exynos NPU \& released on Samsung AI SDK.}
+        \resumeItem{Software/hardware Co-design}{Designed and implemented a new number system for the next-generation NPU architecture.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
 
 %-----------AWARDS-----------------
 \section{Honors and Awards}
