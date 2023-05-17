@@ -1,0 +1,28 @@
+languageCode = "en"
+languageName = "English"
+displayName = "EN"
+isoCode = "en"
+weight = 1
+rtl = false
+
+title = "Minkyoung Cho"
+description = "Minkyoung's Website"
+# copyright = "Copy, _right?_ :thinking_face:"
+
+dateFormat = "16 May 2023"
+
+[params]
+  # mainSections = ["section1", "section2"]
+
+[author]
+  name = "Minkyoung Cho"
+  image = "img/author.jpg"
+  headline = "Ph.D. Student in CSE at the University of Michigan"
+  bio = "The only way to do great work is to love what you do."
+  links = [
+    { email = "mailto:minkycho@umich.edu"},
+    { github = "https://github.com/MinkyoungCho"},
+    { google-scholar = "https://scholar.google.com/citations?user=lX1iTbgAAAAJ&hl=en&authuser=1" },
+    # { google = "https://scholar.google.com/citations?user=lX1iTbgAAAAJ&hl=en&authuser=1" },
+    { linkedin = "https://www.linkedin.com/in/minkyoung-cho-84593511b/" }
+  ]
