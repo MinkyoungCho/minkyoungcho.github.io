@@ -5,13 +5,6 @@
     
       <url>
             <loc>https://minkyoungcho.github.io/about/</loc>
-            <priority>0</priority>
-          </url>
-    
-  
-    
-      <url>
-            <loc>https://minkyoungcho.github.io/research/</loc>
           </url>
     
   
@@ -20,6 +13,12 @@
     
       <url>
             <loc>https://minkyoungcho.github.io/</loc>
+          </url>
+    
+  
+    
+      <url>
+            <loc>https://minkyoungcho.github.io/research/</loc>
           </url>
     
   

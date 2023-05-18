@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Minkyoung Cho</title>
+    <title>About on Minkyoung Cho</title>
     <link>https://minkyoungcho.github.io/about/</link>
-    <description>Recent content on Minkyoung Cho</description>
+    <description>Recent content in About on Minkyoung Cho</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language><atom:link href="https://minkyoungcho.github.io/about/index.xml" rel="self" type="application/rss+xml" />
   </channel>
