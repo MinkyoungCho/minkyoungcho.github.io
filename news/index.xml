@@ -6,13 +6,22 @@
     <description>Recent content in News on Minkyoung Cho</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 03 Jun 2024 08:22:00 -0400</lastBuildDate><atom:link href="https://minkyoungcho.github.io/news/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 12 Aug 2024 08:22:00 -0400</lastBuildDate><atom:link href="https://minkyoungcho.github.io/news/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Our Paper Accepted to ACM CSCS&#39;24</title>
+      <link>https://minkyoungcho.github.io/news/20240812-cscs24/</link>
+      <pubDate>Mon, 12 Aug 2024 08:22:00 -0400</pubDate>
+      
+      <guid>https://minkyoungcho.github.io/news/20240812-cscs24/</guid>
+      <description>This survey paper on AV security and safety has been developed in collaboration with the AV reading group.</description>
+    </item>
+    
     <item>
       <title>Start Internship at NVIDIA</title>
-      <link>https://minkyoungcho.github.io/news/20240603-nvidia-intern/</link>
+      <link>https://minkyoungcho.github.io/news/20240603-nvidia-intern-copy/</link>
       <pubDate>Mon, 03 Jun 2024 08:22:00 -0400</pubDate>
       
-      <guid>https://minkyoungcho.github.io/news/20240603-nvidia-intern/</guid>
+      <guid>https://minkyoungcho.github.io/news/20240603-nvidia-intern-copy/</guid>
       <description>Will be working as a Deep Learning Software Intern at NVIDIA Metropolis team!</description>
     </item>
     
