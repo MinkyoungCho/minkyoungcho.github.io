@@ -4,15 +4,22 @@
   
     
       <url>
+            <loc>https://minkyoungcho.github.io/news/20250122-iclr25/</loc>
+            <lastmod>2025-01-22T17:22:00-04:00</lastmod>
+          </url>
+    
+  
+    
+      <url>
             <loc>https://minkyoungcho.github.io/</loc>
-            <lastmod>2024-08-12T08:22:00-04:00</lastmod>
+            <lastmod>2025-01-22T17:22:00-04:00</lastmod>
           </url>
     
   
     
       <url>
             <loc>https://minkyoungcho.github.io/news/</loc>
-            <lastmod>2024-08-12T08:22:00-04:00</lastmod>
+            <lastmod>2025-01-22T17:22:00-04:00</lastmod>
           </url>
     
   
@@ -47,6 +54,13 @@
     
       <url>
             <loc>https://minkyoungcho.github.io/about/</loc>
+          </url>
+    
+  
+    
+      <url>
+            <loc>https://minkyoungcho.github.io/cocoon/</loc>
+            <priority>0</priority>
           </url>
     
   
