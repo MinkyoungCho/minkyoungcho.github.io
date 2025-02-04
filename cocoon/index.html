@@ -34,6 +34,8 @@
         href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/favicon.svg">
+  <link rel="icon" href="./static/images/text-x-bibtex.svg">
+
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
@@ -178,14 +180,13 @@
               <!-- Video Link. -->
               <!-- Code Link. -->
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2410.12592"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Code (Coming Soon)</span>
-                  </a>
-              </span>
+                <a href="javascript:scrollToBottom();" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <i class="fas fa-bookmark"></i>  <!-- Bookmark icon -->
+                    </span>
+                    <span>BibTeX</span>
+                </a>
+            </span>
             </div>
 
           </div>
@@ -391,15 +392,6 @@ input features via our feature aligner <em>h</em> and using a pre-trained <span 
 
 <footer class="footer">
   <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link"
-         href="./static/videos/nerfies_paper.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
     <div class="columns is-centered">
       <div class="column is-8">
         <div class="content">
@@ -414,4 +406,15 @@ input features via our feature aligner <em>h</em> and using a pre-trained <span 
 </footer>
 
 </body>
+
+
+<script>
+function scrollToBottom() {
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth"
+    });
+}
+</script>
 </html>
+<div id="bottom"></div>
