@@ -42,8 +42,8 @@
   <link
     type="text/css"
     rel="stylesheet"
-    href="/css/main.bundle.min.2bd79c00f357b4f50eb972861c94c7902e8fdddc0f4acefab9d0a0414b4474532d4ea1a7ccd952be152cd692422eb2017873cd0a350d85bf1afc9b28d22559f3.css"
-    integrity="sha512-K9ecAPNXtPUOuXKGHJTHkC6P3dwPSs76udCgQUtEdFMtTqGnzNlSvhUs1pJCLrIBeHPNCjUNhb8a/Jso0iVZ8w=="
+    href="/css/main.bundle.min.4fce830ce2a6ecb3e668f3890ae29d13c3cb95e430ea2f60a2591d86cfa339b880855f0e7b7c4384aca4c2f6e4833edd2b5a0769716fdc1d2897ff7f2458190f.css"
+    integrity="sha512-T86DDOKm7LPmaPOJCuKdE8PLleQw6i9golkdhs&#43;jObiAhV8Oe3xDhKykwvbkgz7dK1oHaXFv3B0ol/9/JFgZDw=="
   />
   
   
@@ -101,7 +101,7 @@
     
     
     "mainEntityOfPage": "true",
-    "wordCount": "416"
+    "wordCount": "708"
   }]
   </script>
 
@@ -357,83 +357,224 @@ The University of Michigan (Advisor: Dr. <a
 Uncertainty-Aware Sensor Fusion</a></strong> <br>
 <strong>Minkyoung Cho</strong>, Yulong Cao, Jiachen Sun, Qingzhao Zhang, Marco Pavone, Jeong Joon Park, Heng Yang, Z. Morley Mao <br>
 ICLR 2025 <br>
-<a
-  class="inline-block !rounded-md bg-primary-600 px-4 py-1 !text-neutral !no-underline hover:!bg-primary-500 dark:bg-primary-800 dark:hover:!bg-primary-700"
-  href="https://minkyoungcho.github.io/cocoon"
-  
-  
-  role="button"
->
-  Webpage
-</a>
-
-<a
-  class="inline-block !rounded-md bg-primary-600 px-4 py-1 !text-neutral !no-underline hover:!bg-primary-500 dark:bg-primary-800 dark:hover:!bg-primary-700"
-  href="https://iclr.cc/media/PosterPDFs/ICLR%202025/30466.png?t=1741992161.004041"
-  
-  
-  role="button"
->
-  Poster
-</a>
-
-<a
-  class="inline-block !rounded-md bg-primary-600 px-4 py-1 !text-neutral !no-underline hover:!bg-primary-500 dark:bg-primary-800 dark:hover:!bg-primary-700"
-  href="https://scholar.googleusercontent.com/scholar.bib?q=info:eUhjaxLUtHkJ:scholar.google.com/&amp;output=citation&amp;scisdr=ClHzqwXWELLF6GujwCU:AFWwaeYAAAAAZ9el2CX_Ow75gTrGvlw9t5-PWwM&amp;scisig=AFWwaeYAAAAAZ9el2FhRbyKYQe5khbN--m2nuIE&amp;scisf=4&amp;ct=citation&amp;cd=-1&amp;hl=en&amp;scfhb=1"
-  
-  
-  role="button"
->
-  BibTeX
-</a>
-</li>
+<a href="https://openreview.net/pdf?id=DKgAFfCs5F" class="purple-btn">Paper</a>
+<a href="https://minkyoungcho.github.io/cocoon" class="purple-btn">Webpage</a>
+<a href="https://iclr.cc/media/PosterPDFs/ICLR%202025/30466.png" class="purple-btn">Poster</a>
+<button class="purple-btn" onclick="toggleCocoon()">BibTeX</button></li>
+</ul>
+<div id="bibtexCocoon" style="display:none; margin-top: 1em;">
+  <pre>
+@inproceedings{cho2025cocoon,
+  title={Cocoon: Robust Multi-Modal Perception with Uncertainty-Aware Sensor Fusion},
+  author={Cho, Minkyoung and Cao, Yulong and Sun, Jiachen and Zhang, Qingzhao and Pavone, Marco and Park, Jeong Joon and Yang, Heng and Mao, Zhuoqing},
+  booktitle={The Thirteenth International Conference on Learning Representations}
+}
+  </pre>
+</div>
+<script>
+function toggleCocoon() {
+  const content = document.getElementById('bibtexCocoon');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+  } else {
+    content.style.display = 'none';
+  }
+}
+</script>
+<ul>
 <li><strong><a
   href="https://dl.acm.org/doi/abs/10.1145/3689936.3694694"
   
   target="_blank" rel="noreferrer noopener"
 >Achieving the Safety and Security of the End-to-End AV Pipeline</a></strong> <br>
 Noah T. Curran, <strong>Minkyoung Cho</strong>, Ryan Feng, Liangkai Liu, Brian Jay Tang, Pedram MohajerAnsari, Alkim Domeke, Mert D. Pesé, Kang G. Shin<br>
-ACM CSCS Workshop Co-located with ACM CCS 2024</li>
+ACM CSCS Workshop Co-located with ACM CCS 2024 <br>
+<a href="https://dl.acm.org/doi/pdf/10.1145/3689936.3694694" class="purple-btn">Paper</a>
+<button class="purple-btn" onclick="toggleAV()">BibTeX</button></li>
+</ul>
+<div id="bibtexAV" style="display:none; margin-top: 1em;">
+  <pre>
+@inproceedings{curran2023achieving,
+  title={Achieving the safety and security of the end-to-end av pipeline},
+  author={Curran, Noah T and Cho, Minkyoung and Feng, Ryan and Liu, Liangkai and Tang, Brian Jay and MohajerAnsari, Pedram and Domeke, Alkim and Pes{\'e}, Mert D and Shin, Kang G},
+  booktitle={Proceedings of the 2024 Cyber Security in CarS Workshop},
+  pages={13--24},
+  year={2023}
+}
+  </pre>
+</div>
+<script>
+function toggleAV() {
+  const content = document.getElementById('bibtexAV');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+  } else {
+    content.style.display = 'none';
+  }
+}
+</script>
+<ul>
 <li><strong><a
   href="https://arxiv.org/abs/2310.14504"
   
   target="_blank" rel="noreferrer noopener"
 >ADoPT: LiDAR Spoofing Attack Detection based on Point-Level Temporal Consistency</a></strong> <br>
 <strong>Minkyoung Cho</strong>, Yulong Cao, Zixiang Zhou, Z. Morley Mao <br>
-BMVC 2023 [<a
-  href="https://bmvc2022.mpi-inf.mpg.de/BMVC2023/0486_poster.pdf"
-  
-  target="_blank" rel="noreferrer noopener"
->Poster</a>]</li>
+BMVC 2023 <br>
+<a href="https://papers.bmvc2023.org/0486.pdf" class="purple-btn">Paper</a>
+<a href="https://bmvc2022.mpi-inf.mpg.de/BMVC2023/0486_poster.pdf" class="purple-btn">Poster</a>
+<button class="purple-btn" onclick="toggleADoPT()">BibTeX</button></li>
+</ul>
+<div id="bibtexBMVC" style="display:none; margin-top: 1em;">
+  <pre>
+@inproceedings{cho2023adopt,
+author    = {Minkyoung Cho and Yulong Cao and Zixiang Zhou and Zhuoqing Morley Mao},
+title     = {ADoPT: LiDAR Spoofing Attack Detection Based on Point-Level Temporal Consistency},
+booktitle = {34th British Machine Vision Conference 2023, {BMVC} 2023, Aberdeen, UK, November 20-24, 2023},
+publisher = {BMVA},
+year      = {2023},
+url       = {https://papers.bmvc2023.org/0486.pdf}
+}
+  </pre>
+</div>
+<script>
+function toggleADoPT() {
+  const content = document.getElementById('bibtexBMVC');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+  } else {
+    content.style.display = 'none';
+  }
+}
+</script>
+<ul>
 <li><strong><a
   href="https://arxiv.org/abs/2302.01568"
   
   target="_blank" rel="noreferrer noopener"
 >DynaMIX: Resource Optimization for DNN-Based Real-Time Applications on a Multi-Tasking System</a></strong> <br>
 <strong>Minkyoung Cho</strong>  and Kang G. Shin <br>
-arXiv 2023</li>
+arXiv 2023 <br>
+<a href="https://arxiv.org/pdf/2302.01568" class="purple-btn">Paper</a>
+<button class="purple-btn" onclick="toggleDynaMIX()">BibTeX</button></li>
+</ul>
+<div id="bibtexDynaMIX" style="display:none; margin-top: 1em;">
+  <pre>
+@article{cho2023dynamix,
+  title={Dynamix: Resource optimization for dnn-based real-time applications on a multi-tasking system},
+  author={Cho, Minkyoung and Shin, Kang G},
+  journal={arXiv preprint arXiv:2302.01568},
+  year={2023}
+}
+  </pre>
+</div>
+<script>
+function toggleDynaMIX() {
+  const content = document.getElementById('bibtexDynaMIX');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+  } else {
+    content.style.display = 'none';
+  }
+}
+</script>
+<ul>
 <li><strong><a
   href="https://ieeexplore.ieee.org/abstract/document/9506527"
   
   target="_blank" rel="noreferrer noopener"
 >A Novel Sensitivity Metric For Mixed-Precision Quantization With Synthetic Data Generation</a></strong> <br>
 Donghyun Lee*, <strong>Minkyoung Cho</strong>*, Seungwon Lee, Joonho Song, Changkyu Choi (*: equal contribution)<br>
-IEEE ICIP 2021</li>
+IEEE ICIP 2021 <br>
+<a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9506527" class="purple-btn">Paper</a>
+<button class="purple-btn" onclick="toggleICIP()">BibTeX</button></li>
+</ul>
+<div id="bibtexICIP" style="display:none; margin-top: 1em;">
+  <pre>
+@inproceedings{lee2021novel,
+  title={A novel sensitivity metric for mixed-precision quantization with synthetic data generation},
+  author={Lee, Donghyun and Cho, Minkyoung and Lee, Seungwon and Song, Joonho and Choi, Changkyu},
+  booktitle={2021 IEEE International Conference on Image Processing (ICIP)},
+  pages={1294--1298},
+  year={2021},
+  organization={IEEE}
+}
+  </pre>
+</div>
+<script>
+function toggleICIP() {
+  const content = document.getElementById('bibtexICIP');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+  } else {
+    content.style.display = 'none';
+  }
+}
+</script>
+<ul>
 <li><strong><a
   href="https://dl.acm.org/doi/10.1145/3008631.3008633"
   
   target="_blank" rel="noreferrer noopener"
 >Contextual Relationship-based Activity Segmentation on an Event Stream in the IoT Environment with Multi-user Activities</a></strong> <br>
 <strong>Minkyoung Cho</strong>, Younggi Kim, Younghee Lee <br>
-ACM M4IoT Workshop Co-located with Middleware 2016</li>
+ACM M4IoT Workshop Co-located with Middleware 2016 <br>
+<a href="https://arxiv.org/pdf/1609.06024" class="purple-btn">Paper</a>
+<button class="purple-btn" onclick="toggleContext()">BibTeX</button></li>
+</ul>
+<div id="bibtexContext" style="display:none; margin-top: 1em;">
+  <pre>
+@article{cho2016contextual,
+  title={Contextual relationship-based activity segmentation on an event stream in the iot environment with multi-user activities},
+  author={Cho, Minkyoung and Kim, Younggi and Lee, Younghee},
+  journal={arXiv preprint arXiv:1609.06024},
+  year={2016}
+}
+  </pre>
+</div>
+<script>
+function toggleContext() {
+  const content = document.getElementById('bibtexContext');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+  } else {
+    content.style.display = 'none';
+  }
+}
+</script>
+<ul>
 <li><strong><a
   href="https://ieeexplore.ieee.org/abstract/document/7524369"
   
   target="_blank" rel="noreferrer noopener"
 >Proactive patrol dispatch surveillance system by inferring mobile trajectories of multiple intruders using binary proximity sensors</a></strong> <br>
 Dahee Jung, <strong>Minkyoung Cho</strong>, Omprakash Gnawali, HyungJune Lee <br>
-IEEE INFOCOM 2016</li>
+IEEE INFOCOM 2016 <br>
+<a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7524369" class="purple-btn">Paper</a>
+<button class="purple-btn" onclick="toggleINFOCOM()">BibTeX</button></li>
 </ul>
+<div id="bibtexINFOCOM" style="display:none; margin-top: 1em;">
+  <pre>
+@inproceedings{jeong2016proactive,
+  title={Proactive patrol dispatch surveillance system by inferring mobile trajectories of multiple intruders using binary proximity sensors},
+  author={Jeong, Dahee and Cho, Minkyoung and Gnawali, Omprakash and Lee, HyungJune},
+  booktitle={IEEE INFOCOM 2016-The 35th Annual IEEE International Conference on Computer Communications},
+  pages={1--9},
+  year={2016},
+  organization={IEEE}
+}
+  </pre>
+</div>
+<script>
+function toggleINFOCOM() {
+  const content = document.getElementById('bibtexINFOCOM');
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+  } else {
+    content.style.display = 'none';
+  }
+}
+</script>
 <!-- - **[A VC-based Joint Account Operation Scheme for Mobile Banking (Korean)](http://www.dbpia.co.kr/Journal/articleDetail?nodeId=NODE02217264)** \
 Mijin Kim, **Minkyoung Cho**, Aeyoung Kim, Sang-Ho Lee \
 Korea Computer Congress 2013 -->
