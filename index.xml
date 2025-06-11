@@ -6,7 +6,25 @@
     <description>Recent content in Introduction on Minkyoung Cho</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 22 Jan 2025 17:22:00 -0400</lastBuildDate><atom:link href="https://minkyoungcho.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 25 May 2025 08:22:00 -0400</lastBuildDate><atom:link href="https://minkyoungcho.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CrowdMap Accepted to CVPRW&#39;25</title>
+      <link>https://minkyoungcho.github.io/news/20250525-cvprw25/</link>
+      <pubDate>Sun, 25 May 2025 08:22:00 -0400</pubDate>
+      
+      <guid>https://minkyoungcho.github.io/news/20250525-cvprw25/</guid>
+      <description>We introduce collaborative global vectorized HD map construction across multiple AV agents.</description>
+    </item>
+    
+    <item>
+      <title>Internship at NVIDIA: Round 2!</title>
+      <link>https://minkyoungcho.github.io/news/20250519-nvidia-intern2/</link>
+      <pubDate>Mon, 19 May 2025 08:22:00 -0400</pubDate>
+      
+      <guid>https://minkyoungcho.github.io/news/20250519-nvidia-intern2/</guid>
+      <description>Excited to rejoin the NVIDIA Metropolis team — this time focusing on Generative AI!</description>
+    </item>
+    
     <item>
       <title>Cocoon Accepted to ICLR&#39;25</title>
       <link>https://minkyoungcho.github.io/news/20250122-iclr25/</link>
@@ -27,10 +45,10 @@
     
     <item>
       <title>Start Internship at NVIDIA</title>
-      <link>https://minkyoungcho.github.io/news/20240603-nvidia-intern-copy/</link>
+      <link>https://minkyoungcho.github.io/news/20240603-nvidia-intern/</link>
       <pubDate>Mon, 03 Jun 2024 08:22:00 -0400</pubDate>
       
-      <guid>https://minkyoungcho.github.io/news/20240603-nvidia-intern-copy/</guid>
+      <guid>https://minkyoungcho.github.io/news/20240603-nvidia-intern/</guid>
       <description>Will be working as a Deep Learning Software Intern at NVIDIA Metropolis team!</description>
     </item>
     
