@@ -6,7 +6,16 @@
     <description>Recent content in Introduction on Minkyoung Cho</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 25 May 2025 08:22:00 -0400</lastBuildDate><atom:link href="https://minkyoungcho.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 15 Jun 2025 08:22:00 -0400</lastBuildDate><atom:link href="https://minkyoungcho.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SCORPION Accepted to IROS&#39;25 (Oral)</title>
+      <link>https://minkyoungcho.github.io/news/20250615-iros25/</link>
+      <pubDate>Sun, 15 Jun 2025 08:22:00 -0400</pubDate>
+      
+      <guid>https://minkyoungcho.github.io/news/20250615-iros25/</guid>
+      <description>We propose a robust, holistic 3D perception framework in a collaborative setting among multiple AVs.</description>
+    </item>
+    
     <item>
       <title>CrowdMap Accepted to CVPRW&#39;25</title>
       <link>https://minkyoungcho.github.io/news/20250525-cvprw25/</link>
