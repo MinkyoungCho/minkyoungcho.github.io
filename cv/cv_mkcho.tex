@@ -39,7 +39,7 @@
 
 % \fancyfoot[L]{\footnotesize{{Minkyoung Cho}}}
 \fancyfoot[C]{\footnotesize{Page \thepage~of \pageref{LastPage}}}
-\fancyfoot[R]{\footnotesize{{Last updated: Mar 9, 2025}}}
+\fancyfoot[R]{\footnotesize{{Last updated: Sep 24, 2025}}}
 
 \urlstyle{same}
 
@@ -117,7 +117,7 @@
 \end{tabular*}
 
 \section{Research Interests}
-\parbox{\textwidth}{Multi-Modal, Efficient AI, Robust AI, Autonomous Driving, Inference and Fine-Tuning Optimization}
+\parbox{\textwidth}{Multi-Modal, Efficient AI, Robust AI, Autonomous Driving, PEFT, Post-Training}
 
 %-----------EDUCATION-----------------
 \section{Education}
@@ -146,16 +146,29 @@
 %-----------PUBLICATIONS-----------------
 \section{Publications}
 \begin{enumerate}[leftmargin=*, itemsep=0em]
-  \item \small \textbf{\href{https://drive.google.com/file/d/1t422YHsrgB5f7Mz8uPgQbmgrrByOnTKx/view}{Scalable Crowd-sourced Global HD Map Construction via Collaborative Map Perception and Sparse Graph Fusion}} \\
-  Ruiyang Zhu$^\ast$, \textbf{Minkyoung Cho$^\ast$}, Shuqing Zeng, Fan Bai, Xiang Gao, and Z. Morley Mao \\
-  T4V @ CVPR 2025  ($^\ast$\textbf{Equal Contribution})
+  \item \small \textbf{MARS: Harmonizing Multimodal Convergence via Adaptive Rank Search} \\
+  \textbf{Minkyoung Cho}, Insu Jang, Shuowei Jin, Zesen Zhao, Adityan Jothi, Ethem F. Can, Min-Hung Chen$^\ast$, and Z. Morley Mao$^\ast$ \\
+  Under Submission ($^\ast$\textbf{Equal Advising})
+  \item \small \textbf{GraphMap: Scalable Crowd-Sourced Global Vectorized HD Map Construction via Sparse Visual Graph Fusion} \\
+  Ruiyang Zhu, \textbf{Minkyoung Cho}, Shuqing Zeng, Fan Bai, and Z. Morley Mao \\
+  Under Submission
+  \item \small \textbf{TC-LoRA: Temporally Modulated Conditional LoRA for Adaptive Diffusion Control} \\
+  \textbf{Minkyoung Cho}, Ruben Ohana, Christian Jacobsen, Adityan Jothi, Zhuoqing Mao, Min-Hung Chen, and Ethem F. Can \\
+  NeurIPS Workshop 2025
+  \item \small \textbf{SCORPION: Robust Spatial-Temporal Collaborative Perception Model
+  on Lossy Wireless Network} \\
+  Ruiyang Zhu, \textbf{Minkyoung Cho}, Shuqing Zeng, Fan Bai, and Z. Morley Mao \\
+  IROS 2025 (Oral)
   \item \small \textbf{\href{https://openreview.net/pdf?id=DKgAFfCs5F}{Cocoon: Robust Multi-Modal Perception with
   Uncertainty-Aware Sensor Fusion}} \\
   \textbf{Minkyoung Cho}, Yulong Cao, Jiachen Sun, Qingzhao Zhang, Marco Pavone, Jeong Joon Park, Heng Yang, and Z. Morley Mao\\ 
-  ICLR 2025
+  ICLR 2025 
+  \item \small \textbf{\href{https://ry4nzhu.github.io/publication/scalable_crowded_hd_map_construction/scalable_crowded_HD_map_construction.pdf}{CrowdMap: Scalable Crowd-sourced Global HD Map Construction via Collaborative Map Perception and Sparse Graph Fusion}} \\
+  Ruiyang Zhu$^\ast$, \textbf{Minkyoung Cho$^\ast$}, Shuqing Zeng, Fan Bai, Xiang Gao, and Z. Morley Mao \\
+  CVPR Workshop 2025  ($^\ast$\textbf{Equal Contribution})
   \item \small \textbf{\href{https://dl.acm.org/doi/abs/10.1145/3689936.3694694}{Achieving the Safety and Security of the End-to-End AV Pipeline}}\\
   Noah T. Curran, \textbf{Minkyoung Cho}, Ryan Feng, Liangkai Liu, Brian Jay Tang, Pedram MohajerAnsari, Alkim Domeke, Mert D. Pesé, and Kang G. Shin\\
-  ACM CSCS @ CCS 2024 
+  ACM CCS Workshop 2024 
   \item \small \textbf{\href{https://arxiv.org/abs/2310.14504}{ADoPT: LiDAR Spoofing Attack Detection based on Point-Level Temporal Consistency}}\\
   \textbf{Minkyoung Cho}, Yulong Cao, Zixiang Zhou, and Z. Morley Mao\\
   BMVC 2023
@@ -167,7 +180,7 @@
   ICIP 2021 ($^\ast$\textbf{Equal Contribution})
   \item \small \textbf{\href{https://dl.acm.org/doi/10.1145/3008631.3008633}{Contextual Relationship-based Activity Segmentation on an Event Stream in the IoT Environment with Multi-user Activities}}\\
   \textbf{Minkyoung Cho}, Younggi Kim, and Younghee Lee\\
-  ACM M4IoT @ Middleware 2016
+  ACM Middleware Workshop 2016
   \item \small \textbf{\href{https://ieeexplore.ieee.org/abstract/document/7524369}{Proactive Patrol Dispatch Surveillance System by Inferring Mobile Trajectories of Multiple Intruders using Binary Proximity Sensors}}\\
   Dahee Jung, \textbf{Minkyoung Cho}, Omprakash Gnawali, and HyungJune Lee\\  
   IEEE INFOCOM 2016
@@ -200,10 +213,10 @@
     {Graduate Student Research Assistant (GSRA)}{Ann Arbor, MI, USA}
     {The University of Michigan (Advisor: Prof. Z. Morley Mao)}{Aug 2022 -- Present}
     \resumeItemListStart
-      \resumeItem{Efficent Fine-Tuning for Multi-Modal Models}{Developing an efficient and robust fine-tuning framework.}
-      \resumeItem{Multi-Modal Perception}{Developed a robust multi-modal perception framework to guarantee reliability and accuracy in diverse driving scenarios.}
-      \resumeItem{Anomaly Detection}{Developed a solution by checking temporal consistency at 3D point cloud level.}
-      \resumeItem{Collaborative Perception}{Developed robust collaborative perception system across connected and automated vehicles.}
+    \resumeItem{[Vision+Language] MLLM Fine-Tuning}{Identified an imbalanced training dynamics problem and developed an MLLM fine-tuning algorithm to mitigate it. Paper (MARS) under submission.}
+    \resumeItem{[2D Vision+3D Vision] Multimodal Perception}{Designed a robust multimodal perception framework and proposed an uncertainty quantification and comparison algorithm across heterogeneous modalities. Cocoon accepted to ICLR 2025.}
+    \resumeItem{[Multi-Agent Visual Feature Fusion] Collaborative Perception}{Built a robust collaborative perception and HD map construction system for connected and automated vehicles. SCORPION (IROS 2025 Oral), CrowdMap (CVPRW 2025), GraphMap (under submission).}
+    \resumeItem{[3D Vision+Time] Anomaly Detection}{Developed a method for detecting anomalies by checking temporal consistency in 3D point clouds. ADoPT accepted to BMVC 2023.}
     \resumeItemListEnd
     \resumeSubheading
       {Research Intern}{Ann Arbor, MI, USA}
@@ -241,13 +254,13 @@
   {Deep Learning Software Intern}{Santa Clara, CA, USA}
   {NVIDIA}{May 2025 -- Aug 2025}
     \resumeItemListStart
-    \resumeItem{Conditioning for Generative AI}{Research on optimal conditioning for generative AI models (e.g., diffusion models).}    
+    \resumeItem{[Vision+Language+Time] Controllable Diffusion Models}{Researched optimal conditioning algorithms for generative AI models (e.g., NVIDIA Cosmos), aiming for improved conditional guidance over standard methods (e.g., ControlNet). Paper (TC-LoRA) accepted to NeurIPSW 2025.} 
     \resumeItemListEnd
    \resumeSubheading
     {Deep Learning Software Intern}{Santa Clara, CA, USA}
     {NVIDIA}{Jun 2024 -- Aug 2024}
     \resumeItemListStart
-      \resumeItem{Fine-Tuning Optimization}{Worked on parameter-efficient fine-tuning techniques for vision and multi-modal models.}
+    \resumeItem{[Vision+Language] Efficient Fine-Tuning for Multimodal Models}{Developed parameter-efficient fine-tuning methods (e.g., LoRA) for multimodal models. Paper (MARS) under submission.}
     \resumeItemListEnd
     \resumeSubheading
       {Artificial Intelligence Researcher}{Suwon, Republic of Korea}
@@ -286,18 +299,19 @@
 \section{Services}
 \resumeSubHeadingListStart
   \resumeItem{Reading Group Organizer}{Organize Systems Reading Group @ UMich, Sep 2023 - Present}
-  \resumeItem{Conference Reviewer}{BMVC'24, NeurIPSW-Compression'24, ICLR'25, ICLRW-SCOPE'25}
+  \resumeItem{Conference Reviewer}{NeurIPSW, ICLRW, CVPRW, BMVC, ICLR, IROS}
 \resumeSubHeadingListEnd
 
 
 
-
-
-%--------PROGRAMMING SKILLS------------
-\section{Skills}
- \resumeSubHeadingListStart
-   \resumeItem{Languages}{Python, C, Java, Markdown, \LaTeX}
-   \resumeItem{Frameworks}{PyTorch, Caffe, MATLAB, Linux, TinyOS, LLVM, OpenCOOD}
- \resumeSubHeadingListEnd
-
 \end{document}
+
+
+% %--------PROGRAMMING SKILLS------------
+% \section{Skills}
+%  \resumeSubHeadingListStart
+%    \resumeItem{Languages}{Python, C, Java, Markdown, \LaTeX}
+%    \resumeItem{Frameworks}{PyTorch, Caffe, MATLAB, Linux, TinyOS, LLVM, OpenCOOD}
+%  \resumeSubHeadingListEnd
+
+% \end{document}

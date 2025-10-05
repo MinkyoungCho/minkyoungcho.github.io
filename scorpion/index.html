@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description"
+        content="Scorpion.">
+  <meta name="keywords" content="Scorpion."> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCORPION: Robust Spatial-Temporal Collaborative Perception Model on Lossy Wireless Network</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+  <link rel="icon" href="./static/images/text-x-bibtex.svg">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <style>
+    .gray-section {
+        background-color: #f5f5f5; /* Light gray background */
+        padding: 40px;
+        border-radius: 8px; /* Optional: rounded corners */
+    }
+
+    .gray-section h2 {
+        text-align: center;
+        font-size: 28px;
+    }
+
+    .highlight-box {
+        background-color: white;
+        padding: 15px;
+        border-left: 4px solid #cccccc;
+        margin-top: 15px;
+        border-radius: 5px;
+    }
+
+    /* Adjust heading spacing */
+.approach-title {
+  margin-top: 40px; /* Moves "Approach" text lower */
+}
+
+/* Center the image properly */
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Resize the image */
+.image-container img {
+  max-width: 180%; /* Ensures responsiveness */
+  height: auto;
+}
+
+.figure-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Adjust this based on your figure width */
+    max-width: 1000px; /* Ensures it doesn't stretch too wide */
+    margin: 0 auto; /* Centers the figure and caption */
+}
+
+.figure-image {
+    width: 380%; /* Ensures the image takes full width of the container */
+    height: auto; /* Keeps the aspect ratio */
+}
+
+.figure-caption {
+    font-size: 18px;
+    color: #666; /* Light gray for readability */
+    text-align: justify; /* Ensures caption aligns with the figure width */
+    margin-top: 10px; /* Adds spacing between figure and caption */
+    max-width: 240%; /* Ensures it does not exceed the figure width */
+}
+
+.publication-date {
+    color: #0066cc; /* Blue color */
+    font-size: 1.2em; /* Larger font size */
+    font-weight: 500; /* Slightly bolder */
+    margin-top: 10px;
+}
+</style>
+
+
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">SCORPION: Robust Spatial-Temporal Collaborative Perception Model on Lossy Wireless Network</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://ry4nzhu.github.io">Ruiyang Zhu</a><sup>1</sup>, </span>
+            </span>
+            <span class="author-block">
+              <a href="https://minkyoungcho.github.io">Minkyoung Cho</a><sup>1</sup>, </span>
+              </span>
+              <span class="author-block">
+                Shuqing Zeng<sup>2</sup>, </span>
+              </span>
+              <span class="author-block">
+                Fan Bai<sup>2</sup>, </span>
+              </span>
+              <span class="author-block">
+                <a href="https://web.eecs.umich.edu/~zmao/">Z. Morley Mao</a><sup>1</sup>
+              </span>
+                      
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup> University of Michigan, Ann Arbor</span>, </span>
+            
+            <span class="author-block"><sup>2</sup> General Motors</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper (Coming Soon)</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-video"></i>
+                  </span>
+                  <span>Video (Coming Soon)</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="javascript:scrollToBottom();" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <i class="fas fa-bookmark"></i>  <!-- Bookmark icon -->
+                    </span>
+                    <span>BibTeX</span>
+                </a>
+            </span>
+            </div>
+            <p class="publication-date">To be appeared at IROS 2025</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- <section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/steve.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/chair-tp.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/shiba.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-fullbody">
+          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/fullbody.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-blueshirt">
+          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/blueshirt.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-mask">
+          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/mask.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-coffee">
+          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/coffee.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-toby">
+          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/toby2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<section class="gray-section">
+  <div class="container is-light is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Collaborative Perception enables multiple agents, such as autonomous vehicles and infrastructure, to share sensor data via vehicular networks so that each agent gains an extended sensing range and better perception quality. Despite its promising benefits, realizing the full potential of such systems faces significant challenges due to inherent imperfections in underlying system layers, consisting of network layer imperfections and hardware-level noises. Such imperfections and noises include packet loss in vehicular networks, localization errors from GPS measurements, and synchronization errors caused by clock deviation and network latency.
+            <br><br>
+            To address these challenges, we propose a novel end-to-end collaborative perception framework, <strong>SCORPION</strong>, that harnesses the AI co-design of the application layer and system layer to tackle the aforementioned imperfections. <strong>SCORPION</strong> consists of three main components: lost bird's eye view feature reconstruction (L-BEV-R) recovers lost spatial features during lossy V2X communication, while deformable spatial cross attention (DSCA) and temporal alignment (TA) compensate for localization and synchronization errors in feature fusion. Experimental results on both synthetic and real-world collaborative 3D object detection datasets demonstrate that <strong>SCORPION</strong> advances the state-of-the-art collaborative perception methods by 5.9 - 13.2 absolute AP on both standard and noisy scenarios.  
+          </p>
+
+          
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    
+
+
+</section>
+
+
+<section class="Section">
+    <div>
+        <div class="highlight-bix
+        Our paper is accepted to ICLR'25. See you in Singapore!"
+    </div>
+</section>
+
+<section class="Section">
+    <div class="container is-light is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          
+          <h2 class="title is-3 approach-title">Overview</h2>
+          <div class="content has-text-justified">
+            
+            <!-- Image Section -->
+              <div class="figure-container">
+                <img src="./static/images/architecture.png" alt="SCORPION Framework">
+                
+            </div>
+            <p class="figure-caption">
+              <strong>Figure 1: SCORPION Overview.</strong> 
+              SCORPION consists of three main components: a lost BEV feature reconstruction (L-BEV-R) module, a deformable spatial cross-attention (DSCA) module, and a temporal alignment (TA) module.
+            </p>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+  </section>
+
+
+  <section class="Section">
+    <div class="container is-light is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          
+          <h2 class="title is-3 approach-title">Qualitative Results</h2>
+          <div class="content has-text-justified">
+            
+            <!-- Image Section -->
+              <div class="figure-container">
+                <img src="./static/images/Visualization.png" alt="SCORPION qualitative results">
+                <p class="figure-caption">
+                    <strong>Figure 2: Qualitative Comparison on Challenging Objects.</strong>  
+                    We compare SCORPION with the state-of-the-art collaborative perception methods on challenging objects, including several occluded, small, and far-away objects.
+                </p>
+            </div>
+            </div> -
+  
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+  </section>
+
+  <section class="Section">
+    <div class="container is-light is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          
+          <h2 class="title is-3 approach-title">Quantitative Results</h2>
+          <div class="content has-text-justified">
+            
+            <!-- Image Section -->
+              <div class="figure-container">
+                <img src="./static/images/noise_all.png" alt="SCORPION quantitative results">
+                <p class="figure-caption">
+                    <strong>Figure 3: Qualitative Comparison.</strong>  
+                    SCORPION outperforms the state-of-the-art collaborative perception methods by 5.9 - 13.2 absolute AP on both standard and noisy scenarios.
+                </p>
+            </div>
+            </div> -
+  
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+  </section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{zhu2025scorpion,
+      title={SCORPION: Robust Spatial-Temporal Collaborative Perception Model on Lossy Wireless Network},
+      author={Ruiyang Zhu, Minkyoung Cho, Shuqing Zeng, Fan Bai, and Z. Morley Mao},
+      journal={To be appeared: 2025 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+      year={2025}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Website source code borrowed from <a
+              href="https://github.com/nerfies/nerfies.github.io">here</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+
+
+<script>
+function scrollToBottom() {
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth"
+    });
+}
+</script>
+</html>
+<div id="bottom"></div>
