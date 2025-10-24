@@ -1,0 +1,424 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description"
+        content="MARS.">
+  <meta name="keywords" content="MARS."> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MARS: Harmonizing Multimodal Convergence via Adaptive Rank Search</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+  <link rel="icon" href="./static/images/text-x-bibtex.svg">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <style>
+    .gray-section {
+        background-color: #f5f5f5; /* Light gray background */
+        padding: 40px;
+        border-radius: 8px; /* Optional: rounded corners */
+    }
+
+    .gray-section h2 {
+        text-align: center;
+        font-size: 28px;
+    }
+
+    .highlight-box {
+        background-color: white;
+        padding: 15px;
+        border-left: 4px solid #cccccc;
+        margin-top: 15px;
+        border-radius: 5px;
+    }
+
+    /* Adjust heading spacing */
+.approach-title {
+  margin-top: 40px; /* Moves "Approach" text lower */
+}
+
+/* Center the image properly */
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Resize the image */
+.image-container img {
+  max-width: 180%; /* Ensures responsiveness */
+  height: auto;
+}
+
+.figure-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Adjust this based on your figure width */
+    max-width: 1000px; /* Ensures it doesn’t stretch too wide */
+    margin: 0 auto; /* Centers the figure and caption */
+}
+
+.figure-image {
+    width: 380%; /* Ensures the image takes full width of the container */
+    height: auto; /* Keeps the aspect ratio */
+}
+
+.figure-caption {
+    font-size: 18px;
+    color: #666; /* Light gray for readability */
+    text-align: justify; /* Ensures caption aligns with the figure width */
+    margin-top: 10px; /* Adds spacing between figure and caption */
+    max-width: 240%; /* Ensures it does not exceed the figure width */
+}
+</style>
+
+
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">MARS: Harmonizing Multimodal Convergence via Adaptive Rank Search</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://minkyoungcho.github.io">Minkyoung Cho</a><sup>1</sup>,</span>
+            </span>
+            <!-- <span class="author-block">
+                <a href="https://kikacaty.github.io">Yulong Cao</a><sup>2</sup>,</span>
+              </span>
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/jiachensun23/">Jiachen Sun</a><sup>1</sup>,</span>
+              </span>
+              <span class="author-block">
+                <a href="https://zqzqz.github.io">Qingzhao Zhang</a><sup>1</sup>,</span>
+              </span>
+            </br>
+              <span class="author-block">
+                <a href="https://stanfordasl.github.io/people/prof-marco-pavone/">Marco Pavone</a><sup>2,3</sup>,</span>
+              </span>
+              <span class="author-block">
+                <a href="https://jjparkcv.github.io">Jeong Joon Park</a><sup>1</sup>,</span>
+              </span>
+              <span class="author-block">
+                <a href="https://hankyang.seas.harvard.edu">Heng Yang</a><sup>2,4</sup>,</span>
+              </span>
+              <span class="author-block">
+                <a href="https://web.eecs.umich.edu/~zmao/">Z. Morley Mao</a><sup>1</sup>,</span>
+              </span> -->
+                      
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Michigan, Ann Arbor      </span>
+            
+            <span class="author-block"><sup>2</sup>NVIDIA Research </span>
+        </br>
+            <span class="author-block"><sup>3</sup>Stanford University  </span>
+            <span class="author-block"><sup>4</sup>Harvard University</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://openreview.net/pdf?id=DKgAFfCs5F"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2410.12592"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="javascript:scrollToBottom();" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <i class="fas fa-bookmark"></i>  <!-- Bookmark icon -->
+                    </span>
+                    <span>BibTeX</span>
+                </a>
+            </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- <section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/steve.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/chair-tp.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/shiba.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-fullbody">
+          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/fullbody.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-blueshirt">
+          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/blueshirt.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-mask">
+          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/mask.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-coffee">
+          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/coffee.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-toby">
+          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/toby2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<section class="gray-section">
+  <div class="container is-light is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            An important paradigm in 3D object detection is the use of multiple modalities to enhance accuracy in both normal and challenging conditions, particularly for long-tail scenarios. 
+    
+            To address this, recent studies have explored two directions of adaptive approaches: MoE-based adaptive fusion, which struggles with uncertainties arising from distinct object configurations, and late fusion for output-level adaptive fusion, which relies on separate detection pipelines and limits comprehensive understanding. In this work, we introduce <strong> Cocoon</strong>, an object- and feature-level uncertainty-aware fusion framework. The key innovation lies in uncertainty quantification for heterogeneous representations, enabling fair comparison across modalities through the introduction of a feature aligner and a learnable surrogate ground truth, termed feature impression. We also define a training objective to ensure that their relationship provides a valid metric for uncertainty quantification. Cocoon consistently outperforms existing static and adaptive methods in both normal and challenging conditions, including those with natural and artificial corruptions. Furthermore, we show the validity and efficacy of our uncertainty metric across diverse datasets.
+          </p>
+
+          
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    
+
+
+</section>
+
+
+<section class="Section">
+    <div>
+        <div class="highlight-bix
+        Our paper is accepted to ICLR'25. See you in Singapore!"
+    </div>
+</section>
+
+<section class="Section">
+    <div class="container is-light is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          
+          <h2 class="title is-3 approach-title">Overview</h2>
+          <div class="content has-text-justified">
+            
+            <!-- Image Section -->
+              <div class="figure-container">
+                <img src="./static/images/cocoon_ov.png" alt="SCORPION Framework">
+                <p class="figure-caption">
+                    <strong>Figure 1: Cocoon Online Procedure (left) and Example Results (right).</strong>  
+                    Cocoon operates on top of base model components. In the feature aligner, per-object features 
+                    (<span style="color:gray;">&#11044;</span>, <span style="color:blue;">&#9650;</span>) are aligned or projected into a common representation space. 
+                    Next, uncertainty quantification is performed for each pair of features (<span style="color:green;">&#11044;</span>, <span style="color:green;">&#9650;</span>). 
+                    These uncertainties are converted into weights (&#945; and &#946;) for adaptive fusion, which either amplify or attenuate the contribution of each modality’s 
+                    original feature (<span style="color:gray;">&#11044;</span>, <span style="color:blue;">&#9650;</span>) to the fused feature. 
+                    The resulting fused feature is then used in the main decoder of the base model.
+                </p>
+            </div>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+  </section>
+
+  <section class="Section">
+    <div class="container is-light is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          
+          <h2 class="title is-3 approach-title">Uncertainty Quantification</h2>
+          <div class="content has-text-justified">
+            
+            <!-- Image Section -->
+            <div class="figure-container">
+                <img src="./static/images/uq_gif.gif" alt="SCORPION Framework">
+                <p class="figure-caption">
+                    <strong>Figure 2: Prior Work vs. Cocoon.</strong>  In the <em>offline</em> stage with calibration data, Feature CP identifies 
+the surrogate ground truth (<span style="color:gold;">&#11044;</span>) for each feature (<span style="color:gray;">&#11044;</span>) through iterative search. 
+Each <span style="color:gold;">&#11044;</span> is derived using the real ground truth label in the output space and the decoder <em>g</em> (serving as a classifier). <br><br>
+However, in a multi-modal setting, each feature lacks a modality-specific <em>g</em>. To resolve this, Cocoon leverages joint training of the feature aligner 
+(which projects heterogeneous features (<span style="color:gray;">&#11044;</span>, <span style="color:blue;">&#9650;</span>) into a common representation space) 
+and the surrogate ground truth (<span style="color:gold;">&#11044;</span> – termed FI). 
+
+Through our proposed training objective, which makes each FI to be the geometric median of aggregated features for valid uncertainty quantification. 
+<br><br>
+In both cases, the nonconformity scores (i.e., distances) are collected to create a calibration set, which will be used as a criterion to gauge the uncertainty of online test inputs. 
+
+In the <em>online</em> stage with test data, while Feature CP iteratively searches for <span style="color:gold;">&#11044;</span>, Cocoon saves time by projecting 
+input features via our feature aligner <em>h</em> and using a pre-trained <span style="color:gold;">&#11044;</span>.
+                </p>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+  </section>
+
+  <section class="Section">
+    <div class="container is-light is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          
+          <h2 class="title is-3 approach-title">Qualitative Results</h2>
+          <div class="content has-text-justified">
+            
+            <!-- Image Section -->
+              <div class="figure-container">
+                <img src="./static/images/result4.png" alt="SCORPION Framework">
+                <p class="figure-caption">
+                    <strong>Figure 3: Qualitative Comparison on Challenging Objects.</strong>  
+                    
+                </p>
+            </div>
+            </div> -
+  
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+    </div>
+  </section>
+  </section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{cho2025cocoon,
+      title={MARS: Harmonizing Multimodal Convergence via Adaptive Rank Search},
+      author={Minkyoung Cho, Insu Jang, Shuowei Jin, Zesen Zhao, Adityan Jothi, Ethem F. Can, Min-Hung Chen*, Zhuoqing Mao*}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Website source code borrowed from <a
+              href="https://github.com/nerfies/nerfies.github.io">here</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+
+
+<script>
+function scrollToBottom() {
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth"
+    });
+}
+</script>
+</html>
+<div id="bottom"></div>
