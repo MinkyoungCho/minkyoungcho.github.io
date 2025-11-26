@@ -128,10 +128,11 @@
               <span class="author-block">
                 <a href="https://shuoweijin.com">Christian Jacobsen</a><sup>2</sup>,</span>
               </span>
-            </br>
+            
             <span class="author-block">
                 Adityan Jothi<sup>2</sup>,</span>
               </span>
+            </br>
               <span class="author-block">
                 <a href="https://minhungchen.netlify.app">Min-Hung Chen</a><sup>2</sup>,</span>
               </span>              
@@ -155,10 +156,10 @@
 
           <div class="publication-logos" style="display: flex; justify-content: center; align-items: center; gap: 30px; margin-top: 20px; margin-bottom: 20px;">
             <a href="https://umich.edu/" target="_blank">
-              <img src="https://brand.umich.edu/assets/brand/style-guide/logo-guidelines/U-M_Logo-Horizontal-Hex.png" alt="University of Michigan" style="height: 80px; width: auto;">
+              <img src="https://brand.umich.edu/assets/brand/style-guide/logo-guidelines/U-M_Logo-Horizontal-Hex.png" alt="University of Michigan" style="height: 60px; width: auto;">
             </a>
             <a href="https://www.nvidia.com/" target="_blank">
-              <img src="https://www.nvidia.com/content/nvidiaGDC/us/en_US/about-nvidia/legal-info/logo-brand-usage/_jcr_content/root/responsivegrid/nv_container_392921705/nv_container_412055486/nv_image.coreimg.100.1290.png/1703060329095/nvidia-logo-horz.png" alt="NVIDIA" style="height: 50px; width: auto;">
+              <img src="https://www.nvidia.com/content/nvidiaGDC/us/en_US/about-nvidia/legal-info/logo-brand-usage/_jcr_content/root/responsivegrid/nv_container_392921705/nv_container_412055486/nv_image.coreimg.100.1290.png/1703060329095/nvidia-logo-horz.png" alt="NVIDIA" style="height: 60px; width: auto;">
             </a>
           </div>
 
@@ -270,8 +271,9 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Fine-tuning Multimodal Large Language Models (MLLMs) with parameter-efficient methods like Low-Rank Adaptation (LoRA) is crucial for task adaptation. However, imbalanced training dynamics across modalities often lead to suboptimal accuracy due to negative interference, a challenge typically addressed with inefficient, heuristic methods like manually tuning separate learning rates. To overcome this, we introduce MARS (Multimodal Adaptive Rank Search), an approach to discover optimal rank pairs that balance training dynamics while maximizing performance. Our key innovation, a proposed framework of dual scaling laws, enables this search: one law models module-specific convergence time to prune the search space to candidates with aligned dynamics, while the other predicts final task performance to select the optimal pair from the pruned set. By re-purposing LoRA rank as a controller for modality-specific convergence speed, MARS achieves superior performance over baseline methods and offers a robust, automated strategy for optimizing MLLM fine-tuning.          </p>
-        </div>
+            Current controllable diffusion models typically rely on fixed architectures that modify intermediate activations to inject guidance conditioned on a new modality. This approach uses a static conditioning strategy for a dynamic, multi-stage denoising process, limiting the model's ability to adapt its response as the generation evolves from coarse structure to fine detail. We introduce TC-LoRA (Temporally Modulated Conditional LoRA), a new paradigm that enables dynamic, context-aware control by conditioning the model's weights directly. Our framework uses a hypernetwork to generate LoRA adapters on-the-fly, tailoring weight modifications for the frozen backbone at each diffusion step based on time and the user's condition. This mechanism enables the model to learn and execute an explicit, adaptive strategy for applying conditional guidance throughout the entire generation process. Through experiments on various data domains, we demonstrate that this dynamic, parametric control significantly enhances generative fidelity and adherence to spatial conditions compared to static, activation-based methods. TC-LoRA establishes an alternative approach in which the model's conditioning strategy is modified through a deeper functional adaptation of its weights, allowing control to align with the dynamic demands of the task and generative stage.
+          </p>
+          </div>
       </div>
     </div>
     <!--/ Abstract. -->
