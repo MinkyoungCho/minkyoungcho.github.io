@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description"
+        content="MARS.">
+  <meta name="keywords" content="MARS."> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TC-LoRA: Temporally Modulated Conditional LoRA for Adaptive Diffusion Control</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+  <link rel="icon" href="./static/images/text-x-bibtex.svg">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <style>
+    .gray-section {
+        background-color: #f5f5f5; /* Light gray background */
+        padding: 40px;
+        border-radius: 8px; /* Optional: rounded corners */
+    }
+
+    .gray-section h2 {
+        text-align: center;
+        font-size: 28px;
+    }
+
+    .highlight-box {
+        background-color: white;
+        padding: 15px;
+        border-left: 4px solid #cccccc;
+        margin-top: 15px;
+        border-radius: 5px;
+    }
+
+    /* Adjust heading spacing */
+.approach-title {
+  margin-top: 40px; /* Moves "Approach" text lower */
+}
+
+/* Center the image properly */
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Resize the image */
+.image-container img {
+  max-width: 180%; /* Ensures responsiveness */
+  height: auto;
+}
+
+.figure-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Adjust this based on your figure width */
+    max-width: 1000px; /* Ensures it doesn’t stretch too wide */
+    margin: 0 auto; /* Centers the figure and caption */
+}
+
+.figure-image {
+    width: 380%; /* Ensures the image takes full width of the container */
+    height: auto; /* Keeps the aspect ratio */
+}
+
+.figure-caption {
+    font-size: 18px;
+    color: #666; /* Light gray for readability */
+    text-align: justify; /* Ensures caption aligns with the figure width */
+    margin-top: 10px; /* Adds spacing between figure and caption */
+    max-width: 240%; /* Ensures it does not exceed the figure width */
+}
+</style>
+
+
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">TC-LoRA: Temporally Modulated Conditional LoRA for Adaptive Diffusion Control</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://minkyoungcho.github.io">Minkyoung Cho</a><sup>1†</sup>,</span>
+            </span>
+              <span class="author-block">
+                <a href="https://insujang.github.io">Ruben Ohana</a><sup>2</sup>,</span>
+              </span>
+              <span class="author-block">
+                <a href="https://shuoweijin.com">Christian Jacobsen</a><sup>2</sup>,</span>
+              </span>
+            </br>
+            <span class="author-block">
+                Adityan Jothi<sup>2</sup>,</span>
+              </span>
+              <span class="author-block">
+                <a href="https://minhungchen.netlify.app">Min-Hung Chen</a><sup>2</sup>,</span>
+              </span>              
+              <span class="author-block">
+                <a href="https://web.eecs.umich.edu/~zmao/">Z. Morley Mao</a><sup>1</sup>,</span>
+              </span>
+              <span class="author-block">
+                <a href="https://developer.nvidia.com/blog/author/ecan/">Ethem F. Can</a><sup>2</sup>,</span>
+              </span>
+                      
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Michigan </span>
+            <span class="author-block"><sup>2</sup>NVIDIA</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>†</sup>Work done during internship</span>
+          </div>
+
+          <div class="publication-logos" style="display: flex; justify-content: center; align-items: center; gap: 30px; margin-top: 20px; margin-bottom: 20px;">
+            <a href="https://umich.edu/" target="_blank">
+              <img src="https://brand.umich.edu/assets/brand/style-guide/logo-guidelines/U-M_Logo-Horizontal-Hex.png" alt="University of Michigan" style="height: 80px; width: auto;">
+            </a>
+            <a href="https://www.nvidia.com/" target="_blank">
+              <img src="https://www.nvidia.com/content/nvidiaGDC/us/en_US/about-nvidia/legal-info/logo-brand-usage/_jcr_content/root/responsivegrid/nv_container_392921705/nv_container_412055486/nv_image.coreimg.100.1290.png/1703060329095/nvidia-logo-horz.png" alt="NVIDIA" style="height: 50px; width: auto;">
+            </a>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://openreview.net/pdf?id=DKgAFfCs5F"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2410.12592"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="javascript:scrollToBottom();" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <i class="fas fa-bookmark"></i>  <!-- Bookmark icon -->
+                    </span>
+                    <span>BibTeX</span>
+                </a>
+            </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- <section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/steve.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/chair-tp.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/shiba.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-fullbody">
+          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/fullbody.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-blueshirt">
+          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/blueshirt.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-mask">
+          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/mask.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-coffee">
+          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/coffee.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-toby">
+          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/toby2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<section class="gray-section">
+  <div class="container is-light is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Fine-tuning Multimodal Large Language Models (MLLMs) with parameter-efficient methods like Low-Rank Adaptation (LoRA) is crucial for task adaptation. However, imbalanced training dynamics across modalities often lead to suboptimal accuracy due to negative interference, a challenge typically addressed with inefficient, heuristic methods like manually tuning separate learning rates. To overcome this, we introduce MARS (Multimodal Adaptive Rank Search), an approach to discover optimal rank pairs that balance training dynamics while maximizing performance. Our key innovation, a proposed framework of dual scaling laws, enables this search: one law models module-specific convergence time to prune the search space to candidates with aligned dynamics, while the other predicts final task performance to select the optimal pair from the pruned set. By re-purposing LoRA rank as a controller for modality-specific convergence speed, MARS achieves superior performance over baseline methods and offers a robust, automated strategy for optimizing MLLM fine-tuning.          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    
+
+
+</section>
+
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{cho2025tclora,
+      title={TC-LoRA: Temporally Modulated Conditional LoRA for Adaptive Diffusion Control},
+      author={Minkyoung Cho, Ruben Ohana, Christian Jacobsen, Adityan Jothi, Min-Hung Chen, Z. Morley Mao, Ethem Can},
+      journal={arXiv preprint arXiv:2510.09561},
+      year={2025}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Website source code borrowed from <a
+              href="https://github.com/nerfies/nerfies.github.io">here</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+
+
+<script>
+function scrollToBottom() {
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth"
+    });
+}
+</script>
+</html>
+<div id="bottom"></div>
