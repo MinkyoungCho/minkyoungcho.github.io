@@ -105,7 +105,15 @@
     margin-top: 10px; /* Adds spacing between figure and caption */
     max-width: 240%; /* Ensures it does not exceed the figure width */
 }
-</style>
+    .publication-authors a {
+        color: #76b900 !important;
+        transition: opacity 0.3s ease;
+    }
+    .publication-authors a:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+  </style>
 
 
 </head>
@@ -120,7 +128,7 @@
           <h1 class="title is-2 publication-title">TC-LoRA: Temporally Modulated Conditional LoRA for Adaptive Diffusion Control</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="https://minkyoungcho.github.io">Minkyoung Cho</a><sup>1†</sup>
+              <a href="https://minkyoungcho.github.io">Minkyoung Cho</a><sup>1†</sup> 
             </span>
             <span class="author-block" style="margin-left: 35px;">
               <a href="https://rubenohana.github.io/">Ruben Ohana</a><sup>2</sup>
@@ -205,63 +213,6 @@
 
 
 
-<!-- <section class="hero is-light is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-steve">
-          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/steve.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-chair-tp">
-          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/chair-tp.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-shiba">
-          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/shiba.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-fullbody">
-          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/fullbody.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-blueshirt">
-          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/blueshirt.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-mask">
-          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/mask.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-coffee">
-          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/coffee.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-toby">
-          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/toby2.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </div>
-  </div>
-</section> -->
-
 
 <section class="gray-section">
   <div class="container is-light is-max-desktop">
@@ -273,16 +224,192 @@
           <p>
             Current controllable diffusion models typically rely on fixed architectures that modify intermediate activations to inject guidance conditioned on a new modality. This approach uses a static conditioning strategy for a dynamic, multi-stage denoising process, limiting the model's ability to adapt its response as the generation evolves from coarse structure to fine detail. 
             
-            We introduce <strong>TC-LoRA</strong> (Temporally Modulated Conditional LoRA), a new paradigm that enables dynamic, context-aware control by conditioning the model's weights directly. Our framework uses a hypernetwork to generate LoRA adapters on-the-fly, tailoring weight modifications for the frozen backbone at each diffusion step based on time and the user's condition. This mechanism enables the model to learn and execute an explicit, adaptive strategy for applying conditional guidance throughout the entire generation process. Through experiments on various data domains, we demonstrate that this dynamic, parametric control significantly enhances generative fidelity and adherence to spatial conditions compared to static, activation-based methods. TC-LoRA establishes an alternative approach in which the model's conditioning strategy is modified through a deeper functional adaptation of its weights, allowing control to align with the dynamic demands of the task and generative stage.
+            We introduce <strong style="color: #76b900;">TC-LoRA (Temporally Modulated Conditional LoRA)</strong>, a new paradigm that enables dynamic, context-aware control by conditioning the model's weights directly. Our framework uses a hypernetwork to generate LoRA adapters on-the-fly, tailoring weight modifications for the frozen backbone at each diffusion step based on time and the user's condition. This mechanism enables the model to learn and execute an explicit, adaptive strategy for applying conditional guidance throughout the entire generation process. Through experiments on various data domains, we demonstrate that this dynamic, parametric control significantly enhances generative fidelity and adherence to spatial conditions compared to static, activation-based methods. TC-LoRA establishes an alternative approach in which the model's conditioning strategy is modified through a deeper functional adaptation of its weights, allowing control to align with the dynamic demands of the task and generative stage.
           </p>
           </div>
       </div>
     </div>
     <!--/ Abstract. -->
 
-    
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Motivation. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Background & Motivation</h2>
+          <h4 class="title is-5 has-text-centered" style="color: #76b900; margin-bottom: 20px;">
+            Why do we need static conditioning strategy for a dynamic diffusion process?
+          </h4>
+          <br>
+          <div class="content has-text-centered">
+            <img src="./static/images/motivation_tclora.png" alt="Motivation" style="width: 100%;">
+          </div>
+          <div class="content has-text-justified">
+            <ul style="margin-bottom: 0;">
+              <li>Control is critical for making generative AI predictable and professional.</li>
+              <li>Existing methods like ControlNet [1] rely on static activation-space conditioning with a frozen adapter.</li>
+            	<li> Diffusion models have evolving needs throughout the generation steps: from early semantic alignment to later spatial refinement [2].</li>
+            </ul>
+            
+              <br>
+              [1] Adding Conditional Control to Text-to-Image Diffusion Models
+              <br>
+              [2] eDiff-I: Text-to-Image Diffusion Models with an Ensemble of Expert Denoisers
+          </div>
+        </div>
+      </div>
+      <!--/ Motivation. -->
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Method. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">TC-LoRA Overview</h2>
+          
+          <div class="content has-text-justified">
+            <h4 class="title is-5 has-text-centered" style="color: #76b900; margin-bottom: 20px;">
+              Can we provide the proper conditional guidance based on the model's changing needs?
+            </h4>
+            <br>
+            <div class="content has-text-centered">
+              <img src="./static/images/overview_tclora.png" alt="Overview" style="width: 250%;">
+            </div>
+            <div class="content">
+              <ul>
+                <li><strong>Dynamic weight conditioning (adaptation)</strong></li>
+                <br>
+
+            <!-- Comparison Table -->
+            <div class="table-container">
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                  <tr>
+                    <th class="has-text-centered"></th>
+                    <th class="has-text-centered">ControlNet-style</th>
+                    <th class="has-text-centered">Ours</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="has-text-weight-bold">Primary Site of Intervention</td>
+                    <td class="has-text-centered">Activation Space</td>
+                    <td class="has-text-centered">Weight Space</td>
+                  </tr>
+                  <tr>
+                    <td class="has-text-weight-bold">Conditioning Strategy</td>
+                    <td class="has-text-centered">Static</td>
+                    <td class="has-text-centered">Dynamic</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+                <li><strong>Context-aware generation via hypernetwork (H)</strong>
+                  <ul>
+                    <li>Adapters conditioned on diffusion timestep (<i>t</i>) and input condition (<i>c</i>)</li>
+                    <li>Hypernetwork shared across different layers</li>
+                  </ul>
+                  <li><strong>LoRA  vs. TC-LoRA</strong></li>
+                </li>
+              </ul>
+              
+              <div class="content has-text-centered box" style="background-color: #e8f5e9; border-left: 5px solid #76b900; margin-top: 20px; padding: 20px; margin-left: 80px;margin-right: 80px;">
+                <p style="font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 1.1em;">
+                  LoRA : <i>W</i> = <i>W</i><sub>0</sub> + <i>BA</i>
+                  <br><br>
+                  TC-LoRA : <i>A</i>(<i>t, c</i>) = <i>H<sub>A</sub></i> (<i>t, c</i>)
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>B</i>(<i>t, c</i>) = <i>H<sub>B</sub></i> (<i>t, c</i>)
+                  <br><br>
+                  <i>W</i> = <i>W</i><sub>0</sub> + <i>B</i>(<i>t, c</i>)<i>A</i> (<i>t, c</i>)
+                </p>
+              </div>
+            </div>
+
+            
+            <!-- Method Image Placeholder -->
+            <!-- <div class="content has-text-centered">
+               <img src="./static/images/framework.png" alt="TC-LoRA Framework" style="width: 100%;">
+            </div> -->
+
+          </div>
+        </div>
+      </div>
+      <!--/ Method. -->
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-light is-max-desktop">
+    <!-- Qualitative Results. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        
+        <h2 class="title is-3 approach-title">Qualitative Comparison</h2>
+        
+        <div class="content" style="display: inline-block; text-align: left; background-color: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+          <ul style="margin-bottom: 0;">
+            <li><strong>  Input:</strong> Depth Map</li>
+            <li><strong>Baseline:</strong> Cosmos-Transfer1 (= Cosmos-Predict1 + ControlNet)</li>
+            <li><strong>Ours:</strong> Cosmos-Predict1 + <strong style="color: #76b900;">TC-LoRA</strong></li>
+          </ul>
+        </div>
+
+        <div class="content has-text-justified">
+          
+          <!-- Image Section -->
+            <div class="figure-container">
+              <img src="./static/images/qual1.png" alt="Qualitative Result 1" style="width:100%; margin-bottom: 10px;">
+              <img src="./static/images/qual2.png" alt="Qualitative Result 2" style="width:100%; margin-bottom: 10px;">
+              <img src="./static/images/qual3.png" alt="Qualitative Result 3" style="width:100%; margin-bottom: 10px;">
+              <p class="figure-caption">
+                  <strong>Qualitative Comparison:</strong>  
+                  Each example set comprises a text prompt (top), a depth condition (left), and the corresponding generation results obtained using ControlNet (middle) and TC-LoRA conditioning (right). Overall, TC-LoRA exhibits improved fidelity in adhering to the spatial condition.
+              </p>
+          </div>
+          </div> -
+
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+</section>
 
 
+
+<section class="section">
+  <div class="container is-light is-max-desktop">
+  <!-- Qualitative Results. -->
+  <div class="columns is-centered has-text-centered">
+    <div class="column is-four-fifths">
+      
+      <h2 class="title is-3 approach-title">Qualitative Results</h2>
+      
+
+      <div class="content has-text-justified">
+        
+        <!-- Image Section -->
+          <div class="figure-container">
+            <img src="./static/images/qual-additional.png" alt="Qualitative Result 1" style="width:250%; margin-bottom: 10px;">
+            <p class="figure-caption">
+                <strong>Effect of TC-LoRA:</strong>  
+                (a) and (b) show images generated from the given text prompt <i>without conditioning</i>. With the condition input shown in (c), the generation process can be conditioned accordingly, demonstrating TC-LoRA’s role in enabling spatial correction through LoRA. Panels (d), (e), and (f) present visualization results at different TC-LoRA post-training durations. After 150k iterations, the generated image is well aligned with the condition in (c).
+            </p>
+        </div>
+        </div> -
+
+      </div>
+    </div>
+  </div>
+  <!--/ Abstract. -->
+</div>
+</section>
 </section>
 
 
