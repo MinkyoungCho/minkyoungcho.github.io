@@ -1,0 +1,461 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description"
+        content="TC-LoRA.">
+  <meta name="keywords" content="TC-LoRA."> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TC-LoRA: Temporally Modulated Conditional LoRA for Adaptive Diffusion Control</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+  <link rel="icon" href="./static/images/text-x-bibtex.svg">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <style>
+    .gray-section {
+        background-color: #f5f5f5; /* Light gray background */
+        padding: 40px;
+        border-radius: 8px; /* Optional: rounded corners */
+    }
+
+    .gray-section h2 {
+        text-align: center;
+        font-size: 28px;
+    }
+
+    .highlight-box {
+        background-color: white;
+        padding: 15px;
+        border-left: 4px solid #cccccc;
+        margin-top: 15px;
+        border-radius: 5px;
+    }
+
+    /* Adjust heading spacing */
+.approach-title {
+  margin-top: 40px; /* Moves "Approach" text lower */
+}
+
+/* Center the image properly */
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Resize the image */
+.image-container img {
+  max-width: 180%; /* Ensures responsiveness */
+  height: auto;
+}
+
+.figure-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Adjust this based on your figure width */
+    max-width: 1000px; /* Ensures it doesn’t stretch too wide */
+    margin: 0 auto; /* Centers the figure and caption */
+}
+
+.figure-image {
+    width: 380%; /* Ensures the image takes full width of the container */
+    height: auto; /* Keeps the aspect ratio */
+}
+
+.figure-caption {
+    font-size: 18px;
+    color: #666; /* Light gray for readability */
+    text-align: justify; /* Ensures caption aligns with the figure width */
+    margin-top: 10px; /* Adds spacing between figure and caption */
+    max-width: 240%; /* Ensures it does not exceed the figure width */
+}
+    .publication-authors a {
+        color: #76b900 !important;
+        transition: opacity 0.3s ease;
+    }
+    .publication-authors a:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+  </style>
+
+
+</head>
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-2 publication-title">TC-LoRA: Temporally Modulated Conditional LoRA for Adaptive Diffusion Control</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://minkyoungcho.github.io">Minkyoung Cho</a><sup>1†</sup> 
+              </span>
+              <span class="author-block" style="margin-left: 35px;">
+                <a href="https://rubenohana.github.io/">Ruben Ohana</a><sup>2</sup>
+              </span>
+              <span class="author-block" style="margin-left: 35px;">
+                <a href="https://minkyoungcho.github.io/tc-lora/">Christian Jacobsen</a><sup>2</sup>
+              </span>
+              <span class="author-block" style="margin-left: 35px;">
+                <a href="https://minkyoungcho.github.io/tc-lora/">Adityan Jothi</a><sup>2</sup>
+              </span>
+              
+              <br>
+              
+              <span class="author-block">
+                <a href="https://minhungchen.netlify.app">Min-Hung Chen</a><sup>2</sup>
+              </span>
+              <span class="author-block" style="margin-left: 35px;">
+                <a href="https://web.eecs.umich.edu/~zmao/">Z. Morley Mao</a><sup>1</sup>
+              </span>
+              <span class="author-block" style="margin-left: 35px;">
+                <a href="https://developer.nvidia.com/blog/author/ecan/">Ethem F. Can</a><sup>2</sup>
+              </span>
+            </div>
+  
+            <div class="is-size-5 publication-authors">
+              <span class="author-block""><sup>1</sup>University of Michigan </span>
+              <span class="author-block" style="margin-left: 35px;"><sup>2</sup>NVIDIA</span>
+            </div>
+  
+            <div class="is-size-6 publication-authors">
+              <span class="author-block"><sup>† </sup>Work done during internship</span>
+            </div>
+  
+            <div style="display: flex; flex-direction: column; align-items: center; margin-top: 10px; margin-bottom: 20px;">
+              <div class="publication-logos" style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+                <a href="https://umich.edu/" target="_blank">
+                  <img src="https://brand.umich.edu/assets/brand/style-guide/logo-guidelines/U-M_Logo-Horizontal-Hex.png" 
+                       alt="University of Michigan" 
+                       style="height: 35px; width: auto; object-fit: contain;">
+                </a>
+                <a href="https://www.nvidia.com/" target="_blank">
+                  <img src="https://www.nvidia.com/content/nvidiaGDC/us/en_US/about-nvidia/legal-info/logo-brand-usage/_jcr_content/root/responsivegrid/nv_container_392921705/nv_container_412055486/nv_image.coreimg.100.1290.png/1703060329095/nvidia-logo-horz.png" 
+                       alt="NVIDIA" 
+                       style="height: 85px; width: auto; object-fit: contain;">
+                </a>
+              </div>
+              
+              <div class="title is-4 has-text-centered" style="color: #76b900; font-weight: bold; margin-top: -10px;">
+                SpaVLE @ NeurIPS’25
+              </div>
+            </div>
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2510.09561"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <img src="./static/images/pdf17.svg" alt="PDF" style="width: 16px; height: 16px; filter: invert(1);">
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2510.09561"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="javascript:scrollToBottom();" class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                          <img src="./static/images/text-x-bibtex.svg" alt="BibTeX" style="width: 16px; height: 16px; filter: invert(1);">
+                      </span>
+                      <span>BibTeX</span>
+                  </a>
+              </span>
+              </div>
+  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+<section class="gray-section">
+  <div class="container is-light is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Current controllable diffusion models typically rely on fixed architectures that modify intermediate activations to inject guidance conditioned on a new modality. This approach uses a static conditioning strategy for a dynamic, multi-stage denoising process, limiting the model's ability to adapt its response as the generation evolves from coarse structure to fine detail. 
+            
+            We introduce <strong style="color: #76b900;">TC-LoRA (Temporally Modulated Conditional LoRA)</strong>, a new paradigm that enables dynamic, context-aware control by conditioning the model's weights directly. Our framework uses a hypernetwork to generate LoRA adapters on-the-fly, tailoring weight modifications for the frozen backbone at each diffusion step based on time and the user's condition. This mechanism enables the model to learn and execute an explicit, adaptive strategy for applying conditional guidance throughout the entire generation process. Through experiments on various data domains, we demonstrate that this dynamic, parametric control significantly enhances generative fidelity and adherence to spatial conditions compared to static, activation-based methods. TC-LoRA establishes an alternative approach in which the model's conditioning strategy is modified through a deeper functional adaptation of its weights, allowing control to align with the dynamic demands of the task and generative stage.
+          </p>
+          </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Motivation. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Background & Motivation</h2>
+          <h4 class="title is-5 has-text-centered" style="color: #76b900; margin-bottom: 20px;">
+            Why do we need static conditioning strategy for a dynamic diffusion process?
+          </h4>
+          <br>
+          <div class="content has-text-centered">
+            <img src="./static/images/qual_motivation.png" alt="Motivation" style="width: 100%;">
+          </div>
+          <div class="content has-text-justified">
+            <ul style="margin-bottom: 0;">
+              <li>Control is critical for making generative AI predictable and professional.</li>
+              <li>Existing methods like ControlNet [1] rely on static activation-space conditioning with a frozen adapter.</li>
+              <li> Diffusion models have evolving needs throughout the generation steps: from early semantic alignment to later spatial refinement [2].</li>
+            </ul>
+            
+              <br>
+              [1] Adding Conditional Control to Text-to-Image Diffusion Models
+              <br>
+              [2] eDiff-I: Text-to-Image Diffusion Models with an Ensemble of Expert Denoisers
+          </div>
+        </div>
+      </div>
+      <!--/ Motivation. -->
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Method. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">TC-LoRA Overview</h2>
+          
+          <div class="content has-text-justified">
+            <h4 class="title is-5 has-text-centered" style="color: #76b900; margin-bottom: 20px;">
+              Can we provide the proper conditional guidance based on the model's changing needs?
+            </h4>
+            <br>
+            <div class="content has-text-centered">
+              <img src="./static/images/overview_tclora.png" alt="Overview" style="width: 250%;">
+            </div>
+            <div class="content">
+              <ul>
+                <li><strong>Dynamic weight conditioning (adaptation)</strong></li>
+                <br>
+
+            <!-- Comparison Table -->
+            <div class="table-container">
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                  <tr>
+                    <th class="has-text-centered"></th>
+                    <th class="has-text-centered">ControlNet-style</th>
+                    <th class="has-text-centered">Ours</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="has-text-weight-bold">Primary Site of Intervention</td>
+                    <td class="has-text-centered">Activation Space</td>
+                    <td class="has-text-centered">Weight Space</td>
+                  </tr>
+                  <tr>
+                    <td class="has-text-weight-bold">Conditioning Strategy</td>
+                    <td class="has-text-centered">Static</td>
+                    <td class="has-text-centered">Dynamic</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+                <li><strong>Context-aware generation via hypernetwork (H)</strong>
+                  <ul>
+                    <li>Adapters conditioned on diffusion timestep (<i>t</i>) and input condition (<i>c</i>)</li>
+                    <li>Hypernetwork shared across different layers</li>
+                  </ul>
+                  <li><strong>LoRA  vs. TC-LoRA</strong></li>
+                </li>
+              </ul>
+              
+              <div class="content has-text-centered box" style="background-color: #e8f5e9; border-left: 5px solid #76b900; margin-top: 20px; padding: 20px; margin-left: 80px;margin-right: 80px;">
+                <p style="font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 1.1em;">
+                  LoRA : <i>W</i> = <i>W</i><sub>0</sub> + <i>BA</i>
+                  <br><br>
+                  TC-LoRA : <i>A</i>(<i>t, c</i>) = <i>H<sub>A</sub></i> (<i>t, c</i>)
+                  <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>B</i>(<i>t, c</i>) = <i>H<sub>B</sub></i> (<i>t, c</i>)
+                  <br><br>
+                  <i>W</i> = <i>W</i><sub>0</sub> + <i>B</i>(<i>t, c</i>)<i>A</i> (<i>t, c</i>)
+                </p>
+              </div>
+            </div>
+
+            
+            <!-- Method Image Placeholder -->
+            <!-- <div class="content has-text-centered">
+               <img src="./static/images/framework.png" alt="TC-LoRA Framework" style="width: 100%;">
+            </div> -->
+
+          </div>
+        </div>
+      </div>
+      <!--/ Method. -->
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-light is-max-desktop">
+    <!-- Qualitative Results. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        
+        <h2 class="title is-3 approach-title">Qualitative Comparison</h2>
+        
+        <div class="content" style="display: inline-block; text-align: left; background-color: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+          <ul style="margin-bottom: 0;">
+            <li><strong>  Input:</strong> Depth Map</li>
+            <li><strong>Baseline:</strong> Cosmos-Transfer1 (= Cosmos-Predict1 + ControlNet)</li>
+            <li><strong>Ours:</strong> Cosmos-Predict1 + <strong style="color: #76b900;">TC-LoRA</strong></li>
+          </ul>
+        </div>
+
+        <div class="content has-text-justified">
+          
+          <!-- Image Section -->
+            <div class="figure-container">
+              <img src="./static/images/qual1.png" alt="Qualitative Result 1" style="width:100%; margin-bottom: 10px;">
+              <img src="./static/images/qual2.png" alt="Qualitative Result 2" style="width:100%; margin-bottom: 10px;">
+              <img src="./static/images/qual3.png" alt="Qualitative Result 3" style="width:100%; margin-bottom: 10px;">
+              <p class="figure-caption">
+                  <strong>Qualitative Comparison:</strong>  
+                  Each example set comprises a text prompt (top), a depth condition (left), and the corresponding generation results obtained using ControlNet (middle) and TC-LoRA conditioning (right). Overall, TC-LoRA exhibits improved fidelity in adhering to the spatial condition.
+              </p>
+          </div>
+          </div> -
+
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+</section>
+
+
+
+<section class="section">
+  <div class="container is-light is-max-desktop">
+  <!-- Qualitative Results. -->
+  <div class="columns is-centered has-text-centered">
+    <div class="column is-four-fifths">
+      
+      <h2 class="title is-3 approach-title">Effect of TC-LoRA</h2>
+      
+
+      <div class="content has-text-justified">
+        
+        <!-- Image Section -->
+          <div class="figure-container">
+            <img src="./static/images/qual-additional.png" alt="Qualitative Result 1" style="width:250%; margin-bottom: 10px;">
+            <p class="figure-caption">
+                <strong>Effect of TC-LoRA:</strong>  
+                (a) and (b) show images generated from the given text prompt <i>without conditioning</i>. With the condition input shown in (c), the generation process can be conditioned accordingly, demonstrating TC-LoRA’s role in enabling spatial correction through LoRA. Panels (d), (e), and (f) present visualization results at different TC-LoRA post-training durations. After 150k iterations, the generated image is well aligned with the condition in (c).
+            </p>
+        </div>
+        </div> -
+
+      </div>
+    </div>
+  </div>
+  <!--/ Abstract. -->
+</div>
+</section>
+</section>
+
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{cho2025tclora,
+      title={TC-LoRA: Temporally Modulated Conditional LoRA for Adaptive Diffusion Control},
+      author={Minkyoung Cho, Ruben Ohana, Christian Jacobsen, Adityan Jothi, Min-Hung Chen, Z. Morley Mao, Ethem Can},
+      journal={arXiv preprint arXiv:2510.09561},
+      year={2025}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Website source code borrowed from <a
+              href="https://github.com/nerfies/nerfies.github.io">here</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+
+
+<script>
+function scrollToBottom() {
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth"
+    });
+}
+</script>
+</html>
+<div id="bottom"></div>
