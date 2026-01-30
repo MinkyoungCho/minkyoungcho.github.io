@@ -1,314 +1,1507 @@
-
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta name="description"
-        content="MARS.">
-  <meta name="keywords" content="MARS."> 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MARS: Harmonizing Multimodal Convergence via Adaptive Rank Search</title>
-
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-
-    gtag('config', 'G-PYVRSFMDRL');
-  </script>
-
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
-
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="./static/images/favicon.svg">
-  <link rel="icon" href="./static/images/text-x-bibtex.svg">
-
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Bulma CSS Framework -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Academicons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 
   <style>
-    .gray-section {
-        background-color: #f5f5f5; /* Light gray background */
-        padding: 40px;
-        border-radius: 8px; /* Optional: rounded corners */
+    :root {
+      /* MARS Theme - Deep Space / Scientific */
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --primary-dark: #4f46e5;
+      --accent: #f97316;
+      --accent-light: #fb923c;
+      --accent-secondary: #22d3ee;
+      --bg-dark: #0f0f23;
+      --bg-darker: #090915;
+      --bg-section: #fafbfc;
+      --bg-section-alt: #f1f5f9;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-light: #94a3b8;
+      --border-color: #e2e8f0;
+      --card-bg: #ffffff;
+      --gradient-1: #667eea;
+      --gradient-2: #764ba2;
+      --gradient-3: #f093fb;
     }
 
-    .gray-section h2 {
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-primary);
+      line-height: 1.7;
+      background: #ffffff;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .title.is-1 {
+      font-size: 2.85rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    .mars-text {
+      background: linear-gradient(135deg, var(--accent), #ef4444);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+    }
+
+    .highlight-text {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+      padding-top: 3rem;
+      padding-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--gradient-1), var(--accent), var(--gradient-2));
+    }
+
+    /* Animated background particles */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(34, 211, 238, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-body {
+      padding: 3rem 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Author Block */
+    .author-block {
+      display: inline-block;
+      margin: 0 0.4rem 0.5rem 0;
+    }
+
+    .author-block a {
+      color: var(--primary);
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .author-block a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+
+    .author-block sup {
+      color: var(--accent);
+      font-weight: 700;
+      margin-left: 1px;
+      font-size: 0.7em;
+    }
+
+    /* Affiliations */
+    .affiliations {
+      margin: 1rem 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .affiliations sup {
+      color: var(--accent);
+      font-weight: 600;
+      margin-right: 0.25rem;
+    }
+
+    /* Institution Logos */
+    .institution-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4rem;
+      margin: 2rem 0 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .institution-logos a {
+      display: flex;
+      align-items: center;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .institution-logos img {
+      object-fit: contain;
+      filter: grayscale(10%);
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+
+    .institution-logos a:hover {
+      transform: scale(1.05);
+    }
+
+    .institution-logos a:hover img {
+      filter: grayscale(0%);
+    }
+
+    /* Publication Badge */
+    .publication-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: white;
+      padding: 0.6rem 1.5rem;
+      border-radius: 2rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+      letter-spacing: 0.3px;
+    }
+
+    /* Publication Links (Buttons) */
+    .publication-links {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+
+    .link-block a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.3rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      border: 2px solid transparent;
+    }
+
+    .link-block a.arxiv-link {
+      background: linear-gradient(135deg, #1e293b, #334155);
+      color: white;
+    }
+
+    .link-block a.arxiv-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(30, 41, 59, 0.35);
+    }
+
+    .link-block a.github-link {
+      background: linear-gradient(135deg, #171717, #262626);
+      color: white;
+    }
+
+    .link-block a.github-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(23, 23, 23, 0.35);
+    }
+
+    .link-block a.dataset-link {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+    }
+
+    .link-block a.dataset-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+    }
+
+    .link-block a.video-link {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+    }
+
+    .link-block a.video-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    /* Sections */
+    .section {
+      padding: 5rem 1.5rem;
+    }
+
+    .section:nth-child(even) {
+      background: var(--bg-section);
+    }
+
+    .section-title {
+      font-size: 2.1rem;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      margin: 1rem auto 0;
+      border-radius: 2px;
+    }
+
+    /* Abstract Box */
+    .abstract-box {
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      border-left: 5px solid var(--primary);
+      padding: 2rem;
+      border-radius: 0 16px 16px 0;
+      margin: 2rem 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .abstract-box p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    /* Motivation Figure */
+    .motivation-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    @media (max-width: 900px) {
+      .motivation-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .motivation-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--border-color);
+    }
+
+    .motivation-card h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .motivation-card .tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .tag-slow {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .tag-fast {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+
+    .tag-balanced {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+
+    /* Key Contributions */
+    .contributions-list {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .contribution-item {
+      display: flex;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .contribution-item:last-child {
+      border-bottom: none;
+    }
+
+    .contribution-number {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--gradient-2));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .contribution-content h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .contribution-content p {
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Method Section */
+    .method-overview {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--border-color);
+      margin: 2rem 0;
+    }
+
+    .dual-scaling-laws {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .dual-scaling-laws {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .scaling-law-card {
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 2px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .scaling-law-card:hover {
+      border-color: var(--primary-light);
+      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.1);
+    }
+
+    .scaling-law-card.performance {
+      border-top: 4px solid var(--primary);
+    }
+
+    .scaling-law-card.convergence {
+      border-top: 4px solid var(--accent);
+    }
+
+    .scaling-law-card h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .scaling-law-card .formula {
+      background: var(--bg-dark);
+      color: #e2e8f0;
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+
+    .scaling-law-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Workflow Steps */
+    .workflow-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 2rem auto;
+    }
+
+    .workflow-step {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--gradient-2));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.4rem;
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+    }
+
+    .step-content {
+      flex: 1;
+      background: var(--card-bg);
+      padding: 1.75rem;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    }
+
+    .step-content h4 {
+      color: var(--primary);
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+    }
+
+    .step-content p {
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Results Section */
+    .results-highlight {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .results-highlight {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .result-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--border-color);
+      transition: transform 0.3s ease;
+    }
+
+    .result-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .result-card .metric {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .result-card .metric-label {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+      font-weight: 500;
+    }
+
+    .result-card .benchmark {
+      color: var(--text-light);
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Image Container */
+    .image-container {
+      margin: 2rem 0;
+      text-align: center;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-caption {
+      margin-top: 1rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Comparison Table */
+    .comparison-table-wrapper {
+      overflow-x: auto;
+      margin: 2rem 0;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .comparison-table th {
+      background: linear-gradient(135deg, var(--bg-dark), #1e293b);
+      color: white;
+      padding: 1rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+
+    .comparison-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.95rem;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .comparison-table tr:hover td {
+      background: #f8fafc;
+    }
+
+    .comparison-table .best {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .comparison-table .mars-row {
+      background: linear-gradient(90deg, rgba(99, 102, 241, 0.05), rgba(249, 115, 22, 0.05));
+    }
+
+    .comparison-table .mars-row td {
+      font-weight: 600;
+    }
+
+    /* BibTeX */
+    .bibtex-container {
+      background: var(--bg-dark);
+      border-radius: 16px;
+      padding: 2rem;
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .bibtex-container pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      line-height: 1.7;
+    }
+
+    .copy-button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .copy-button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Table of Contents */
+    .toc-container {
+      position: fixed;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.25rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--border-color);
+      z-index: 100;
+      max-width: 180px;
+    }
+
+    .toc-container h4 {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+    }
+
+    .toc-container ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .toc-container li {
+      margin-bottom: 0.6rem;
+    }
+
+    .toc-container a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+      display: block;
+      padding: 0.25rem 0;
+    }
+
+    .toc-container a:hover,
+    .toc-container a.active {
+      color: var(--primary);
+      transform: translateX(4px);
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--gradient-2));
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+      transition: all 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+      z-index: 100;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-dark);
+      color: var(--text-light);
+      padding: 2.5rem;
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--primary-light);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 1300px) {
+      .toc-container {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .title.is-1 {
+        font-size: 2rem;
+      }
+
+      .section {
+        padding: 3rem 1rem;
+      }
+
+      .publication-links {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .link-block a {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+      }
+
+      .workflow-step {
+        flex-direction: column;
+        align-items: center;
         text-align: center;
-        font-size: 28px;
+      }
+
+      .contribution-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
     }
 
-    .highlight-box {
-        background-color: white;
-        padding: 15px;
-        border-left: 4px solid #cccccc;
-        margin-top: 15px;
-        border-radius: 5px;
+    /* Animation Keyframes */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    /* Adjust heading spacing */
-.approach-title {
-  margin-top: 40px; /* Moves "Approach" text lower */
-}
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
 
-/* Center the image properly */
-.image-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-top: 20px;
-}
+    .animate-in {
+      animation: fadeInUp 0.7s ease-out forwards;
+    }
 
-/* Resize the image */
-.image-container img {
-  max-width: 180%; /* Ensures responsiveness */
-  height: auto;
-}
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
 
-.figure-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%; /* Adjust this based on your figure width */
-    max-width: 1000px; /* Ensures it doesn’t stretch too wide */
-    margin: 0 auto; /* Centers the figure and caption */
-}
+    /* Algorithm Box */
+    .algorithm-box {
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      overflow-x: auto;
+    }
 
-.figure-image {
-    width: 380%; /* Ensures the image takes full width of the container */
-    height: auto; /* Keeps the aspect ratio */
-}
+    .algorithm-box .keyword {
+      color: #f472b6;
+    }
 
-.figure-caption {
-    font-size: 18px;
-    color: #666; /* Light gray for readability */
-    text-align: justify; /* Ensures caption aligns with the figure width */
-    margin-top: 10px; /* Adds spacing between figure and caption */
-    max-width: 240%; /* Ensures it does not exceed the figure width */
-}
-</style>
+    .algorithm-box .comment {
+      color: #6ee7b7;
+    }
 
-
+    .algorithm-box .function {
+      color: #60a5fa;
+    }
+  </style>
 </head>
 <body>
 
+  <!-- Table of Contents (Fixed Sidebar) -->
+  <nav class="toc-container">
+    <h4>Contents</h4>
+    <ul>
+      <li><a href="#abstract">Abstract</a></li>
+      <li><a href="#motivation">Motivation</a></li>
+      <li><a href="#contributions">Contributions</a></li>
+      <li><a href="#method">Method</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#bibtex">BibTeX</a></li>
+    </ul>
+  </nav>
 
-<section class="hero">
-  <div class="hero-body">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop has-text-centered">
+        
+        <!-- Title -->
+        <h1 class="title is-1 animate-in">
+          <span class="mars-text">MARS</span>: Harmonizing Multimodal Convergence via Adaptive Rank Search
+        </h1>
+        
+        <!-- Authors -->
+        <div class="authors animate-in delay-1">
+          <span class="author-block">
+            <a href="https://minkyoungcho.github.io">Minkyoung Cho</a><sup>1</sup>
+          </span>
+          <span class="author-block">
+            <a href="https://minkyoungcho.github.io/mars/">Insu Jang</a><sup>1</sup>
+          </span>
+          <span class="author-block">
+            <a href="https://shuoweijin.com">Shuowei Jin</a><sup>1</sup>
+          </span>
+          <span class="author-block">
+            <a href="#">Zesen Zhao</a><sup>1</sup>
+          </span>
+          <span class="author-block">
+            <a href="https://minkyoungcho.github.io/mars/">Adityan Jothi</a><sup>2</sup>
+          </span>
+          <br>
+          <span class="author-block">
+            <a href="https://minkyoungcho.github.io/mars/">Ethem F. Can</a><sup>2</sup>
+          </span>
+          <span class="author-block">
+            <a href="https://minhungchen.netlify.app">Min-Hung Chen</a><sup>†2</sup>
+          </span>
+          <span class="author-block">
+            <a href="https://web.eecs.umich.edu/~zmao/">Z. Morley Mao</a><sup>†1</sup>
+          </span>
+        </div>
+        
+        <!-- Affiliations -->
+        <div class="affiliations animate-in delay-2">
+          <sup>1</sup>University of Michigan&nbsp;&nbsp;&nbsp;
+          <sup>2</sup>NVIDIA
+          <br>
+          <small><sup>†</sup>Equal Advising</small>
+        </div>
+        
+        <!-- Institution Logos -->
+        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 10px; margin-bottom: 20px;">
+          <div class="publication-logos" style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+            <a href="https://umich.edu/" target="_blank">
+              <img src="https://brand.umich.edu/assets/brand/style-guide/logo-guidelines/U-M_Logo-Horizontal-Hex.png" 
+                   alt="University of Michigan" 
+                   style="height: 35px; width: auto; object-fit: contain;">
+            </a>
+            <a href="https://www.nvidia.com/" target="_blank">
+              <img src="https://www.nvidia.com/content/nvidiaGDC/us/en_US/about-nvidia/legal-info/logo-brand-usage/_jcr_content/root/responsivegrid/nv_container_392921705/nv_container_412055486/nv_image.coreimg.100.1290.png/1703060329095/nvidia-logo-horz.png" 
+                   alt="NVIDIA" 
+                   style="height: 85px; width: auto; object-fit: contain;">
+            </a>
+          </div>
+        </div>
+        
+        <!-- Publication Badge -->
+        <div class="animate-in delay-3">
+          <span class="publication-badge">
+            📄 In Submission
+          </span>
+        </div>
+        
+        <!-- Publication Links -->
+        <div class="publication-links animate-in delay-4">
+          <span class="link-block">
+            <a href="#" class="arxiv-link">
+              <i class="ai ai-arxiv"></i>
+              <span>Paper</span>
+            </a>
+          </span>
+          <span class="link-block">
+            <a href="#" class="github-link" style="opacity: 0.7; cursor: not-allowed;">
+              <i class="fab fa-github"></i>
+              <span>Code (Coming Soon)</span>
+            </a>
+          </span>
+          <span class="link-block">
+            <a href="#bibtex" class="dataset-link">
+              <i class="fas fa-quote-right"></i>
+              <span>BibTeX</span>
+            </a>
+          </span>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Abstract Section -->
+  <section class="section" id="abstract">
     <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">MARS: Harmonizing Multimodal Convergence via Adaptive Rank Search</h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://minkyoungcho.github.io">Minkyoung Cho</a><sup>1</sup>,</span>
-            </span>
-              <span class="author-block">
-                <a href="https://insujang.github.io">Insu Jang</a><sup>1</sup>,</span>
-              </span>
-              <span class="author-block">
-                <a href="https://shuoweijin.com">Shuowei Jin</a><sup>1</sup>,</span>
-              </span>
-              <span class="author-block">
-                Zesen Zhao<sup>1</sup>,</span>
-              </span>
-            </br>
-            <span class="author-block">
-                Adityan Jothi<sup>2</sup>,</span>
-              </span>
-              <span class="author-block">
-                <a href="https://developer.nvidia.com/blog/author/ecan/">Ethem F. Can</a><sup>2</sup>,</span>
-              </span>
-              <span class="author-block">
-                <a href="https://minhungchen.netlify.app">Min-Hung Chen</a><sup>2</sup>,</span>
-              </span>              
-              <span class="author-block">
-                <a href="https://web.eecs.umich.edu/~zmao/">Z. Morley Mao</a><sup>1</sup>,</span>
-              </span>
-                      
-          </div>
-
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>University of Michigan </span>
-            <span class="author-block"><sup>2</sup>NVIDIA</span>
-          </div>
-
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <!-- PDF Link. -->
-              <span class="link-block">
-                <a href="https://openreview.net/pdf?id=DKgAFfCs5F"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/2410.12592"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-              <!-- Video Link. -->
-              <!-- Code Link. -->
-              <span class="link-block">
-                <a href="javascript:scrollToBottom();" class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                        <i class="fas fa-bookmark"></i>  <!-- Bookmark icon -->
-                    </span>
-                    <span>BibTeX</span>
-                </a>
-            </span>
-            </div>
-
-          </div>
-        </div>
+      <h2 class="section-title">Abstract</h2>
+      
+      <div class="abstract-box">
+        <p>
+          Fine-tuning Multimodal Large Language Models (MLLMs) with parameter-efficient methods like Low-Rank Adaptation (LoRA) is crucial for task adaptation. However, <strong>imbalanced training dynamics across modalities</strong> often lead to suboptimal accuracy due to negative interference, a challenge typically addressed with inefficient heuristic methods such as manually tuning separate learning rates. To overcome this, we introduce <strong>MARS (Multimodal Adaptive Rank Search)</strong>, an approach to discover optimal rank pairs that balance training dynamics while maximizing performance. Our key innovation, a proposed framework of <strong>dual scaling laws</strong>, enables this search: one law models module-specific convergence time to prune the search space to candidates with aligned dynamics, while the other predicts final task performance to select the optimal pair from the pruned set. By re-purposing the LoRA rank as a controller for modality-specific convergence speed, MARS outperforms baseline methods and provides a robust, automated strategy for optimizing MLLM fine-tuning.
+        </p>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-
-
-<!-- <section class="hero is-light is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-steve">
-          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/steve.mp4"
-                    type="video/mp4">
-          </video>
+  <!-- Motivation Section -->
+  <section class="section" id="motivation">
+    <div class="container is-max-desktop">
+      <h2 class="section-title">Why <span class="mars-text">MARS</span> is Needed?</h2>
+      
+      <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem; color: var(--text-secondary);">
+        Imbalanced training dynamics between the Vision Encoder (VE) and LLM lead to suboptimal performance. 
+        When modules converge at different rates, it causes either performance bottlenecks or training oscillations.
+      </p>
+      
+      <div class="motivation-grid">
+        <div class="motivation-card">
+          <h4>
+            <span class="tag tag-slow">VE Slow</span>
+            Vision Encoder Under-adapted
+          </h4>
+          <div style="display: flex; gap: 1rem; align-items: center; margin: 1rem 0;">
+            <img src="assets/fig1a.png" alt="VE Slow Diagram" style="width: 48%; border-radius: 8px;">
+            <img src="assets/fig1b.png" alt="VE Slow Results" style="width: 48%; border-radius: 8px;">
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            When the vision encoder is under-adapted (lr<sub>ve</sub> ≪ lr<sub>llm</sub>), 
+            it creates a <strong>performance bottleneck</strong> that limits the overall model capability.
+          </p>
         </div>
-        <div class="item item-chair-tp">
-          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/chair-tp.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-shiba">
-          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/shiba.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-fullbody">
-          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/fullbody.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-blueshirt">
-          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/blueshirt.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-mask">
-          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/mask.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-coffee">
-          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/coffee.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-toby">
-          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/toby2.mp4"
-                    type="video/mp4">
-          </video>
+        
+        <div class="motivation-card">
+          <h4>
+            <span class="tag tag-slow">LLM Slow</span>
+            LLM Under-adapted
+          </h4>
+          <div style="display: flex; gap: 1rem; align-items: center; margin: 1rem 0;">
+            <img src="assets/fig1c.png" alt="LLM Slow Diagram" style="width: 48%; border-radius: 8px;">
+            <img src="assets/fig1d.png" alt="LLM Slow Results" style="width: 48%; border-radius: 8px;">
+          </div>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            When the LLM is under-adapted (lr<sub>llm</sub> ≪ lr<sub>ve</sub>), 
+            it causes significant <strong>training instability and oscillations</strong>.
+          </p>
         </div>
       </div>
-    </div>
-  </div>
-</section> -->
 
-
-<section class="gray-section">
-  <div class="container is-light is-max-desktop">
-    <!-- Abstract. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            Fine-tuning Multimodal Large Language Models (MLLMs) with parameter-efficient methods like Low-Rank Adaptation (LoRA) is crucial for task adaptation. However, imbalanced training dynamics across modalities often lead to suboptimal accuracy due to negative interference, a challenge typically addressed with inefficient, heuristic methods like manually tuning separate learning rates. To overcome this, we introduce MARS (Multimodal Adaptive Rank Search), an approach to discover optimal rank pairs that balance training dynamics while maximizing performance. Our key innovation, a proposed framework of dual scaling laws, enables this search: one law models module-specific convergence time to prune the search space to candidates with aligned dynamics, while the other predicts final task performance to select the optimal pair from the pruned set. By re-purposing LoRA rank as a controller for modality-specific convergence speed, MARS achieves superior performance over baseline methods and offers a robust, automated strategy for optimizing MLLM fine-tuning.          </p>
-        </div>
-      </div>
-    </div>
-    <!--/ Abstract. -->
-
-    
-
-
-</section>
-
-
-
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@inproceedings{cho2025mars,
-      title={MARS: Harmonizing Multimodal Convergence via Adaptive Rank Search},
-      author={Minkyoung Cho, Insu Jang, Shuowei Jin, Zesen Zhao, Adityan Jothi, Ethem Can, Min-Hung Chen, and Z. Morley Mao},
-      year={2025}
-}</code></pre>
-  </div>
-</section>
-
-<footer class="footer">
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
-          <p>
-            Website source code borrowed from <a
-              href="https://github.com/nerfies/nerfies.github.io">here</a>.
+      <div style="text-align: center; margin-top: 2rem;">
+        <div class="motivation-card" style="display: inline-block; max-width: 500px;">
+          <h4>
+            <span class="tag tag-balanced">Balanced</span>
+            MARS Solution
+          </h4>
+          <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 1rem;">
+            MARS discovers <strong>optimal LoRA rank pairs</strong> that align convergence times (t<sub>ve</sub> ≈ t<sub>llm</sub>), 
+            enabling stable training dynamics and maximum performance.
           </p>
         </div>
       </div>
     </div>
-  </div>
-</footer>
+  </section>
+
+  <!-- Key Contributions Section -->
+  <section class="section" id="contributions">
+    <div class="container is-max-desktop">
+      <h2 class="section-title">Key Contributions</h2>
+      
+      <div class="contributions-list">
+        <div class="contribution-item">
+          <div class="contribution-number">1</div>
+          <div class="contribution-content">
+            <h4>Identifying the Core Problem</h4>
+            <p>
+              We identify and provide evidence that <strong>imbalanced training dynamics</strong> in MLLM fine-tuning, 
+              originating from a two-fold disparity (learning capacity and required learning budget), 
+              represent a key source of suboptimal performance.
+            </p>
+          </div>
+        </div>
+        
+        <div class="contribution-item">
+          <div class="contribution-number">2</div>
+          <div class="contribution-content">
+            <h4>Dual Scaling Laws Framework</h4>
+            <p>
+              We are the first to propose and validate <strong>dual scaling laws</strong> for MLLM fine-tuning: 
+              <strong>Scaling Law-P</strong> (models performance) and <strong>Scaling Law-C</strong> (models module-specific convergence time), 
+              making the rank search feasible.
+            </p>
+          </div>
+        </div>
+        
+        <div class="contribution-item">
+          <div class="contribution-number">3</div>
+          <div class="contribution-content">
+            <h4>Superior Performance & Efficiency</h4>
+            <p>
+              MARS outperforms baselines with up to <strong>12.0% higher ScienceQA accuracy</strong> and 
+              <strong>13.2% lower LLaVA Bench perplexity</strong>, while demonstrating robust generality 
+              and an <strong>11.5× reduction</strong> in total search and fine-tuning time.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Method Section -->
+  <section class="section" id="method">
+    <div class="container is-max-desktop">
+      <h2 class="section-title">MARS Methodology</h2>
+      
+      <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem; color: var(--text-secondary);">
+        MARS transforms the intractable search for optimal LoRA ranks into an efficient, guided procedure 
+        through a two-step process enabled by our dual scaling laws.
+      </p>
+
+      <div class="method-overview">
+        <h3 style="text-align: center; margin-bottom: 1.5rem; font-family: 'Inter', sans-serif; font-size: 1.3rem;">
+          Dual Scaling Laws: The Predictive Foundation
+        </h3>
+        
+        <!-- Scaling Law Figures -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+          <div style="text-align: center;">
+            <img src="assets/fig2_sc1.png" alt="Scaling Law-P" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <p style="margin-top: 0.75rem; font-size: 0.9rem; color: var(--text-secondary);">
+              <strong>(a) Scaling Law-P:</strong> Performance (perplexity) as a function of dataset size for different LLM ranks.
+            </p>
+          </div>
+          <div style="text-align: center;">
+            <img src="assets/fig2_sc2.png" alt="Scaling Law-C" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <p style="margin-top: 0.75rem; font-size: 0.9rem; color: var(--text-secondary);">
+              <strong>(b) Scaling Law-C:</strong> Convergence time as a function of dataset size for different LLM ranks.
+            </p>
+          </div>
+        </div>
+        
+        <div class="dual-scaling-laws">
+          <div class="scaling-law-card performance">
+            <h4>
+              <i class="fas fa-chart-line" style="color: var(--primary);"></i>
+              Scaling Law-P (Performance)
+            </h4>
+            <div class="formula">
+              L̂(r<sub>ve</sub>, r<sub>llm</sub>, D<sub>f</sub>) = A · 1/((r<sub>ve</sub>)<sup>α<sub>m</sub></sup> · (r<sub>llm</sub>)<sup>α<sub>l</sub></sup> · D<sub>f</sub><sup>β</sup>) + E
+            </div>
+            <p>
+              Predicts final task accuracy/perplexity. Serves as the <strong>objective function</strong> 
+              to select the optimal rank pair from pruned candidates.
+            </p>
+          </div>
+          
+          <div class="scaling-law-card convergence">
+            <h4>
+              <i class="fas fa-clock" style="color: var(--accent);"></i>
+              Scaling Law-C (Convergence)
+            </h4>
+            <div class="formula">
+              t<sub>i</sub>(r<sub>i</sub>, D<sub>f</sub>) = k<sub>i</sub> · (r<sub>i</sub>)<sup>γ<sub>i</sub></sup> · D<sub>f</sub><sup>δ<sub>i</sub></sup> + E<sub>i</sub>
+            </div>
+            <p>
+              Models convergence time for each module. Used to <strong>prune the search space</strong> 
+              to candidates with aligned dynamics (t<sub>ve</sub> ≈ t<sub>llm</sub>).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="text-align: center; margin: 3rem 0 2rem; font-family: 'Inter', sans-serif; font-size: 1.3rem;">
+        Two-Step Search Process
+      </h3>
+
+      <div class="workflow-container">
+        <div class="workflow-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Pruning via Convergence Balancing</h4>
+            <p>
+              MARS uses Scaling Law-C to enforce a balance condition (t<sub>ve</sub> ≈ t<sub>llm</sub>). 
+              This drastically prunes the search space to candidate pairs predicted to exhibit 
+              <strong>stable, harmonized training dynamics</strong>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="workflow-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Selection via Performance Prediction</h4>
+            <p>
+              From the pruned set of stable candidates, MARS uses Scaling Law-P to 
+              <strong>predict the final task accuracy</strong> for each pair and selects 
+              the one with the best predicted outcome.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="algorithm-box">
+        <div><span class="keyword">Input:</span> Candidate ranks R<sub>options</sub>, target dataset D<sub>f</sub></div>
+        <div><span class="keyword">Output:</span> Optimal config (r*<sub>ve</sub>, r*<sub>llm</sub>)</div>
+        <br>
+        <div><span class="keyword">for</span> r<sub>llm</sub> ∈ R<sub>options</sub> <span class="keyword">do</span></div>
+        <div style="margin-left: 1.5rem;"><span class="comment"># MARS: Prune search space & Select best VE rank</span></div>
+        <div style="margin-left: 1.5rem;">r'<sub>ve</sub> ← <span class="function">FindBalancedRank</span>(r<sub>llm</sub>) <span class="comment">// Using SL-C</span></div>
+        <div style="margin-left: 1.5rem;">Add (r'<sub>ve</sub>, r<sub>llm</sub>) to CandidatePairs</div>
+        <br>
+        <div>(r*<sub>ve</sub>, r*<sub>llm</sub>) ← <span class="function">SelectBest</span>(CandidatePairs) <span class="comment">// Using SL-P</span></div>
+        <div><span class="keyword">return</span> (r*<sub>ve</sub>, r*<sub>llm</sub>)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results Section -->
+  <section class="section" id="results">
+    <div class="container is-max-desktop">
+      <h2 class="section-title">Results</h2>
+      
+      <div class="results-highlight">
+        <div class="result-card">
+          <div class="metric">+12.0%</div>
+          <div class="metric-label">Higher Accuracy</div>
+          <div class="benchmark">ScienceQA Benchmark</div>
+        </div>
+        <div class="result-card">
+          <div class="metric">-13.2%</div>
+          <div class="metric-label">Lower Perplexity</div>
+          <div class="benchmark">LLaVA Bench</div>
+        </div>
+        <div class="result-card">
+          <div class="metric">11.5×</div>
+          <div class="metric-label">Faster Search</div>
+          <div class="benchmark">vs Naive Search</div>
+        </div>
+      </div>
+
+      <!-- Generality Figure -->
+      <h3 style="margin: 3rem 0 1.5rem; font-family: 'Inter', sans-serif; font-size: 1.15rem; font-weight: 600; text-align: center;">
+        Evaluation of Generalist Capabilities
+      </h3>
+      
+      <div class="image-container">
+        <img src="assets/generality.pdf" alt="Generality Results" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1);">
+        <p class="image-caption">
+          <strong>Left:</strong> Comparison across diverse multimodal benchmarks demonstrating broad generalization.
+          <strong>Right:</strong> Fine-grained capability breakdown on MMStar.
+        </p>
+      </div>
+
+      <h3 style="margin: 3rem 0 1.5rem; font-family: 'Inter', sans-serif; font-size: 1.15rem; font-weight: 600;">
+        Comparison with Fixed-Rank Tuning (Different Learning Rates)
+      </h3>
+
+      <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Benchmark</th>
+              <th>LoRA (⋆, 1e-5)</th>
+              <th>LoRA (⋆, 1e-6)</th>
+              <th>LoRA (⋆, 1e-7)</th>
+              <th>MARS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="2">LLaVA-OV-0.5B</td>
+              <td>LLaVA (↓)</td>
+              <td>2.7336</td>
+              <td>2.771</td>
+              <td>2.8472</td>
+              <td class="best">2.7188</td>
+            </tr>
+            <tr class="mars-row">
+              <td>ScienceQA (↑)</td>
+              <td>71.06</td>
+              <td>61.88</td>
+              <td>59.28</td>
+              <td class="best">72.85</td>
+            </tr>
+            <tr>
+              <td rowspan="2">LLaVA-OV-7B</td>
+              <td>LLaVA (↓)</td>
+              <td>2.2317</td>
+              <td>2.295</td>
+              <td>2.4346</td>
+              <td class="best">2.1875</td>
+            </tr>
+            <tr class="mars-row">
+              <td>ScienceQA (↑)</td>
+              <td>72.26</td>
+              <td>69.86</td>
+              <td>67.27</td>
+              <td class="best">74.25</td>
+            </tr>
+            <tr>
+              <td rowspan="2">Qwen2.5-VL-3B</td>
+              <td>LLaVA (↓)</td>
+              <td>3.6156</td>
+              <td>3.7415</td>
+              <td>4.1557</td>
+              <td class="best">3.5925</td>
+            </tr>
+            <tr class="mars-row">
+              <td>ScienceQA (↑)</td>
+              <td>78.04</td>
+              <td>76.45</td>
+              <td>76.25</td>
+              <td class="best">79.24</td>
+            </tr>
+            <tr>
+              <td rowspan="2">Qwen2.5-VL-7B</td>
+              <td>LLaVA (↓)</td>
+              <td>3.5032</td>
+              <td>3.5908</td>
+              <td>3.8716</td>
+              <td class="best">3.3879</td>
+            </tr>
+            <tr class="mars-row">
+              <td>ScienceQA (↑)</td>
+              <td>79.84</td>
+              <td>76.25</td>
+              <td>74.25</td>
+              <td class="best">79.64</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin: 3rem 0 1.5rem; font-family: 'Inter', sans-serif; font-size: 1.15rem; font-weight: 600;">
+        Comparison with Adaptive Rank Search Baselines
+      </h3>
+
+      <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>AdaLoRA</th>
+              <th>GeoLoRA</th>
+              <th>Full-rank</th>
+              <th>LoRA (⋆, 16)</th>
+              <th>LoRA (⋆, 32)</th>
+              <th>MARS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="7" style="background: #f1f5f9; font-weight: 600; text-align: center;">LLaVA Bench (perplexity ↓)</td>
+            </tr>
+            <tr>
+              <td>LLaVA-OV-0.5B</td>
+              <td>2.8973</td>
+              <td>2.8801</td>
+              <td>2.7209</td>
+              <td>2.7336</td>
+              <td>2.7331</td>
+              <td class="best">2.7188</td>
+            </tr>
+            <tr>
+              <td>LLaVA-OV-7B</td>
+              <td>2.5189</td>
+              <td>2.4888</td>
+              <td>2.2693</td>
+              <td>2.2317</td>
+              <td>2.4420</td>
+              <td class="best">2.1875</td>
+            </tr>
+            <tr>
+              <td colspan="7" style="background: #f1f5f9; font-weight: 600; text-align: center;">ScienceQA (accuracy % ↑)</td>
+            </tr>
+            <tr>
+              <td>LLaVA-OV-0.5B</td>
+              <td>62.28</td>
+              <td>63.52</td>
+              <td>69.66</td>
+              <td>71.06</td>
+              <td>69.86</td>
+              <td class="best">72.85</td>
+            </tr>
+            <tr class="mars-row">
+              <td>LLaVA-OV-7B</td>
+              <td>66.27</td>
+              <td>67.81</td>
+              <td>70.46</td>
+              <td>72.26</td>
+              <td>73.65</td>
+              <td class="best">74.25</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BibTeX Section -->
+  <section class="section" id="bibtex">
+    <div class="container is-max-desktop">
+      <h2 class="section-title">BibTeX</h2>
+      
+      <div class="bibtex-container">
+        <button class="copy-button" onclick="copyBibtex()">
+          <i class="fas fa-copy"></i> Copy
+        </button>
+        <pre><code>@article{cho2026mars,
+    title={{MARS}: Harmonizing Multimodal Convergence via Adaptive Rank Search},
+    author={Cho, Minkyoung and Jang, Insu and Jin, Shuowei and Zhao, Zesen and Jothi, Adityan and Can, Ethem F. and Chen, Min-Hung and Mao, Z. Morley},
+    journal={arXiv preprint},
+    year={2026}
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>
+        This website template is adapted from 
+        <a href="https://nerfies.github.io/">Nerfies</a> and 
+        <a href="https://passing2961.github.io/refinebench-page/">RefineBench</a>, 
+        licensed under a 
+        <a href="http://creativecommons.org/licenses/by-sa/4.0/">
+          Creative Commons Attribution-ShareAlike 4.0 International License
+        </a>.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // Copy BibTeX
+    function copyBibtex() {
+      const bibtex = document.querySelector('.bibtex-container code').textContent;
+      navigator.clipboard.writeText(bibtex).then(() => {
+        const btn = document.querySelector('.copy-button');
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+        }, 2000);
+      });
+    }
+
+    // Back to top functionality
+    const backToTopBtn = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    });
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Active TOC link
+    const sections = document.querySelectorAll('section[id]');
+    const tocLinks = document.querySelectorAll('.toc-container a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (window.scrollY >= sectionTop - 150) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      tocLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
 
 </body>
-
-
-<script>
-function scrollToBottom() {
-    window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: "smooth"
-    });
-}
-</script>
 </html>
-<div id="bottom"></div>
