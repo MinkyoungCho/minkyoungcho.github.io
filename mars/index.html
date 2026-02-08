@@ -1205,7 +1205,12 @@
               Scaling Law-P (Performance)
             </h4>
             <div class="formula">
-              L̂(r<sub>ve</sub>, r<sub>llm</sub>, D<sub>f</sub>) = A · 1/((r<sub>ve</sub>)<sup>α<sub>m</sub></sup> · (r<sub>llm</sub>)<sup>α<sub>l</sub></sup> · D<sub>f</sub><sup>β</sup>) + E
+              L̂(r<sub>ve</sub>, r<sub>llm</sub>, D<sub>f</sub>) = 
+              <span class="fraction">
+                <span class="numerator">A</span>
+                <span class="denominator">(r<sub>ve</sub>)<sup>α<sub>m</sub></sup> · (r<sub>llm</sub>)<sup>α<sub>l</sub></sup> · D<sub>f</sub><sup>β</sup></span>
+              </span>
+              + E
             </div>
             <p>
               Predicts final task performance. Serves as the <strong>objective function</strong> 
@@ -1239,11 +1244,11 @@
             <div class="key-findings">
               <h5>Key Findings</h5>
               <div class="key-finding-item convergence-finding">
-                <strong>Increasing dataset size <em>increases</em> convergence time.</strong> 
+                <strong>1) Increasing dataset size <em>increases</em> convergence time.</strong> 
                 <!-- Larger D<sub>f</sub> requires more iterations as the model needs additional steps to process extra data. --> 
               </div>
               <div class="key-finding-item convergence-finding">
-                <strong>Increasing rank size <em>decreases</em> convergence time.</strong> 
+                <strong>2) Increasing rank size <em>decreases</em> convergence time.</strong> 
                 <!-- Higher LoRA ranks provide greater capacity, enabling faster adaptation (negative γ<sub>i</sub>). -->
               </div>
             </div>
@@ -1325,7 +1330,7 @@
       </h3>
       
       <div class="image-container">
-        <img src="assets/generality.png" alt="Generality Results" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1);">
+        <img src="assets/generality.pdf" alt="Generality Results" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1);">
         <p class="image-caption">
           <strong>Left:</strong> Comparison across diverse multimodal benchmarks demonstrating broad generalization.
           <strong>Right:</strong> Fine-grained capability breakdown on MMStar.
