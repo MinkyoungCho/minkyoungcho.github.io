@@ -680,13 +680,6 @@
       font-size: 0.85rem;
       color: #e2e8f0;
       line-height: 1.7;
-      background: transparent;
-    }
-
-    .bibtex-container code {
-      background: transparent;
-      color: inherit;
-      padding: 0;
     }
 
     .copy-button {
@@ -901,6 +894,42 @@
 
     .algorithm-box .function {
       color: #60a5fa;
+    }
+
+    /* Key Findings Box */
+    .key-findings {
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .key-findings h5 {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+    }
+
+    .key-finding-item {
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      border-left: 3px solid var(--primary);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    .key-finding-item.convergence-finding {
+      border-left-color: var(--accent);
+    }
+
+    .key-finding-item strong {
+      color: var(--text-primary);
     }
   </style>
 </head>
@@ -1150,7 +1179,7 @@
           <div style="text-align: center;">
             <img src="assets/fig2_sc1.png" alt="Scaling Law-P" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
             <p style="margin-top: 0.75rem; font-size: 0.9rem; color: var(--text-secondary);">
-              <strong>(a) Scaling Law-P:</strong> Performance (perplexity) as a function of dataset size for different LLM ranks.
+              <strong>(a) Scaling Law-P:</strong> Performance as a function of dataset size for different LLM ranks.
             </p>
           </div>
           <div style="text-align: center;">
@@ -1171,9 +1200,20 @@
               L̂(r<sub>ve</sub>, r<sub>llm</sub>, D<sub>f</sub>) = A · 1/((r<sub>ve</sub>)<sup>α<sub>m</sub></sup> · (r<sub>llm</sub>)<sup>α<sub>l</sub></sup> · D<sub>f</sub><sup>β</sup>) + E
             </div>
             <p>
-              Predicts final task accuracy/perplexity. Serves as the <strong>objective function</strong> 
+              Predicts final task performance. Serves as the <strong>objective function</strong> 
               to select the optimal rank pair from pruned candidates.
             </p>
+            <div class="key-findings">
+              <h5>Key Findings</h5>
+              <div class="key-finding-item">
+                <strong>1) Performance is sensitive to VE-LLM rank interplay.</strong> 
+                <!-- Unlike unimodal studies where LoRA rank has modest effect, MLLM fine-tuning strongly depends on the combination of ranks for VE and LLM. -->
+              </div>
+              <div class="key-finding-item">
+                <strong>2) Optimal rank pair involves a trade-off with dataset size.</strong> 
+                <!-- Small datasets benefit from higher VE ranks; large datasets favor moderate ranks to avoid overfitting. -->
+              </div>
+            </div>
           </div>
           
           <div class="scaling-law-card convergence">
@@ -1188,6 +1228,17 @@
               Models convergence time for each module. Used to <strong>prune the search space</strong> 
               to candidates with aligned dynamics (t<sub>ve</sub> ≈ t<sub>llm</sub>).
             </p>
+            <div class="key-findings">
+              <h5>Key Findings</h5>
+              <div class="key-finding-item convergence-finding">
+                <strong>1) Increasing dataset size <em>increases</em> convergence time.</strong> 
+                <!-- Larger D<sub>f</sub> requires more iterations as the model needs additional steps to process extra data. --> 
+              </div>
+              <div class="key-finding-item convergence-finding">
+                <strong>2) Increasing rank size <em>decreases</em> convergence time.</strong> 
+                <!-- Higher LoRA ranks provide greater capacity, enabling faster adaptation (negative γ<sub>i</sub>). -->
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1222,19 +1273,19 @@
         </div>
       </div>
 
-      <div class="algorithm-box">
+      <!-- <div class="algorithm-box">
         <div><span class="keyword">Input:</span> Candidate ranks R<sub>options</sub>, target dataset D<sub>f</sub></div>
         <div><span class="keyword">Output:</span> Optimal config (r*<sub>ve</sub>, r*<sub>llm</sub>)</div>
         <br>
         <div><span class="keyword">for</span> r<sub>llm</sub> ∈ R<sub>options</sub> <span class="keyword">do</span></div>
         <div style="margin-left: 1.5rem;"><span class="comment"># MARS: Prune search space & Select best VE rank</span></div>
-        <div style="margin-left: 1.5rem;">r'<sub>ve</sub> ← <span class="function">FindBalancedRank</span>(r<sub>llm</sub>) <span class="comment">// Using SL-C</span></div>
+        <div style="margin-left: 1.5rem;">r'<sub>ve</sub> ← <span class="function">FindBalancedRank</span>(r<sub>llm</sub>) <span class="comment">// Using Scaling Law-C</span></div>
         <div style="margin-left: 1.5rem;">Add (r'<sub>ve</sub>, r<sub>llm</sub>) to CandidatePairs</div>
         <br>
-        <div>(r*<sub>ve</sub>, r*<sub>llm</sub>) ← <span class="function">SelectBest</span>(CandidatePairs) <span class="comment">// Using SL-P</span></div>
+        <div>(r*<sub>ve</sub>, r*<sub>llm</sub>) ← <span class="function">SelectBest</span>(CandidatePairs) <span class="comment">// Using Scaling Law-P</span></div>
         <div><span class="keyword">return</span> (r*<sub>ve</sub>, r*<sub>llm</sub>)</div>
       </div>
-    </div>
+    </div> -->
   </section>
 
   <!-- Results Section -->
@@ -1242,7 +1293,7 @@
     <div class="container is-max-desktop">
       <h2 class="section-title">Results</h2>
       
-      <div class="results-highlight">
+      <!-- <div class="results-highlight">
         <div class="result-card">
           <div class="metric">+12.0%</div>
           <div class="metric-label">Higher Accuracy</div>
@@ -1258,7 +1309,7 @@
           <div class="metric-label">Faster Search</div>
           <div class="benchmark">vs Naive Search</div>
         </div>
-      </div>
+      </div> -->
 
       <!-- Generality Figure -->
       <h3 style="margin: 3rem 0 1.5rem; font-family: 'Inter', sans-serif; font-size: 1.15rem; font-weight: 600; text-align: center;">
@@ -1266,7 +1317,7 @@
       </h3>
       
       <div class="image-container">
-        <img src="assets/generality.png" alt="Generality Results" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1);">
+        <img src="assets/generality.pdf" alt="Generality Results" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1);">
         <p class="image-caption">
           <strong>Left:</strong> Comparison across diverse multimodal benchmarks demonstrating broad generalization.
           <strong>Right:</strong> Fine-grained capability breakdown on MMStar.
