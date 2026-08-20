@@ -1,110 +1,122 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Introduction on Minkyoung Cho</title>
-    <link>https://minkyoungcho.github.io/</link>
-    <description>Recent content in Introduction on Minkyoung Cho</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Mon, 22 Sep 2025 08:22:00 -0400</lastBuildDate><atom:link href="https://minkyoungcho.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>TC-LoRA Accepted to NeurIPSW&#39;25</title>
-      <link>https://minkyoungcho.github.io/news/20250922-neuripsw25/</link>
-      <pubDate>Mon, 22 Sep 2025 08:22:00 -0400</pubDate>
-      
-      <guid>https://minkyoungcho.github.io/news/20250922-neuripsw25/</guid>
-      <description>TC-LoRA is a new paradigm that enables dynamic context-aware control by conditioning the model&amp;rsquo;s weights directly.</description>
-    </item>
-    
-    <item>
-      <title>SCORPION Accepted to IROS&#39;25</title>
-      <link>https://minkyoungcho.github.io/news/20250615-iros25/</link>
-      <pubDate>Sun, 15 Jun 2025 08:22:00 -0400</pubDate>
-      
-      <guid>https://minkyoungcho.github.io/news/20250615-iros25/</guid>
-      <description>We propose a robust, holistic 3D perception framework in a collaborative setting among multiple AVs.</description>
-    </item>
-    
-    <item>
-      <title>CrowdMap Accepted to CVPRW&#39;25</title>
-      <link>https://minkyoungcho.github.io/news/20250525-cvprw25/</link>
-      <pubDate>Sun, 25 May 2025 08:22:00 -0400</pubDate>
-      
-      <guid>https://minkyoungcho.github.io/news/20250525-cvprw25/</guid>
-      <description>We introduce the global vectorized HD map construction task in a collaborative setting among multiple AV agents.</description>
-    </item>
-    
-    <item>
-      <title>Internship at NVIDIA: Round 2!</title>
-      <link>https://minkyoungcho.github.io/news/20250519-nvidia-intern2/</link>
-      <pubDate>Mon, 19 May 2025 08:22:00 -0400</pubDate>
-      
-      <guid>https://minkyoungcho.github.io/news/20250519-nvidia-intern2/</guid>
-      <description>Thrilled to return to the NVIDIA Metropolis team, this time diving into Generative AI research!</description>
-    </item>
-    
-    <item>
-      <title>Cocoon Accepted to ICLR&#39;25</title>
-      <link>https://minkyoungcho.github.io/news/20250122-iclr25/</link>
-      <pubDate>Wed, 22 Jan 2025 17:22:00 -0400</pubDate>
-      
-      <guid>https://minkyoungcho.github.io/news/20250122-iclr25/</guid>
-      <description>Cocoon is a new object- and feature-level uncertainty-aware multimodal fusion framework designed for 3D OD tasks.</description>
-    </item>
-    
-    <item>
-      <title>Our Paper Accepted to ACM CSCS&#39;24</title>
-      <link>https://minkyoungcho.github.io/news/20240812-cscs24/</link>
-      <pubDate>Mon, 12 Aug 2024 08:22:00 -0400</pubDate>
-      
-      <guid>https://minkyoungcho.github.io/news/20240812-cscs24/</guid>
-      <description>This survey paper on AV security and safety has been developed in collaboration with the AV reading group at UMich.</description>
-    </item>
-    
-    <item>
-      <title>Start Internship at NVIDIA</title>
-      <link>https://minkyoungcho.github.io/news/20240603-nvidia-intern/</link>
-      <pubDate>Mon, 03 Jun 2024 08:22:00 -0400</pubDate>
-      
-      <guid>https://minkyoungcho.github.io/news/20240603-nvidia-intern/</guid>
-      <description>Will be working as a Deep Learning Software Intern at NVIDIA Metropolis team!</description>
-    </item>
-    
-    <item>
-      <title>ADoPT Accepted to BMVC&#39;23</title>
-      <link>https://minkyoungcho.github.io/news/20230821-bmvc23/</link>
-      <pubDate>Mon, 21 Aug 2023 10:18:00 -0400</pubDate>
-      
-      <guid>https://minkyoungcho.github.io/news/20230821-bmvc23/</guid>
-      <description>ADoPT is a cutting-edge defense mechanism against LiDAR spoofing attacks, leveraging point-level temporal consistency.</description>
-    </item>
-    
-    <item>
-      <title>Changed Blog Theme</title>
-      <link>https://minkyoungcho.github.io/news/20230516-changed-blog-theme/</link>
-      <pubDate>Tue, 16 May 2023 08:22:00 -0400</pubDate>
-      
-      <guid>https://minkyoungcho.github.io/news/20230516-changed-blog-theme/</guid>
-      <description>Changed blog theme to Congo!</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://minkyoungcho.github.io/about/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://minkyoungcho.github.io/about/</guid>
-      <description>false</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://minkyoungcho.github.io/research/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://minkyoungcho.github.io/research/</guid>
-      <description>false</description>
-    </item>
-    
-  </channel>
+	<channel>
+		<title>Introduction on Minkyoung Cho</title>
+		<link>https://minkyoungcho.github.io/</link>
+		<description>Recent content in Introduction on Minkyoung Cho</description>
+		<generator>Hugo</generator>
+		<language>en</language>
+		
+		
+		
+		
+			<lastBuildDate>Tue, 16 Jun 2026 08:22:00 -0400</lastBuildDate>
+		
+			<atom:link href="https://minkyoungcho.github.io/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>GraphMap Accepted to IROS&#39;26</title>
+				<link>https://minkyoungcho.github.io/news/20260616-iros26/</link>
+				<pubDate>Tue, 16 Jun 2026 08:22:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20260616-iros26/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Internship at NVIDIA: Round 3!</title>
+				<link>https://minkyoungcho.github.io/news/20260518-nvidia-intern3/</link>
+				<pubDate>Mon, 18 May 2026 08:22:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20260518-nvidia-intern3/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Our Tutorial Accepted to ECCV&#39;26</title>
+				<link>https://minkyoungcho.github.io/news/20260501-eccv26-tutorial/</link>
+				<pubDate>Fri, 01 May 2026 08:22:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20260501-eccv26-tutorial/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>DLA Accepted to ICML&#39;26</title>
+				<link>https://minkyoungcho.github.io/news/20260430-icml26-dla/</link>
+				<pubDate>Thu, 30 Apr 2026 08:22:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20260430-icml26-dla/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>TC-LoRA Accepted to NeurIPSW&#39;25</title>
+				<link>https://minkyoungcho.github.io/news/20250922-neuripsw25/</link>
+				<pubDate>Mon, 22 Sep 2025 08:22:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20250922-neuripsw25/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>SCORPION Accepted to IROS&#39;25</title>
+				<link>https://minkyoungcho.github.io/news/20250615-iros25/</link>
+				<pubDate>Sun, 15 Jun 2025 08:22:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20250615-iros25/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>CrowdMap Accepted to CVPRW&#39;25</title>
+				<link>https://minkyoungcho.github.io/news/20250525-cvprw25/</link>
+				<pubDate>Sun, 25 May 2025 08:22:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20250525-cvprw25/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Internship at NVIDIA: Round 2!</title>
+				<link>https://minkyoungcho.github.io/news/20250519-nvidia-intern2/</link>
+				<pubDate>Mon, 19 May 2025 08:22:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20250519-nvidia-intern2/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Cocoon Accepted to ICLR&#39;25</title>
+				<link>https://minkyoungcho.github.io/news/20250122-iclr25/</link>
+				<pubDate>Wed, 22 Jan 2025 17:22:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20250122-iclr25/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Our Paper Accepted to ACM CSCS&#39;24</title>
+				<link>https://minkyoungcho.github.io/news/20240812-cscs24/</link>
+				<pubDate>Mon, 12 Aug 2024 08:22:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20240812-cscs24/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Start Internship at NVIDIA</title>
+				<link>https://minkyoungcho.github.io/news/20240603-nvidia-intern/</link>
+				<pubDate>Mon, 03 Jun 2024 08:22:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20240603-nvidia-intern/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>ADoPT Accepted to BMVC&#39;23</title>
+				<link>https://minkyoungcho.github.io/news/20230821-bmvc23/</link>
+				<pubDate>Mon, 21 Aug 2023 10:18:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20230821-bmvc23/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title>Changed Blog Theme</title>
+				<link>https://minkyoungcho.github.io/news/20230516-changed-blog-theme/</link>
+				<pubDate>Tue, 16 May 2023 08:22:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20230516-changed-blog-theme/</guid>
+				<description></description>
+			</item>
+			<item>
+				<title></title>
+				<link>https://minkyoungcho.github.io/about/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>https://minkyoungcho.github.io/about/</guid>
+				<description>false</description>
+			</item>
+			<item>
+				<title></title>
+				<link>https://minkyoungcho.github.io/research/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>https://minkyoungcho.github.io/research/</guid>
+				<description>false</description>
+			</item>
+	</channel>
 </rss>
