@@ -10,9 +10,16 @@
 		
 		
 		
-			<lastBuildDate>Tue, 16 Jun 2026 08:22:00 -0400</lastBuildDate>
+			<lastBuildDate>Thu, 24 Sep 2026 08:22:00 -0400</lastBuildDate>
 		
 			<atom:link href="https://minkyoungcho.github.io/news/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>MARS Accepted to NeurIPS&#39;25</title>
+				<link>https://minkyoungcho.github.io/news/20260924-neurips25-mars/</link>
+				<pubDate>Thu, 24 Sep 2026 08:22:00 -0400</pubDate>
+				<guid>https://minkyoungcho.github.io/news/20260924-neurips25-mars/</guid>
+				<description></description>
+			</item>
 			<item>
 				<title>GraphMap Accepted to IROS&#39;26</title>
 				<link>https://minkyoungcho.github.io/news/20260616-iros26/</link>
