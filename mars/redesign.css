@@ -16,10 +16,15 @@
 html {
   scroll-padding-top: 76px;
   background: var(--paper);
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
   background: var(--paper);
   color: var(--ink);
   font-family: "Inter", sans-serif;
@@ -136,6 +141,8 @@ a { color: inherit; }
 
 /* Hero */
 .hero {
+  width: 100%;
+  max-width: 100%;
   min-height: calc(100vh - 70px);
   display: grid;
   align-items: center;
@@ -146,8 +153,19 @@ a { color: inherit; }
   border-bottom: 1px solid var(--line);
 }
 .hero::before, .hero::after { display: none; }
-.hero-body { padding: 5rem 1.5rem 4rem; }
-.hero .container { max-width: 1040px !important; }
+.hero-body {
+  width: 100%;
+  max-width: 100%;
+  padding: 5rem 1.5rem 4rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.hero-shell {
+  width: min(1040px, calc(100vw - 3rem));
+  max-width: 1040px;
+  margin-inline: auto;
+}
 .hero-eyebrow {
   display: flex;
   justify-content: center;
@@ -177,19 +195,32 @@ a { color: inherit; }
 }
 .hero-wordmark span { color: var(--mars); }
 .title.is-1 {
-  max-width: 920px;
+  width: 100%;
+  max-width: 1040px;
   margin: 1.3rem auto .8rem;
-  font-size: clamp(1.75rem, 4vw, 3.25rem);
+  font-size: clamp(1.75rem, 3.2vw, 3.15rem);
   line-height: 1.08;
   font-weight: 700;
   letter-spacing: -.055em;
   color: var(--ink);
   background: none;
   -webkit-text-fill-color: currentColor;
+  text-align: center;
+  overflow-wrap: normal;
 }
 .title.is-1 span {
   color: var(--ink-soft);
   font-weight: 600;
+}
+.title.is-1 .title-primary,
+.title.is-1 .title-secondary {
+  display: block;
+  width: 100%;
+  white-space: normal;
+}
+.title.is-1 .title-primary {
+  color: var(--ink);
+  font-weight: 700;
 }
 .hero-deck {
   margin: 0 auto 2rem;
@@ -581,6 +612,7 @@ footer a { color: #fff; }
   .toc-container { padding: 0 1rem; }
   .nav-paper { font-size: .66rem !important; }
   .hero-body { padding: 3.5rem 1rem 2.5rem; }
+  .hero-shell { width: calc(100vw - 2rem); }
   .hero-wordmark { font-size: clamp(4.5rem, 27vw, 7rem); }
   .hero-eyebrow { font-size: .58rem; letter-spacing: .08em; }
   .title.is-1 { font-size: 1.65rem; }
