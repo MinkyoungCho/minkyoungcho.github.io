@@ -10,6 +10,7 @@
       subtitle: 'Generalist and domain-specific evaluation',
       labels: [['MME'], ['POPE'], ['MMStar'], ['TextCaps'], ['AI2D'], ['GQA']],
       tableLabels: ['MME (sum)', 'POPE', 'MMStar (avg)', 'TextCaps (Val)', 'AI2D', 'GQA'],
+      maxima: [1800, 90, 50, 50, 60, 60],
       values: {
         'AdaLoRA': [1524.0, 79.7, 28.6, 38.0, 45.5, 52.7],
         'LoRA (★, 64)': [1662.4, 86.8, 36.1, 42.6, 48.0, 55.1],
@@ -28,6 +29,7 @@
         ['Math']
       ],
       tableLabels: ['Coarse Per.', 'Fine-Grained Per.', 'Instance Reason.', 'Logical Reason.', 'Sci & Tech', 'Math'],
+      maxima: [60, 40, 60, 40, 40, 40],
       values: {
         'AdaLoRA': [34.7, 23.2, 27.8, 29.9, 24.4, 31.5],
         'LoRA (★, 64)': [55.5, 27.8, 49.8, 32.1, 22.2, 29.0],
@@ -68,7 +70,7 @@
   };
 
   const showTooltip = (method, label, raw, normalized, event) => {
-    tooltip.innerHTML = `<strong>${method}</strong><br><span>${label}</span> &nbsp;${raw.toFixed(1)}<br><span>Normalized</span> &nbsp;${normalized.toFixed(2)}`;
+    tooltip.innerHTML = `<strong>${method}</strong><br><span>${label}</span> &nbsp;${raw.toFixed(1)}<br><span>Paper-scale position</span> &nbsp;${normalized.toFixed(2)}`;
     tooltip.hidden = false;
     positionTooltip(event);
   };
@@ -94,7 +96,7 @@
       viewBox: '0 0 420 350',
       class: 'radar-svg',
       role: 'img',
-      'aria-label': `${dataset.title}. Values are min-max normalized per axis; farther outward is better.`
+      'aria-label': `${dataset.title}. Values use the fixed axis limits from the paper figure; farther outward is better.`
     });
     const cx = 210;
     const cy = 171;
@@ -137,17 +139,7 @@
       svg.append(text);
     });
 
-    [0.5, 1].forEach(level => {
-      const scaleLabel = svgEl('text', { x: cx + 5, y: cy - radius * level + 11, class: 'radar-scale-label' });
-      scaleLabel.textContent = String(level);
-      svg.append(scaleLabel);
-    });
-
-    const mins = dataset.labels.map((_, index) => Math.min(...methods.map(method => dataset.values[method][index])));
-    const maxs = dataset.labels.map((_, index) => Math.max(...methods.map(method => dataset.values[method][index])));
-    const normalize = (value, index) => maxs[index] === mins[index]
-      ? 0.5
-      : (value - mins[index]) / (maxs[index] - mins[index]);
+    const normalize = (value, index) => Math.max(0, Math.min(1, value / dataset.maxima[index]));
 
     const layer = svgEl('g');
     svg.append(layer);
@@ -175,7 +167,7 @@
           'stroke-width': 1,
           tabindex: 0,
           role: 'img',
-          'aria-label': `${method}, ${dataset.tableLabels[index]}: ${dataset.values[method][index].toFixed(1)}; normalized ${score.toFixed(2)}`
+          'aria-label': `${method}, ${dataset.tableLabels[index]}: ${dataset.values[method][index].toFixed(1)}; paper-scale position ${score.toFixed(2)}`
         });
         const title = svgEl('title');
         title.textContent = dot.getAttribute('aria-label');
@@ -205,7 +197,10 @@
       });
     });
 
-    card.append(svg);
+    const ranges = document.createElement('p');
+    ranges.className = 'radar-axis-ranges';
+    ranges.textContent = `Paper axis maxima · ${dataset.tableLabels.map((label, index) => `${label.replace(/\s*\([^)]*\)/g, '')} ${dataset.maxima[index]}`).join(' · ')}`;
+    card.append(svg, ranges);
     grid.append(card);
   });
 
@@ -246,12 +241,12 @@
 
   const note = document.createElement('p');
   note.className = 'radar-note';
-  note.innerHTML = 'Per axis, <strong>0 = lowest and 1 = highest</strong> among AdaLoRA, LoRA (★, 64), and MARS. These normalized coordinates are for comparison only; exact reported values are below.';
+  note.innerHTML = 'Coordinates use the <strong>fixed axis maxima from the paper figure</strong>, rather than stretching the three methods from 0 to 1. Exact Appendix I values are below.';
   root.append(note);
 
   const details = document.createElement('details');
   details.className = 'radar-exact';
-  details.innerHTML = '<summary>Exact Appendix I values &amp; normalization</summary><p class="radar-formula">Normalization: (x − minimum) / (maximum − minimum), independently for each axis. All metrics are higher-is-better.</p>';
+  details.innerHTML = '<summary>Exact Appendix I values &amp; paper ranges</summary><p class="radar-formula">Plot position = reported value / paper axis maximum. General benchmarks: 1800, 90, 50, 50, 60, 60. MMStar capabilities: 60, 40, 60, 40, 40, 40. All metrics are higher-is-better.</p>';
   datasets.forEach(dataset => {
     const wrap = document.createElement('div');
     wrap.className = 'radar-table-wrap';
