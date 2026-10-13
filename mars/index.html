@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MARS uses dual scaling laws to find modality-specific LoRA ranks that harmonize vision-language model fine-tuning.">
+  <meta name="theme-color" content="#fbfaf7">
   <title>MARS: Harmonizing Multimodal Convergence via Adaptive Rank Search</title>
   
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   
   <!-- Bulma CSS Framework -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
@@ -939,31 +941,36 @@
       color: var(--text-primary);
     }
   </style>
+  <link rel="stylesheet" href="redesign.css?v=20261013">
 </head>
 <body>
 
-  <!-- Table of Contents (Fixed Sidebar) -->
-  <nav class="toc-container">
-    <h4>Contents</h4>
-    <ul>
-      <li><a href="#abstract">Abstract</a></li>
-      <li><a href="#motivation">Motivation</a></li>
-      <li><a href="#contributions">Contributions</a></li>
-      <li><a href="#method">Method</a></li>
-      <li><a href="#results">Results</a></li>
-      <li><a href="#bibtex">BibTeX</a></li>
-    </ul>
-  </nav>
+  <a class="skip-link" href="#abstract">Skip to content</a>
+
+  <!-- Compact editorial navigation inspired by the GroundAct project page. -->
+  <header class="site-header">
+    <nav class="toc-container container" aria-label="Main navigation">
+      <a class="site-brand" href="#top" aria-label="MARS home">MARS<span>.</span></a>
+      <ul>
+        <li><a href="#motivation">Why MARS</a></li>
+        <li><a href="#method">Method</a></li>
+        <li><a href="#results">Results</a></li>
+      </ul>
+      <a class="nav-paper" href="https://arxiv.org/pdf/2603.00720" target="_blank" rel="noopener noreferrer">Read paper <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
 
   <!-- Hero Section -->
-  <section class="hero">
+  <section class="hero" id="top">
     <div class="hero-body">
       <div class="container is-max-desktop has-text-centered">
-        
-        <!-- Title -->
+        <p class="hero-eyebrow animate-in"><span></span> MULTIMODAL LEARNING &nbsp;/&nbsp; ADAPTIVE FINE-TUNING</p>
+        <div class="hero-wordmark animate-in" aria-hidden="true">MARS<span>.</span></div>
+
         <h1 class="title is-1 animate-in">
-          <span class="mars-text">MARS</span>: Harmonizing Multimodal Convergence via Adaptive Rank Search
+          <span class="sr-only">MARS: </span>Harmonizing Multimodal Convergence<br><span>via Adaptive Rank Search</span>
         </h1>
+        <p class="hero-deck animate-in delay-1">Choose the ranks that let vision and language learn in sync.</p>
         
         <!-- Authors -->
         <div class="authors animate-in delay-1">
@@ -982,15 +989,14 @@
           <span class="author-block">
             <a href="https://minkyoungcho.github.io/mars/">Adityan Jothi</a><sup>2</sup>
           </span>
-          <br>
           <span class="author-block">
             <a href="https://minkyoungcho.github.io/mars/">Ethem F. Can</a><sup>2</sup>
           </span>
           <span class="author-block">
-            <a href="https://minhungchen.netlify.app">Min-Hung Chen</a><sup>2</sup>
+            <a href="https://minhungchen.netlify.app">Min-Hung Chen</a><sup>2,*</sup>
           </span>
           <span class="author-block">
-            <a href="https://web.eecs.umich.edu/~zmao/">Z. Morley Mao</a><sup>1</sup>
+            <a href="https://web.eecs.umich.edu/~zmao/">Z. Morley Mao</a><sup>1,*</sup>
           </span>
         </div>
         
@@ -999,27 +1005,12 @@
           <sup>1</sup>University of Michigan&nbsp;&nbsp;&nbsp;
           <sup>2</sup>NVIDIA
         </div>
-        
-        <!-- Institution Logos -->
-        <div style="display: flex; flex-direction: column; align-items: center; margin-top: 10px; margin-bottom: 20px;">
-          <div class="publication-logos" style="display: flex; justify-content: center; align-items: center; gap: 20px;">
-            <a href="https://umich.edu/" target="_blank">
-              <img src="https://brand.umich.edu/assets/brand/style-guide/logo-guidelines/U-M_Logo-Horizontal-Hex.png" 
-                   alt="University of Michigan" 
-                   style="height: 35px; width: auto; object-fit: contain;">
-            </a>
-            <a href="https://www.nvidia.com/" target="_blank">
-              <img src="https://www.nvidia.com/content/nvidiaGDC/us/en_US/about-nvidia/legal-info/logo-brand-usage/_jcr_content/root/responsivegrid/nv_container_392921705/nv_container_412055486/nv_image.coreimg.100.1290.png/1703060329095/nvidia-logo-horz.png" 
-                   alt="NVIDIA" 
-                   style="height: 85px; width: auto; object-fit: contain;">
-            </a>
-          </div>
-        </div>
+        <p class="author-note animate-in delay-2"><sup>*</sup> Equal advising.</p>
         
         <!-- Publication Badge -->
         <div class="animate-in delay-3">
           <span class="publication-badge">
-            📄 NeurIPS 2026
+            NeurIPS 2026
           </span>
         </div>
         
@@ -1045,6 +1036,14 @@
             </a>
           </span>
         </div>
+
+        <div class="hero-principles animate-in delay-5" aria-label="MARS in three steps">
+          <div><span>01</span><strong>Measure</strong><small>module dynamics</small></div>
+          <i aria-hidden="true">→</i>
+          <div><span>02</span><strong>Balance</strong><small>convergence time</small></div>
+          <i aria-hidden="true">→</i>
+          <div><span>03</span><strong>Select</strong><small>the best rank pair</small></div>
+        </div>
         
       </div>
     </div>
@@ -1053,7 +1052,7 @@
   <!-- Abstract Section -->
   <section class="section" id="abstract">
     <div class="container is-max-desktop">
-      <h2 class="section-title">Abstract</h2>
+      <h2 class="section-title" data-kicker="00 / IN ONE MINUTE">Abstract</h2>
       
       <div class="abstract-box">
         <p>
@@ -1066,12 +1065,30 @@
   <!-- Motivation Section -->
   <section class="section" id="motivation">
     <div class="container is-max-desktop">
-      <h2 class="section-title">Why <span class="mars-text">MARS</span> is Needed?</h2>
+      <h2 class="section-title" data-kicker="01 / THE PROBLEM">Why is <span class="mars-text">MARS</span> needed?</h2>
       
       <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem; color: var(--text-secondary);">
         Imbalanced training dynamics between the Vision Encoder (VE) and LLM lead to suboptimal performance. 
         When modules converge at different rates, it causes either performance bottlenecks or training oscillations.
       </p>
+
+      <div class="balance-story" aria-label="MARS balances vision and language convergence">
+        <article>
+          <span class="module-label">VISION</span>
+          <strong>Vision Encoder</strong>
+          <small>visual adaptation</small>
+        </article>
+        <div class="balance-axis">
+          <span>r<sub>ve</sub></span>
+          <div><i></i><b>balanced convergence</b><i></i></div>
+          <span>r<sub>llm</sub></span>
+        </div>
+        <article>
+          <span class="module-label">LANGUAGE</span>
+          <strong>LLM Backbone</strong>
+          <small>language adaptation</small>
+        </article>
+      </div>
       
       <div class="motivation-grid">
         <div class="motivation-card">
@@ -1123,7 +1140,7 @@
   <!-- Key Contributions Section -->
   <section class="section" id="contributions">
     <div class="container is-max-desktop">
-      <h2 class="section-title">Key Contributions</h2>
+      <h2 class="section-title" data-kicker="02 / THE IDEA">What MARS changes</h2>
       
       <div class="contributions-list">
         <div class="contribution-item">
@@ -1168,7 +1185,7 @@
   <!-- Method Section -->
   <section class="section" id="method">
     <div class="container is-max-desktop">
-      <h2 class="section-title">MARS Methodology</h2>
+      <h2 class="section-title" data-kicker="03 / THE METHOD">Two laws. One rank pair.</h2>
       
       <p style="text-align: center; max-width: 800px; margin: 0 auto 2rem; color: var(--text-secondary);">
         MARS transforms the intractable search for optimal LoRA ranks into an efficient, guided procedure 
@@ -1297,9 +1314,9 @@
   <!-- Results Section -->
   <section class="section" id="results">
     <div class="container is-max-desktop">
-      <h2 class="section-title">Results</h2>
+      <h2 class="section-title" data-kicker="04 / THE EVIDENCE">Results</h2>
       
-      <!-- <div class="results-highlight">
+      <div class="results-highlight">
         <div class="result-card">
           <div class="metric">+12.0%</div>
           <div class="metric-label">Higher Accuracy</div>
@@ -1315,7 +1332,7 @@
           <div class="metric-label">Faster Search</div>
           <div class="benchmark">vs Naive Search</div>
         </div>
-      </div> -->
+      </div>
 
       <!-- Generality Figure -->
       <h3 style="margin: 3rem 0 1.5rem; font-family: 'Inter', sans-serif; font-size: 1.15rem; font-weight: 600; text-align: center;">
@@ -1481,7 +1498,7 @@
   <!-- BibTeX Section -->
   <section class="section" id="bibtex">
     <div class="container is-max-desktop">
-      <h2 class="section-title">BibTeX</h2>
+      <h2 class="section-title" data-kicker="05 / CITE THE WORK">BibTeX</h2>
       
       <div class="bibtex-container">
         <button class="copy-button" onclick="copyBibtex()">
@@ -1565,6 +1582,25 @@
         }
       });
     });
+
+    // Subtle section reveals; content remains fully visible without JavaScript.
+    if ('IntersectionObserver' in window &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const revealItems = document.querySelectorAll('.section > .container > *');
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -40px' });
+
+      revealItems.forEach((item) => {
+        item.classList.add('js-reveal');
+        revealObserver.observe(item);
+      });
+    }
   </script>
 
 </body>
