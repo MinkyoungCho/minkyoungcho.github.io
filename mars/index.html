@@ -941,7 +941,7 @@
       color: var(--text-primary);
     }
   </style>
-  <link rel="stylesheet" href="redesign.css?v=20261013-2">
+  <link rel="stylesheet" href="redesign.css?v=20261013-3">
 </head>
 <body>
 
@@ -1336,18 +1336,32 @@
         </div>
       </div>
 
-      <!-- Generality Figure -->
-      <h3 style="margin: 3rem 0 1.5rem; font-family: 'Inter', sans-serif; font-size: 1.15rem; font-weight: 600; text-align: center;">
-        Evaluation of Generalist Capabilities
-      </h3>
-      
-      <div class="image-container">
-        <img src="assets/generality.png" alt="Generality Results" style="max-width: 70%; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1);">
-        <p class="image-caption">
-          <strong>Left:</strong> Comparison across diverse multimodal benchmarks demonstrating broad generalization.
-          <strong>Right:</strong> Fine-grained capability breakdown on MMStar.
-        </p>
-      </div>
+      <!-- Interactive generality plots. Values come from Appendix I. -->
+      <section class="radar-overview" id="generality" aria-labelledby="generality-title">
+        <div class="radar-heading">
+          <p class="radar-kicker">APPENDIX I / GENERALITY</p>
+          <h3 id="generality-title">One rank pair, broader capabilities.</h3>
+          <p>MARS is evaluated across six multimodal benchmarks and six MMStar capability groups.</p>
+        </div>
+
+        <div class="radar-guide">
+          <span class="radar-guide-icon" aria-hidden="true">↗</span>
+          <div>
+            <span>HOW TO READ THE PLOTS</span>
+            <strong>Farther outward means better.</strong>
+            <p>Each axis is normalized only against the three compared methods. Select a method below to show or hide it; hover a point for its exact Appendix I value.</p>
+          </div>
+        </div>
+
+        <div data-mars-radar>
+          <p class="radar-loading">Loading interactive benchmark plots…</p>
+        </div>
+        <noscript>
+          <div class="image-container">
+            <img src="assets/generality.png" alt="Generality results across multimodal benchmarks and MMStar capabilities">
+          </div>
+        </noscript>
+      </section>
 
       <h3 style="margin: 3rem 0 1.5rem; font-family: 'Inter', sans-serif; font-size: 1.15rem; font-weight: 600;">
         Comparison with Fixed-Rank Tuning (Different Learning Rates)
@@ -1604,6 +1618,7 @@
       });
     }
   </script>
+  <script src="radar.js?v=20261013-1"></script>
 
 </body>
 </html>
