@@ -251,6 +251,11 @@ a { color: inherit; }
   align-items: baseline;
   margin: 0;
 }
+.author-line-break {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 0;
+}
 .author-block a {
   color: var(--ink);
   font-weight: 600;
@@ -718,14 +723,6 @@ a { color: inherit; }
 }
 .radar-series circle:hover,
 .radar-series circle:focus { r: 5; stroke-width: 2; }
-.radar-axis-ranges {
-  margin: -1rem 1rem 1rem;
-  padding-top: .7rem;
-  border-top: 1px solid #eceae5;
-  color: #73776f;
-  font: 500 .55rem/1.65 "JetBrains Mono", monospace;
-  text-align: center;
-}
 .radar-tooltip {
   position: fixed;
   z-index: 300;
@@ -766,15 +763,6 @@ a { color: inherit; }
 .radar-legend button:hover { border-color: #aaa8a2; }
 .radar-legend button[aria-pressed="false"] { opacity: .42; background: #f3f1ec; }
 .radar-legend svg { width: 28px; height: 10px; }
-.radar-note {
-  max-width: 790px;
-  margin: 0 auto;
-  color: var(--ink-soft);
-  text-align: center;
-  font-size: .7rem;
-  line-height: 1.7;
-}
-.radar-note strong { color: var(--ink); }
 .radar-exact { margin-top: 1.2rem; border-block: 1px solid var(--line); }
 .radar-exact > summary {
   padding: .9rem .15rem;
