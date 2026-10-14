@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NavAny: does a robot know what its body can do?</title>
+<meta name="description" content="NavAny is a benchmark for physical self-models across bodies: matched pairs, a four-rung capability ladder, boundary curves, and sixteen navigation and loco-manipulation tasks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --paper:#F6F8FB; --sheet:#FFFFFF; --ink:#1C2333; --muted:#5A6478; --hair:#E1E7F0; --grid:#E6ECF4;
+  --teal:#0F8A6C; --teal-soft:#E3F3EE; --indigo:#4B55C8; --indigo-soft:#E9EBFA;
+  --amber:#B7791F; --amber-soft:#FBF1DF; --red:#C2412D;
+  --display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --text:"Source Serif 4", Georgia, "Times New Roman", serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:72px}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--text); font-size:1.075rem; line-height:1.68; -webkit-font-smoothing:antialiased}
+img{max-width:100%; height:auto; display:block}
+a{color:var(--indigo); text-underline-offset:3px}
+a:focus-visible, button:focus-visible{outline:2px solid var(--indigo); outline-offset:3px; border-radius:4px}
+h1,h2,h3,h4{font-family:var(--display); line-height:1.15; margin:0; letter-spacing:-0.01em}
+.wrap{max-width:1120px; margin:0 auto; padding:0 24px}
+
+/* top bar */
+.bar{position:sticky; top:0; z-index:10; background:rgba(246,248,251,.92); backdrop-filter:saturate(1.2) blur(8px); border-bottom:1px solid var(--hair)}
+.bar .wrap{display:flex; align-items:center; gap:24px; height:60px}
+.mark{font-family:var(--display); font-weight:700; font-size:1.2rem; color:var(--ink); text-decoration:none; letter-spacing:-0.02em}
+.mark span{color:var(--teal)}
+.bar nav{margin-left:auto; display:flex; gap:20px; overflow-x:auto}
+.bar nav a{font-family:var(--display); font-weight:500; font-size:.95rem; color:var(--muted); text-decoration:none; white-space:nowrap}
+.bar nav a:hover{color:var(--ink)}
+
+/* hero on drafting paper */
+.hero{background-color:var(--sheet); background-image:linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size:28px 28px; border-bottom:1px solid var(--hair)}
+.hero .wrap{display:grid; grid-template-columns:.92fr 1.08fr; gap:40px; align-items:center; padding-top:72px; padding-bottom:72px}
+.hero h1{font-size:clamp(2.5rem, 5.2vw, 4.25rem); font-weight:700; max-width:13ch}
+.hero .lede{font-size:1.2rem; color:var(--ink); max-width:46ch; margin:24px 0 0}
+.hero .who{font-family:var(--display); color:var(--muted); font-size:.98rem; margin-top:28px}
+figure{margin:0}
+.plan{background:var(--sheet); border:1px solid var(--hair); border-radius:14px; padding:14px}
+.plan figcaption{font-family:var(--display); font-size:.9rem; color:var(--muted); margin-top:8px; line-height:1.45}
+
+/* sections */
+section.block{padding:84px 0 0}
+.block > .wrap > h2{font-size:clamp(1.8rem, 3vw, 2.4rem); font-weight:700}
+.intro{max-width:66ch; color:var(--ink); margin:16px 0 0}
+.prose p{max-width:66ch}
+
+/* goal: a real sequence */
+.steps{list-style:none; margin:32px 0 0; padding:0; display:grid; grid-template-columns:repeat(3,1fr); gap:0; counter-reset:s; border-top:2px solid var(--ink)}
+.steps li{counter-increment:s; padding:20px 24px 4px 0}
+.steps li + li{padding-left:24px; border-left:1px solid var(--hair)}
+.steps li::before{content:counter(s); font-family:var(--display); font-weight:700; font-size:2.6rem; color:var(--teal); line-height:1; display:block; margin-bottom:12px}
+.steps h3{font-size:1.25rem; font-weight:600}
+.steps p{margin:8px 0 0; color:var(--muted)}
+
+/* design questions */
+.questions{display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-top:32px}
+.questions div{border-left:3px solid var(--indigo); padding:2px 0 2px 18px}
+.questions h3{font-size:1.3rem; font-weight:600; line-height:1.25}
+.questions p{margin:10px 0 0; color:var(--muted); font-size:1rem}
+
+/* ladder: the signature element */
+.ladder-wrap{display:grid; grid-template-columns:200px 1fr; gap:28px; margin-top:36px}
+.bands{display:grid; grid-template-rows:1fr 1fr; gap:16px}
+.band{border-radius:12px; padding:18px; font-family:var(--display)}
+.band b{display:block; font-size:1.15rem}
+.band span{color:var(--muted); font-size:.95rem; line-height:1.4; display:block; margin-top:6px}
+.band.dyn{background:var(--indigo-soft)} .band.dyn b{color:var(--indigo)}
+.band.sta{background:var(--teal-soft)} .band.sta b{color:var(--teal)}
+.ladder{list-style:none; margin:0; padding:0 26px; position:relative; display:grid; gap:16px; isolation:isolate}
+.ladder::before, .ladder::after{content:""; position:absolute; top:-10px; bottom:-10px; width:6px; border-radius:3px; background:#C9D2DF}
+.ladder::before{left:0} .ladder::after{right:0}
+.rung{background:var(--sheet); border:1px solid var(--hair); border-radius:12px; padding:18px 20px; position:relative}
+.rung::before{content:""; position:absolute; left:-27px; right:-27px; top:50%; height:6px; margin-top:-3px; border-radius:3px; background:#C9D2DF; z-index:-1}
+.rung.static{border-top:4px solid var(--teal)} .rung.dynamic{border-top:4px solid var(--indigo)}
+.rung-head{display:flex; align-items:baseline; gap:12px}
+.rung-code{font-family:var(--display); font-weight:700; font-size:1.05rem; color:var(--teal)}
+.dynamic .rung-code{color:var(--indigo)}
+.rung-name{font-family:var(--display); font-weight:700; font-size:1.35rem}
+.rung-q{margin:6px 0 12px; color:var(--muted); font-size:1rem}
+.rung-tasks{list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; gap:8px}
+.rung-tasks a{display:inline-block; font-family:var(--display); font-size:.9rem; font-weight:500; text-decoration:none; color:var(--ink); background:var(--paper); border:1px solid var(--hair); border-radius:999px; padding:4px 12px}
+.rung-tasks a:hover{border-color:var(--ink)}
+.ladder-note{margin:20px 0 0; color:var(--muted); font-family:var(--display); font-size:.98rem}
+
+/* scoring */
+.scoring{display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start; margin-top:32px}
+.rules{margin:0; padding:0; list-style:none; display:grid; gap:22px}
+.rules h3{font-size:1.2rem; font-weight:600}
+.rules p{margin:6px 0 0; color:var(--muted)}
+.curve{background:var(--sheet); border:1px solid var(--hair); border-radius:14px; padding:16px}
+.curve figcaption{font-family:var(--display); font-size:.9rem; color:var(--muted); margin-top:6px; line-height:1.45}
+
+/* gallery */
+.tier{margin-top:48px}
+.tier-head{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 18px; padding-bottom:14px; border-bottom:2px solid var(--teal)}
+.tier.dynamic .tier-head{border-bottom-color:var(--indigo)}
+.tier-head h3{font-size:1.5rem; font-weight:700}
+.tier-head p{margin:0; color:var(--muted); font-size:1rem}
+.grid{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:28px; margin-top:24px}
+.task{margin:0; background:var(--sheet); border:1px solid var(--hair); border-radius:14px; overflow:hidden; scroll-margin-top:80px}
+.task .shot{display:block; background:var(--paper); border-bottom:1px solid var(--hair)}
+.task figcaption{padding:16px 20px 18px}
+.task-top{display:flex; align-items:center; gap:10px}
+.task-id{font-family:var(--display); font-weight:700; color:var(--teal)}
+.dynamic .task-id{color:var(--indigo)}
+.tag{font-family:var(--display); font-size:.8rem; font-weight:500; border-radius:999px; padding:2px 10px}
+.tag.nav{background:var(--teal-soft); color:#0B6B54} .tag.loco{background:var(--amber-soft); color:#7A5410}
+.task h4{font-size:1.2rem; font-weight:600; margin-top:8px}
+.task p{margin:6px 0 0; font-size:1rem}
+.task .ground{color:var(--muted); font-size:.93rem}
+
+/* comparison table */
+.table-scroll{overflow-x:auto; margin-top:28px; border:1px solid var(--hair); border-radius:14px; background:var(--sheet)}
+table{border-collapse:collapse; width:100%; min-width:900px; font-family:var(--display); font-size:.9rem}
+th, td{text-align:left; vertical-align:top; padding:11px 12px; border-bottom:1px solid var(--hair)}
+thead th{font-weight:600; color:var(--muted); background:var(--paper); line-height:1.3}
+tbody th{font-weight:700; white-space:nowrap}
+.venue{display:block; font-weight:500; color:var(--muted); font-size:.82rem}
+.y{color:#0B6B54; font-weight:600} .n{color:var(--muted)} .d{color:var(--muted)}
+.note{display:block; color:var(--muted); font-size:.82rem}
+tr.ours{background:var(--teal-soft)} tr.ours th, tr.ours td{border-bottom:none}
+.legend{font-family:var(--display); color:var(--muted); font-size:.92rem; margin-top:12px; max-width:80ch}
+
+/* real robot */
+.robot{display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:28px; align-items:start}
+.robot h3{font-size:1.2rem; font-weight:600}
+.robot p{margin:8px 0 0; color:var(--muted)}
+.goal + .goal{margin-top:22px}
+.variants{border-collapse:collapse; width:100%; min-width:0; font-size:.92rem}
+.variants th, .variants td{padding:10px 12px}
+.variants thead th{background:var(--paper)}
+
+footer{margin-top:96px; border-top:1px solid var(--hair); background:var(--sheet)}
+footer .wrap{padding:28px 24px 40px; font-family:var(--display); color:var(--muted); font-size:.95rem; display:flex; flex-wrap:wrap; gap:12px 28px}
+
+@media (max-width: 900px){
+  .hero .wrap{grid-template-columns:1fr; padding-top:48px; padding-bottom:48px}
+  .steps, .questions{grid-template-columns:1fr}
+  .steps li + li{padding-left:0; border-left:none; border-top:1px solid var(--hair)}
+  .ladder-wrap{grid-template-columns:1fr}
+  .bands{grid-template-rows:none; grid-template-columns:1fr 1fr}
+  .scoring, .robot{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
+}
+@media (max-width: 560px){
+  .bar nav{display:none}
+  .bands{grid-template-columns:1fr}
+  body{font-size:1.02rem}
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap">
+    <a class="mark" href="#top">Nav<span>Any</span></a>
+    <nav aria-label="Sections">
+      <a href="#why">Why</a><a href="#goal">Goal</a><a href="#ladder">Ladder</a><a href="#scoring">Scoring</a><a href="#tasks">Tasks</a><a href="#compare">Compare</a><a href="#robot">Real robot</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <h1>Does a robot know what its body can do?</h1>
+      <p class="lede">NavAny is a benchmark for physical self-models. The same scene and the same instruction go to different bodies, and only an agent that knows its own body picks the right action for each.</p>
+      <p class="who">Minkyoung Cho. Project page, work in progress.</p>
+    </div>
+    <figure class="plan">
+      <svg viewBox="0 0 520 330" role="img" aria-labelledby="hero-t hero-d">
+        <title id="hero-t">Same instruction, two bodies</title>
+        <desc id="hero-d">A wall with a narrow 0.50 m gap and a wide door. The small robot walks through the gap; the large robot takes the wide door. A dashed red line shows a body-blind plan sending the large robot into the gap, where it gets stuck.</desc>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+        <rect x="0" y="0" width="520" height="330" rx="10" fill="#FFFFFF"/>
+        <g stroke="#E6ECF4" stroke-width="1">
+          <path d="M26 0V330M52 0V330M78 0V330M104 0V330M130 0V330M156 0V330M182 0V330M208 0V330M234 0V330M260 0V330M286 0V330M312 0V330M338 0V330M364 0V330M390 0V330M416 0V330M442 0V330M468 0V330M494 0V330"/>
+          <path d="M0 26H520M0 52H520M0 78H520M0 104H520M0 130H520M0 156H520M0 182H520M0 208H520M0 234H520M0 260H520M0 286H520M0 312H520"/>
+        </g>
+        <rect x="128" y="18" width="244" height="38" rx="19" fill="#F6F8FB" stroke="#E1E7F0"/>
+        <text x="250" y="43" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-size="17" fill="#1C2333">“Go to the meeting room”</text>
+        <g fill="#3B4A66">
+          <rect x="300" y="70" width="12" height="78" rx="2"/>
+          <rect x="300" y="170" width="12" height="70" rx="2"/>
+          <rect x="300" y="300" width="12" height="30" rx="2"/>
+        </g>
+        <text x="322" y="140" font-family="Bricolage Grotesque, sans-serif" font-size="16" fill="#5A6478">0.50 m gap</text>
+        <text x="322" y="296" font-family="Bricolage Grotesque, sans-serif" font-size="16" fill="#5A6478">wide door</text>
+        <rect x="420" y="128" width="78" height="60" rx="8" fill="none" stroke="#9AA6B8" stroke-dasharray="5 4"/>
+        <text x="459" y="163" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-size="16" fill="#5A6478">Room</text>
+        <path d="M118 159 L408 159" fill="none" stroke="#0F8A6C" stroke-width="3" stroke-linecap="round" marker-end="url(#ah)"/>
+        <path d="M128 236 Q210 274 300 270 L408 270 Q432 262 448 196" fill="none" stroke="#0F8A6C" stroke-width="3" stroke-linecap="round" marker-end="url(#ah)"/>
+        <path d="M134 226 L290 166" fill="none" stroke="#C2412D" stroke-width="2.4" stroke-dasharray="7 6" stroke-linecap="round"/>
+        <path d="M282 150 L298 166 M298 150 L282 166" stroke="#C2412D" stroke-width="3" stroke-linecap="round"/>
+        <g>
+          <rect x="82" y="146" width="36" height="26" rx="7" fill="#E3F3EE" stroke="#0F8A6C" stroke-width="2"/>
+          <circle cx="90" cy="146" r="3" fill="#0F8A6C"/><circle cx="110" cy="146" r="3" fill="#0F8A6C"/><circle cx="90" cy="172" r="3" fill="#0F8A6C"/><circle cx="110" cy="172" r="3" fill="#0F8A6C"/>
+        </g>
+        <g>
+          <rect x="70" y="216" width="58" height="42" rx="10" fill="#E3F3EE" stroke="#0F8A6C" stroke-width="2"/>
+          <circle cx="82" cy="216" r="4" fill="#0F8A6C"/><circle cx="116" cy="216" r="4" fill="#0F8A6C"/><circle cx="82" cy="258" r="4" fill="#0F8A6C"/><circle cx="116" cy="258" r="4" fill="#0F8A6C"/>
+        </g>
+        <text x="100" y="198" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-size="16" fill="#5A6478">small, ×0.8</text>
+        <text x="99" y="288" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-size="16" fill="#5A6478">large, ×1.2</text>
+      </svg>
+      <figcaption>Look-alike legged twins. Green: the body-aware plans. Dashed red: a body-blind plan that sends the large twin into the gap.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="block" id="why">
+  <div class="wrap prose">
+    <h2>Why it matters</h2>
+    <p class="intro">Generalist agents now drive humanoids, legged robots, wheeled manipulators and drones. A doorway can be passable for one body and not for another, and a body changes the moment it picks up a box. An agent that misjudges its body either attempts what it cannot do, which is unsafe, or refuses what it could do, which wastes the robot.</p>
+    <p>Existing evaluations either hand the body to the model as a text profile, or vary the body without changing the right answer. Neither can tell whether a model actually knows its body, and neither says how to make it better.</p>
+  </div>
+</section>
+
+<section class="block" id="goal">
+  <div class="wrap">
+    <h2>What we aim for</h2>
+    <p class="intro">The benchmark is a means, not the end. We use it to find training signals that make self-models better.</p>
+    <ol class="steps">
+      <li><h3>Diagnose</h3><p>Measure each self-model capability with matched pairs and boundary curves, separately for prediction and correction.</p></li>
+      <li><h3>Find proxy signals</h3><p>Keep only the diagnostics that predict performance on bodies the model has never seen, beyond plain success rate.</p></li>
+      <li><h3>Improve</h3><p>Turn them into rewards or auxiliary losses, train, and re-test on held-out bodies and mid-task body changes.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="block" id="questions">
+  <div class="wrap">
+    <h2>Design questions</h2>
+    <p class="intro">Like memory in RoboMME, body knowledge raises three design questions. NavAny answers them with controlled comparisons on fixed backbones.</p>
+    <div class="questions">
+      <div><h3>What does an agent need to know about its body?</h3><p>Four capabilities, from fitting the body now to staying correct as it changes.</p></div>
+      <div><h3>In what form should that knowledge be given?</h3><p>Nothing, a learned embodiment token, a text spec, a numeric capability vector, or an interaction history with probing.</p></div>
+      <div><h3>Where should it enter the model?</h3><p>In the planner or the controller, as input or as feature-wise modulation.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="ladder">
+  <div class="wrap">
+    <h2>The capability ladder</h2>
+    <p class="intro">Four rungs, each with two navigation and two loco-manipulation tasks. A model that cannot fit its body now cannot stay feasible as it changes, so the first rung a model fails shows what it is missing.</p>
+    <div class="ladder-wrap">
+      <div class="bands">
+        <div class="band dyn"><b>Dynamic: fit over time</b><span>C3 predicts the changes the agent's own actions will cause. C4 corrects after unannounced changes.</span></div>
+        <div class="band sta"><b>Static: fit now</b><span>C1 is body-scaled: size and form. C2 is action-scaled: force, payload, slope and braking.</span></div>
+      </div>
+      <ol class="ladder" reversed>
+<li class="rung dynamic">
+  <div class="rung-head"><span class="rung-code">C4</span><span class="rung-name">Self-State Update</span></div>
+  <p class="rung-q">Does the agent notice an unannounced body change, update itself and replan?</p>
+  <ul class="rung-tasks"><li><a href="#c4-l1">C4-L1 Unexpected weight</a></li><li><a href="#c4-n1">C4-N1 Recalibration after a body change</a></li><li><a href="#c4-n2">C4-N2 Mid-task damage</a></li><li><a href="#c4-l2">C4-L2 Posture change</a></li></ul>
+</li>
+<li class="rung dynamic">
+  <div class="rung-head"><span class="rung-code">C3</span><span class="rung-name">Horizon Feasibility</span></div>
+  <p class="rung-q">Does the plan stay feasible once the changes the agent&#x27;s own actions will cause are predicted?</p>
+  <ul class="rung-tasks"><li><a href="#c3-l1">C3-L1 End-state planning</a></li><li><a href="#c3-n1">C3-N1 Carrying a wide box</a></li><li><a href="#c3-n2">C3-N2 Energy budget</a></li><li><a href="#c3-l2">C3-L2 Tool extends reach</a></li></ul>
+</li>
+<li class="rung static">
+  <div class="rung-head"><span class="rung-code">C2</span><span class="rung-name">Capability Fit</span></div>
+  <p class="rung-q">Does the plan stay within the body&#x27;s force, payload, slope and braking limits?</p>
+  <ul class="rung-tasks"><li><a href="#c2-n1">C2-N1 Braking to a stop line</a></li><li><a href="#c2-n2">C2-N2 Walkable slope</a></li><li><a href="#c2-l1">C2-L1 Payload</a></li><li><a href="#c2-l2">C2-L2 Heavy door</a></li></ul>
+</li>
+<li class="rung static">
+  <div class="rung-head"><span class="rung-code">C1</span><span class="rung-name">Body Fit</span></div>
+  <p class="rung-q">Does the plan fit the body&#x27;s size and form, including what it carries?</p>
+  <ul class="rung-tasks"><li><a href="#c1-n1">C1-N1 Gap passing</a></li><li><a href="#c1-n2">C1-N2 Stair climbing</a></li><li><a href="#c1-l1">C1-L1 Reach across a table</a></li><li><a href="#c1-l2">C1-L2 Form: no hands</a></li></ul>
+</li>
+      </ol>
+    </div>
+    <p class="ladder-note">Grounded in offline and online body representation (Carruthers 2008) and in feedforward and feedback motor control (Wolpert and Kawato 1998).</p>
+  </div>
+</section>
+
+<section class="block" id="scoring">
+  <div class="wrap">
+    <h2>How a task is scored</h2>
+    <div class="scoring">
+      <ul class="rules">
+        <li><h3>Matched pairs</h3><p>Same scene, same instruction, different body or body state, and a different correct answer. A body-blind policy must get at least one of the two wrong.</p></li>
+        <li><h3>Two-sided scoring</h3><p>Attempting the impossible and refusing the possible both fail. The cautious option always costs the capable body something, so neither always-go nor always-cautious can pass a pair.</p></li>
+        <li><h3>Boundary curves</h3><p>Sweep the body-scaled ratio, such as gap width over body width, and compare where the model judges the boundary with where it really is. This follows the psychophysics of affordances (Warren 1984; Warren and Whang 1987).</p></li>
+        <li><h3>Use, infer, update</h3><p>Every task runs with body information given and withheld. C4 adds changes the agent is not told about.</p></li>
+      </ul>
+      <figure class="curve">
+        <svg viewBox="0 0 520 300" role="img" aria-labelledby="cv-t cv-d">
+          <title id="cv-t">Judged versus actual boundary</title>
+          <desc id="cv-d">Success rate against gap width. The actual curve rises at 0.46 m. A body-blind model's attempt curve rises at 0.57 m, leaving a band of needless refusals below it and, for a larger body, unsafe attempts.</desc>
+          <rect width="520" height="300" fill="#FFFFFF"/>
+          <path d="M126 236 L136 214 L144 170 L152 110 L160 70 L170 54 L240 52 L240 56 L222 76 L208 120 L198 170 L188 214 L174 236 L150 243 Z" fill="#FBF1DF"/>
+          <line x1="60" y1="244" x2="500" y2="244" stroke="#C9D2DF"/>
+          <line x1="60" y1="40" x2="60" y2="244" stroke="#C9D2DF"/>
+          <path d="M60 244 L110 243 L126 236 L136 214 L144 170 L152 110 L160 70 L170 54 L500 52" fill="none" stroke="#0F8A6C" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M60 244 L150 243 L174 236 L188 214 L198 170 L208 120 L222 76 L240 56 L500 52" fill="none" stroke="#4B55C8" stroke-width="3" stroke-dasharray="8 6" stroke-linejoin="round"/>
+          <line x1="147" y1="262" x2="203" y2="262" stroke="#5A6478" stroke-width="1.4" marker-start="url(#ah)" marker-end="url(#ah)"/>
+          <text x="175" y="288" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-size="17" fill="#5A6478">boundary error</text>
+          <text x="52" y="56" text-anchor="end" font-family="Bricolage Grotesque, sans-serif" font-size="16" fill="#5A6478">1</text>
+          <text x="52" y="248" text-anchor="end" font-family="Bricolage Grotesque, sans-serif" font-size="16" fill="#5A6478">0</text>
+          <text x="500" y="270" text-anchor="end" font-family="Bricolage Grotesque, sans-serif" font-size="16" fill="#5A6478">gap width</text>
+          <line x1="282" y1="108" x2="312" y2="108" stroke="#0F8A6C" stroke-width="3"/>
+          <text x="320" y="114" font-family="Bricolage Grotesque, sans-serif" font-size="17" fill="#1C2333">actual success</text>
+          <line x1="282" y1="138" x2="312" y2="138" stroke="#4B55C8" stroke-width="3" stroke-dasharray="8 6"/>
+          <text x="320" y="144" font-family="Bricolage Grotesque, sans-serif" font-size="17" fill="#1C2333">model attempts</text>
+          <rect x="282" y="160" width="30" height="14" fill="#FBF1DF"/>
+          <text x="320" y="173" font-family="Bricolage Grotesque, sans-serif" font-size="17" fill="#1C2333">needless refusals</text>
+        </svg>
+        <figcaption>Each point is a rate over repeated trials, so the curve is an S-shape rather than a step. The 50% point is the boundary; the slope says how sharp it is.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="tasks">
+  <div class="wrap">
+    <h2>Sixteen tasks</h2>
+    <p class="intro">Closed-loop mockups on a floor plan with a 1 m grid. Every task replicates a classic paradigm and plays the same pair under three policies: self-model, always-default and always-cautious. Only the self-model policy passes. Select a mockup to open it at full size.</p>
+<section class="tier static" aria-labelledby="g-C1">
+  <div class="tier-head"><h3 id="g-C1"><span class="rung-code">C1</span> Body Fit</h3><p>Does the plan fit the body&#x27;s size and form, including what it carries?</p></div>
+  <div class="grid"><figure class="task" id="c1-n1">
+  <a class="shot" href="gifs/c1_n1_gap_passing_v3.gif" aria-label="Open the C1-N1 mockup at full size"><img src="gifs/c1_n1_gap_passing_v3.gif" width="900" height="788" loading="lazy" alt="C1-N1 mockup: Look-alike legged twins meet a 0.50 m gap: the small one walks through, the large one takes the wide door."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C1-N1</span><span class="tag nav">Navigation</span></div>
+    <h4>Gap passing</h4>
+    <p>Look-alike legged twins meet a 0.50 m gap: the small one walks through, the large one takes the wide door.</p>
+    <p class="ground">Grounded in Warren &amp; Whang 1987</p>
+  </figcaption>
+</figure><figure class="task" id="c1-n2">
+  <a class="shot" href="gifs/c1_n2_stair_climbing_v3.gif" aria-label="Open the C1-N2 mockup at full size"><img src="gifs/c1_n2_stair_climbing_v3.gif" width="900" height="788" loading="lazy" alt="C1-N2 mockup: 0.30 m risers: the long-legged humanoid climbs, the short-legged one takes the long ramp."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C1-N2</span><span class="tag nav">Navigation</span></div>
+    <h4>Stair climbing</h4>
+    <p>0.30 m risers: the long-legged humanoid climbs, the short-legged one takes the long ramp.</p>
+    <p class="ground">Grounded in Warren 1984</p>
+  </figcaption>
+</figure><figure class="task" id="c1-l1">
+  <a class="shot" href="gifs/c1_l1_reach_across_v3.gif" aria-label="Open the C1-L1 mockup at full size"><img src="gifs/c1_l1_reach_across_v3.gif" width="900" height="788" loading="lazy" alt="C1-L1 mockup: A cup 1.5 m across a table: the long-armed humanoid reaches across, the short-armed one walks around."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C1-L1</span><span class="tag loco">Loco-manipulation</span></div>
+    <h4>Reach across a table</h4>
+    <p>A cup 1.5 m across a table: the long-armed humanoid reaches across, the short-armed one walks around.</p>
+    <p class="ground">Grounded in Carello et al. 1989; Choi &amp; Mark 2004</p>
+  </figcaption>
+</figure><figure class="task" id="c1-l2">
+  <a class="shot" href="gifs/c1_l2_form_no_hands_v3.gif" aria-label="Open the C1-L2 mockup at full size"><img src="gifs/c1_l2_form_no_hands_v3.gif" width="900" height="788" loading="lazy" alt="C1-L2 mockup: A humanoid fetches the cup; a drone without a gripper hands the task off."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C1-L2</span><span class="tag loco">Loco-manipulation</span></div>
+    <h4>Form: no hands</h4>
+    <p>A humanoid fetches the cup; a drone without a gripper hands the task off.</p>
+    <p class="ground">Grounded in Turvey 1992</p>
+  </figcaption>
+</figure></div>
+</section>
+<section class="tier static" aria-labelledby="g-C2">
+  <div class="tier-head"><h3 id="g-C2"><span class="rung-code">C2</span> Capability Fit</h3><p>Does the plan stay within the body&#x27;s force, payload, slope and braking limits?</p></div>
+  <div class="grid"><figure class="task" id="c2-n1">
+  <a class="shot" href="gifs/c2_n1_braking_v3.gif" aria-label="Open the C2-N1 mockup at full size"><img src="gifs/c2_n1_braking_v3.gif" width="900" height="788" loading="lazy" alt="C2-N1 mockup: Same approach speed: the light robot brakes late and firm, the heavy robot must brake early."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C2-N1</span><span class="tag nav">Navigation</span></div>
+    <h4>Braking to a stop line</h4>
+    <p>Same approach speed: the light robot brakes late and firm, the heavy robot must brake early.</p>
+    <p class="ground">Grounded in Fajen 2005</p>
+  </figcaption>
+</figure><figure class="task" id="c2-n2">
+  <a class="shot" href="gifs/c2_n2_walkable_slope_v3.gif" aria-label="Open the C2-N2 mockup at full size"><img src="gifs/c2_n2_walkable_slope_v3.gif" width="900" height="788" loading="lazy" alt="C2-N2 mockup: A 20° ramp: the legged robot climbs it, the low-torque wheeled robot takes the 6° ramp."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C2-N2</span><span class="tag nav">Navigation</span></div>
+    <h4>Walkable slope</h4>
+    <p>A 20° ramp: the legged robot climbs it, the low-torque wheeled robot takes the 6° ramp.</p>
+    <p class="ground">Grounded in Kinsella-Shaw et al. 1992</p>
+  </figcaption>
+</figure><figure class="task" id="c2-l1">
+  <a class="shot" href="gifs/c2_l1_payload_v3.gif" aria-label="Open the C2-L1 mockup at full size"><img src="gifs/c2_l1_payload_v3.gif" width="900" height="788" loading="lazy" alt="C2-L1 mockup: A 6 kg box: the humanoid (8 kg payload) carries it, the legged robot (3 kg) delegates."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C2-L1</span><span class="tag loco">Loco-manipulation</span></div>
+    <h4>Payload</h4>
+    <p>A 6 kg box: the humanoid (8 kg payload) carries it, the legged robot (3 kg) delegates.</p>
+    <p class="ground">Grounded in Fajen 2005, 2007</p>
+  </figcaption>
+</figure><figure class="task" id="c2-l2">
+  <a class="shot" href="gifs/c2_l2_heavy_door_v3.gif" aria-label="Open the C2-L2 mockup at full size"><img src="gifs/c2_l2_heavy_door_v3.gif" width="900" height="788" loading="lazy" alt="C2-L2 mockup: A door that needs 80 N: the humanoid pushes it, the light robot uses the button."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C2-L2</span><span class="tag loco">Loco-manipulation</span></div>
+    <h4>Heavy door</h4>
+    <p>A door that needs 80 N: the humanoid pushes it, the light robot uses the button.</p>
+    <p class="ground">Grounded in Action-scaled boundary (Fajen 2005)</p>
+  </figcaption>
+</figure></div>
+</section>
+<section class="tier dynamic" aria-labelledby="g-C3">
+  <div class="tier-head"><h3 id="g-C3"><span class="rung-code">C3</span> Horizon Feasibility</h3><p>Does the plan stay feasible once the changes the agent&#x27;s own actions will cause are predicted?</p></div>
+  <div class="grid"><figure class="task" id="c3-l1">
+  <a class="shot" href="gifs/c3_l1_end_state_v3.gif" aria-label="Open the C3-L1 mockup at full size"><img src="gifs/c3_l1_end_state_v3.gif" width="900" height="788" loading="lazy" alt="C3-L1 mockup: The bar must end upright: the free-wrist arm rotates it in hand, the limited-wrist arm plans a regrasp first."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C3-L1</span><span class="tag loco">Loco-manipulation</span></div>
+    <h4>End-state planning</h4>
+    <p>The bar must end upright: the free-wrist arm rotates it in hand, the limited-wrist arm plans a regrasp first.</p>
+    <p class="ground">Grounded in Rosenbaum et al. 1990, end-state comfort</p>
+  </figcaption>
+</figure><figure class="task" id="c3-n1">
+  <a class="shot" href="gifs/c3_n1_wide_load_v3.gif" aria-label="Open the C3-N1 mockup at full size"><img src="gifs/c3_n1_wide_load_v3.gif" width="900" height="788" loading="lazy" alt="C3-N1 mockup: After picking up a 0.86 m square box, the 0.80 m door no longer fits in any orientation, so the plan must reroute."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C3-N1</span><span class="tag nav">Navigation</span></div>
+    <h4>Carrying a wide box</h4>
+    <p>After picking up a 0.86 m square box, the 0.80 m door no longer fits in any orientation, so the plan must reroute.</p>
+    <p class="ground">Grounded in Wagman &amp; Taylor 2005</p>
+  </figcaption>
+</figure><figure class="task" id="c3-n2">
+  <a class="shot" href="gifs/c3_n2_energy_budget_v3.gif" aria-label="Open the C3-N2 mockup at full size"><img src="gifs/c3_n2_energy_budget_v3.gif" width="900" height="788" loading="lazy" alt="C3-N2 mockup: 40% battery and 10 m to go: the efficient robot goes direct, the heavy robot charges first."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C3-N2</span><span class="tag nav">Navigation</span></div>
+    <h4>Energy budget</h4>
+    <p>40% battery and 10 m to go: the efficient robot goes direct, the heavy robot charges first.</p>
+    <p class="ground">Grounded in Todorov &amp; Jordan 2002, optimal feedback control</p>
+  </figcaption>
+</figure><figure class="task" id="c3-l2">
+  <a class="shot" href="gifs/c3_l2_tool_reach_v3.gif" aria-label="Open the C3-L2 mockup at full size"><img src="gifs/c3_l2_tool_reach_v3.gif" width="900" height="788" loading="lazy" alt="C3-L2 mockup: The short-armed humanoid plans to fetch the stick first; the long-armed one reaches directly."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C3-L2</span><span class="tag loco">Loco-manipulation</span></div>
+    <h4>Tool extends reach</h4>
+    <p>The short-armed humanoid plans to fetch the stick first; the long-armed one reaches directly.</p>
+    <p class="ground">Grounded in Iriki et al. 1996</p>
+  </figcaption>
+</figure></div>
+</section>
+<section class="tier dynamic" aria-labelledby="g-C4">
+  <div class="tier-head"><h3 id="g-C4"><span class="rung-code">C4</span> Self-State Update</h3><p>Does the agent notice an unannounced body change, update itself and replan?</p></div>
+  <div class="grid"><figure class="task" id="c4-l1">
+  <a class="shot" href="gifs/c4_l1_unexpected_weight_v3.gif" aria-label="Open the C4-L1 mockup at full size"><img src="gifs/c4_l1_unexpected_weight_v3.gif" width="900" height="788" loading="lazy" alt="C4-L1 mockup: Same-looking boxes of 2 kg and 12 kg: probe first, then carry or delegate."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C4-L1</span><span class="tag loco">Loco-manipulation</span></div>
+    <h4>Unexpected weight</h4>
+    <p>Same-looking boxes of 2 kg and 12 kg: probe first, then carry or delegate.</p>
+    <p class="ground">Grounded in Gordon et al. 1991; Johansson &amp; Westling 1988</p>
+  </figcaption>
+</figure><figure class="task" id="c4-n1">
+  <a class="shot" href="gifs/c4_n1_recalibration_v3.gif" aria-label="Open the C4-N1 mockup at full size"><img src="gifs/c4_n1_recalibration_v3.gif" width="900" height="788" loading="lazy" alt="C4-N1 mockup: A tall backpack is added mid-route: the updated humanoid crouches under each bar, the unchanged one walks upright."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C4-N1</span><span class="tag nav">Navigation</span></div>
+    <h4>Recalibration after a body change</h4>
+    <p>A tall backpack is added mid-route: the updated humanoid crouches under each bar, the unchanged one walks upright.</p>
+    <p class="ground">Grounded in Mark 1987; Franchak &amp; Somoano 2018</p>
+  </figcaption>
+</figure><figure class="task" id="c4-n2">
+  <a class="shot" href="gifs/c4_n2_midtask_damage_v3.gif" aria-label="Open the C4-N2 mockup at full size"><img src="gifs/c4_n2_midtask_damage_v3.gif" width="900" height="788" loading="lazy" alt="C4-N2 mockup: Knee torque drops by half mid-route: the damaged robot notices and reroutes to the ramp; the healthy one climbs."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C4-N2</span><span class="tag nav">Navigation</span></div>
+    <h4>Mid-task damage</h4>
+    <p>Knee torque drops by half mid-route: the damaged robot notices and reroutes to the ramp; the healthy one climbs.</p>
+    <p class="ground">Grounded in Bongard, Zykov &amp; Lipson 2006</p>
+  </figcaption>
+</figure><figure class="task" id="c4-l2">
+  <a class="shot" href="gifs/c4_l2_posture_change_v3.gif" aria-label="Open the C4-L2 mockup at full size"><img src="gifs/c4_l2_posture_change_v3.gif" width="900" height="788" loading="lazy" alt="C4-L2 mockup: Switched to kneeling mid-route: the updated humanoid stands up before reaching the shelf."></a>
+  <figcaption>
+    <div class="task-top"><span class="task-id">C4-L2</span><span class="tag loco">Loco-manipulation</span></div>
+    <h4>Posture change</h4>
+    <p>Switched to kneeling mid-route: the updated humanoid stands up before reaching the shelf.</p>
+    <p class="ground">Grounded in Adolph 2000; Franchak 2020</p>
+  </figcaption>
+</figure></div>
+</section>
+  </div>
+</section>
+
+<section class="block" id="compare">
+  <div class="wrap">
+    <h2>How NavAny differs</h2>
+    <p class="intro">Navigation and loco-manipulation benchmarks either give the body to the model or vary it without changing the answer. NavAny makes body knowledge necessary and measures it.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr>
+          <th scope="col">Benchmark</th><th scope="col">Domain</th><th scope="col">Bodies</th><th scope="col">How the body enters</th><th scope="col">Evaluation</th>
+          <th scope="col">Correct answer depends on the body</th><th scope="col">Body changes during a task</th><th scope="col">Boundary curves</th><th scope="col">Diagnosis to training signals</th>
+        </tr></thead>
+        <tbody>
+<tr><th scope="row">CapNav<span class="venue">CVPR 2026</span></th><td>Navigation</td><td>5 human and robot profiles</td><td>Text capability profile</td><td>Open-loop VLM QA</td><td><span class="y" aria-label="yes">Yes</span></td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td></tr>
+<tr><th scope="row">NaviTrace<span class="venue">ICRA 2026</span></th><td>Navigation</td><td>4 embodiment types</td><td>Embodiment label</td><td>Open-loop trace QA</td><td><span class="y" aria-label="yes">Yes</span></td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td></tr>
+<tr><th scope="row">VLN-PE<span class="venue">ICCV 2025</span></th><td>Navigation</td><td>Humanoid, legged, wheeled</td><td>Physical body in sim</td><td>Closed loop</td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td></tr>
+<tr><th scope="row">HumanoidVLN<span class="venue">arXiv 2026</span></th><td>Navigation</td><td>4 humanoids of different heights</td><td>Physical body in sim</td><td>Closed loop</td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td></tr>
+<tr><th scope="row">RoboCasa<span class="venue">RSS 2024</span></th><td>Kitchen mobile manipulation</td><td>Several embodiments supported</td><td>Physical body in sim</td><td>Closed loop</td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td></tr>
+<tr><th scope="row">RoboMME<span class="venue">ICML 2026</span></th><td>Tabletop manipulation</td><td>One arm</td><td>Fixed body</td><td>Closed loop</td><td><span class="d">n/a</span></td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td><td><span class="n" aria-label="no">No</span></td></tr>
+<tr class="ours"><th scope="row">NavAny<span class="venue">this work</span></th><td>Navigation and loco-manipulation</td><td>Humanoids, legged, wheeled, flying, plus body-state changes</td><td>Given, withheld or changing: use, infer, update</td><td>Judgment and closed loop</td><td><span class="y" aria-label="yes">Yes</span><span class="note">by construction</span></td><td><span class="y" aria-label="yes">Yes</span><span class="note">predicted and unannounced</span></td><td><span class="y" aria-label="yes">Yes</span><span class="note">judged vs actual</span></td><td><span class="y" aria-label="yes">Yes</span><span class="note">validated proxies</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="legend">CapNav and NaviTrace do make answers depend on the body, but the body is handed to the model as a profile or a label and only judgments are scored. VLN-PE and HumanoidVLN vary physical bodies while keeping the same correct path, which tests robustness rather than self-knowledge.</p>
+  </div>
+</section>
+
+<section class="block" id="robot">
+  <div class="wrap">
+    <h2>Real-robot validation, planned</h2>
+    <p class="intro">We will validate on a Unitree G1. Pairs come from changing the same robot's body state rather than swapping robots.</p>
+    <div class="robot">
+      <div>
+        <div class="goal"><h3>Ground-truth boundaries hold on the robot</h3><p>Measure each boundary on the physical G1 and in simulation with the same controller, and check that the boundary shifts by the same amount when the body changes.</p></div>
+        <div class="goal"><h3>Main findings transfer</h3><p>Rerun the comparison of body-information formats on four tasks, one per rung, about ten trials per condition, following RoboMME's real-robot check.</p></div>
+      </div>
+      <div class="table-scroll" style="margin-top:0">
+        <table class="variants">
+          <thead><tr><th scope="col">Boundary</th><th scope="col">Base body</th><th scope="col">Changed body</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Gap width</th><td>G1 as is</td><td>Holding a 0.6 m tray</td></tr>
+            <tr><th scope="row">Step height</th><td>Full knee torque</td><td>Torque limited by 30% and 50%</td></tr>
+            <tr><th scope="row">Reach</th><td>Standing</td><td>Kneeling</td></tr>
+            <tr><th scope="row">Payload</th><td>Default limit</td><td>Lower limit set in software</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>NavAny, a benchmark for physical self-models.</span>
+    <span>Mockups are illustrations, not simulation output.</span>
+    <a href="../">Back to the homepage</a>
+  </div>
+</footer>
+</body>
+</html>
