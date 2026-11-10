@@ -1,0 +1,1866 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OpenReview Preview</title>
+<meta name="description" content="Write OpenReview comments in Markdown and LaTeX and preview them with the same renderer openreview.net uses.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238c1b13'/%3E%3Cpath d='M19 17h26v7H30l9 8-9 8h15v7H19v-6l10-9-10-9z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+/* ======================================================================
+   Tool chrome
+   ====================================================================== */
+:root {
+  --canvas: #e8ecf0;
+  --surface: #ffffff;
+  --surface-2: #f2f4f7;
+  --ink: #1b2733;
+  --ink-2: #4c5a68;
+  --ink-3: #6f7c89;
+  --rule: #d3dae1;
+  --rule-strong: #b4bec8;
+  --accent: #8c1b13;
+  --accent-hover: #73150e;
+  --accent-ink: #ffffff;
+  --focus: #3e6775;
+  --focus-ring: rgba(62, 103, 117, 0.28);
+  --ok: #23704a;
+  --ok-bg: #e2f2e8;
+  --warn: #835300;
+  --warn-bg: #fcefd4;
+  --bad: #ad2a1f;
+  --bad-bg: #fbe5e2;
+  --field: #ffffff;
+  --code-bg: #edf0f3;
+  --toast-bg: #1b2733;
+  --toast-ink: #ffffff;
+  --font-ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --canvas: #0e141a;
+    --surface: #151d25;
+    --surface-2: #1b252f;
+    --ink: #e2e8ee;
+    --ink-2: #a2afbb;
+    --ink-3: #8592a0;
+    --rule: #27323d;
+    --rule-strong: #3b4855;
+    --accent: #b43a2e;
+    --accent-hover: #c9473a;
+    --accent-ink: #ffffff;
+    --focus: #7fb2c3;
+    --focus-ring: rgba(127, 178, 195, 0.3);
+    --ok: #6ccb95;
+    --ok-bg: #15301f;
+    --warn: #eebd5c;
+    --warn-bg: #33270e;
+    --bad: #ff8b7f;
+    --bad-bg: #3b1714;
+    --field: #10171e;
+    --code-bg: #1f2a35;
+    --toast-bg: #e2e8ee;
+    --toast-ink: #0e141a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --canvas: #0e141a;
+  --surface: #151d25;
+  --surface-2: #1b252f;
+  --ink: #e2e8ee;
+  --ink-2: #a2afbb;
+  --ink-3: #8592a0;
+  --rule: #27323d;
+  --rule-strong: #3b4855;
+  --accent: #b43a2e;
+  --accent-hover: #c9473a;
+  --accent-ink: #ffffff;
+  --focus: #7fb2c3;
+  --focus-ring: rgba(127, 178, 195, 0.3);
+  --ok: #6ccb95;
+  --ok-bg: #15301f;
+  --warn: #eebd5c;
+  --warn-bg: #33270e;
+  --bad: #ff8b7f;
+  --bad-bg: #3b1714;
+  --field: #10171e;
+  --code-bg: #1f2a35;
+  --toast-bg: #e2e8ee;
+  --toast-ink: #0e141a;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+[hidden] { display: none !important; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.app { height: 100%; display: flex; flex-direction: column; }
+
+/* ---------- top bar ---------- */
+.topbar {
+  flex: none;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 12px 24px;
+  padding: 12px 20px;
+  padding-top: calc(12px + env(safe-area-inset-top, 0px));
+  background: var(--surface);
+  border-bottom: 1px solid var(--rule);
+}
+.brand { margin-right: auto; min-width: 0; }
+.brand h1 { margin: 0; font-size: 18px; line-height: 1.2; font-weight: 600; letter-spacing: -0.015em; }
+.brand p { margin: 3px 0 0; font-size: 13px; color: var(--ink-2); }
+.controls { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 16px; }
+
+.seg {
+  display: inline-flex; min-width: 0; margin: 0; padding: 3px;
+  border: 1px solid var(--rule); border-radius: 9px; background: var(--surface-2);
+}
+.seg label { position: relative; display: block; }
+.seg input {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  margin: 0; opacity: 0; cursor: pointer;
+}
+.seg span {
+  display: block; padding: 5px 12px; border-radius: 6px;
+  font-size: 13px; font-weight: 500; color: var(--ink-2); white-space: nowrap;
+}
+.seg input:checked + span { background: var(--surface); color: var(--ink); box-shadow: 0 0 0 1px var(--rule), 0 1px 2px rgba(15, 25, 35, 0.1); }
+.seg input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 1px; }
+
+.switch {
+  position: relative; display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 500; color: var(--ink-2); cursor: pointer; user-select: none;
+}
+.switch input { position: absolute; z-index: 1; left: 0; top: 50%; width: 34px; height: 20px; margin: -10px 0 0; opacity: 0; cursor: pointer; }
+.switch .track { position: relative; flex: none; width: 34px; height: 20px; border-radius: 10px; background: var(--rule-strong); transition: background-color 0.15s; }
+.switch .track::after {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px;
+  border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25); transition: transform 0.15s;
+}
+.switch input:checked + .track { background: var(--focus); }
+.switch input:checked + .track::after { transform: translateX(14px); }
+.switch input:focus-visible + .track { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 32px; padding: 0 12px;
+  border: 1px solid var(--rule); border-radius: 7px; background: var(--surface); color: var(--ink);
+  font-size: 13px; font-weight: 500; white-space: nowrap;
+}
+.btn:hover { border-color: var(--rule-strong); background: var(--surface-2); }
+.btn.quiet { border-color: transparent; background: transparent; color: var(--ink-2); }
+.btn.quiet:hover { background: var(--surface-2); color: var(--ink); }
+.btn.solid { border-color: var(--ink); background: var(--ink); color: var(--surface); }
+.btn.solid:hover { border-color: var(--ink-2); background: var(--ink-2); }
+.btn.small { height: 28px; padding: 0 10px; font-size: 12.5px; }
+.btn svg { width: 15px; height: 15px; flex: none; }
+.btn .delta { font-weight: 400; color: var(--ink-3); }
+.btn:focus-visible, .icon-btn:focus-visible, .compile:focus-visible, .loc:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* ---------- workspace ---------- */
+.workspace {
+  position: relative; flex: 1; min-height: 0;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.pane { display: flex; flex-direction: column; min-width: 0; min-height: 0; background: var(--surface); }
+.pane-preview { border-left: 1px solid var(--rule); }
+.pane-head {
+  flex: none; display: flex; align-items: center; gap: 12px;
+  height: 52px; padding: 0 20px; border-bottom: 1px solid var(--rule);
+}
+.pane-head h2 { margin: 0; font-size: 14px; font-weight: 600; }
+.pane-source .pane-head { padding-right: 136px; }
+.pane-preview .pane-head { padding-left: 136px; justify-content: space-between; }
+.meta { font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.status { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink-2); white-space: nowrap; }
+.dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--ink-3); }
+.dot.ok { background: var(--ok); }
+.dot.warn { background: var(--warn); }
+.dot.bad { background: var(--bad); }
+.dot.info { background: var(--focus); }
+
+/* The one loud element: the compile button bridging source and preview */
+.compile {
+  position: absolute; z-index: 3; top: 8px; left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 36px; padding: 0 18px 0 14px;
+  border: 0; border-radius: 18px;
+  background: var(--accent); color: var(--accent-ink);
+  font-size: 14px; font-weight: 600; white-space: nowrap;
+  box-shadow: 0 0 0 5px var(--surface), 0 2px 6px rgba(90, 15, 8, 0.25);
+}
+.compile:hover { background: var(--accent-hover); }
+.compile:active { transform: translateX(-50%) translateY(1px); }
+.compile svg { width: 14px; height: 14px; flex: none; }
+
+/* ---------- source pane ---------- */
+.source-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 14px; padding: 16px 20px 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; min-height: 0; }
+.field.grow { flex: 1; }
+.field-label { font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
+.field-label .opt { font-weight: 400; color: var(--ink-3); }
+.title-row { display: flex; gap: 6px; }
+.input {
+  flex: 1; min-width: 0; height: 36px; padding: 0 12px;
+  border: 1px solid var(--rule); border-radius: 8px; background: var(--field); font-size: 14px;
+}
+.editor {
+  flex: 1; width: 100%; min-height: 220px; margin: 0; padding: 14px 16px;
+  resize: none; border: 1px solid var(--rule); border-radius: 8px;
+  background: var(--field); color: var(--ink);
+  font-family: var(--font-mono); font-size: 13.5px; line-height: 1.65; tab-size: 4;
+}
+.input:focus, .editor:focus, .limit input:focus { outline: none; border-color: var(--focus); box-shadow: 0 0 0 3px var(--focus-ring); }
+.input::placeholder, .editor::placeholder { color: var(--ink-3); }
+.icon-btn {
+  flex: none; display: inline-grid; place-items: center; width: 36px; height: 36px; padding: 0;
+  border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); color: var(--ink-2);
+}
+.icon-btn:hover { border-color: var(--rule-strong); color: var(--ink); }
+.icon-btn svg { width: 16px; height: 16px; }
+.icon-btn.small { width: 28px; height: 28px; border-color: transparent; }
+
+.source-foot {
+  flex: none; display: flex; align-items: center; flex-wrap: wrap; gap: 12px 16px;
+  padding: 12px 20px 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--rule);
+}
+.budget { flex: 1 1 240px; min-width: 0; display: grid; gap: 7px; }
+.budget-line { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; }
+.remaining { font-size: 13.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.remaining.warning { color: var(--warn); }
+.remaining.danger { color: var(--bad); }
+.meter { height: 6px; overflow: hidden; border-radius: 3px; background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--rule); }
+.meter span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--focus); transition: width 0.2s ease; }
+.meter.warning span { background: var(--warn); }
+.meter.danger span { background: var(--bad); }
+.limit { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-2); }
+.limit input {
+  width: 86px; height: 32px; padding: 0 8px;
+  border: 1px solid var(--rule); border-radius: 7px; background: var(--field); font-variant-numeric: tabular-nums;
+}
+
+/* ---------- preview pane ---------- */
+.preview-scroll { flex: 1; min-height: 0; overflow: auto; padding: 20px; background: #f7f6f4; }
+.pipeline-note { max-width: 1140px; margin: 14px 2px 0; font: 12px/1.5 var(--font-ui); color: #666; }
+.pipeline-note a { color: #3e6775; }
+
+.checks {
+  flex: none; display: flex; flex-direction: column; min-height: 0; max-height: 40%;
+  border-top: 1px solid var(--rule); background: var(--surface);
+}
+.checks-head { flex: none; display: flex; align-items: center; gap: 10px; padding: 9px 14px 9px 20px; }
+.checks-head h3 { margin: 0; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.checks-summary { display: inline-flex; align-items: center; gap: 7px; min-width: 0; margin-right: auto; font-size: 13px; color: var(--ink-2); }
+.checks-summary .txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chev { transition: transform 0.15s; }
+.checks.collapsed .chev { transform: rotate(-90deg); }
+.checks-list { list-style: none; margin: 0; padding: 0 12px 10px; overflow: auto; }
+.issue { display: flex; align-items: flex-start; gap: 12px; padding: 10px 8px; border-top: 1px solid var(--rule); }
+.issue-main { flex: 1; min-width: 0; }
+.issue-top { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+.badge { display: inline-block; padding: 0 8px; border-radius: 999px; font-size: 11.5px; font-weight: 600; line-height: 19px; white-space: nowrap; }
+.badge.bad { background: var(--bad-bg); color: var(--bad); }
+.badge.warn { background: var(--warn-bg); color: var(--warn); }
+.badge.info { background: var(--surface-2); color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--rule); }
+.loc {
+  padding: 0; border: 0; background: none; color: var(--focus);
+  font-size: 12px; font-weight: 500; text-decoration: underline; text-underline-offset: 2px;
+}
+.issue-msg { margin: 0; font-size: 13px; line-height: 1.5; }
+.issue code { padding: 0 4px; border-radius: 4px; background: var(--code-bg); font-family: var(--font-mono); font-size: 12px; }
+.issue-code { display: grid; gap: 3px; margin-top: 6px; font-size: 12px; color: var(--ink-2); }
+.issue-code > div { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.issue-code .k { flex: none; width: 96px; color: var(--ink-3); }
+.issue-code code { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.issue .joint { flex: none; padding-top: 4px; font-size: 12px; color: var(--ink-3); white-space: nowrap; }
+
+.toast {
+  position: fixed; left: 50%; z-index: 30;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  width: max-content; max-width: calc(100vw - 32px);
+  padding: 10px 16px; border-radius: 10px;
+  background: var(--toast-bg); color: var(--toast-ink);
+  font-size: 13.5px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  opacity: 0; transform: translate(-50%, 12px); pointer-events: none;
+  transition: opacity 0.18s, transform 0.18s;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@keyframes or-press {
+  from { box-shadow: 0 0 0 0 rgba(140, 27, 19, 0.4); }
+  to { box-shadow: 0 0 0 12px rgba(140, 27, 19, 0); }
+}
+.or-root .note.flash { animation: or-press 0.6s ease-out; }
+.or-root .spot { outline: 2px solid rgba(140, 27, 19, 0.6); outline-offset: 3px; border-radius: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .or-root .note.flash { animation: none; }
+  .toast, .meter span, .switch .track, .switch .track::after, .chev { transition: none; }
+}
+
+@media (max-width: 900px) {
+  .app { height: auto; min-height: 100%; }
+  .topbar { padding-left: 16px; padding-right: 16px; }
+  .workspace { display: flex; flex-direction: column; }
+  .pane-source { order: 1; }
+  .compile {
+    order: 2; position: static; transform: none; align-self: center; margin: 16px 0;
+    box-shadow: 0 2px 6px rgba(90, 15, 8, 0.25);
+  }
+  .compile:active { transform: translateY(1px); }
+  .pane-preview { order: 3; border-left: 0; border-top: 1px solid var(--rule); }
+  .pane-source .pane-head, .pane-preview .pane-head { padding-left: 16px; padding-right: 16px; }
+  .source-body { padding: 14px 16px 12px; }
+  .source-foot { padding-left: 16px; padding-right: 16px; }
+  .editor { min-height: 46vh; }
+  .preview-scroll { overflow: visible; padding: 16px; }
+  .checks { max-height: none; }
+  .checks-list { overflow: visible; }
+}
+
+/* ======================================================================
+   OpenReview look, scoped to .or-root.
+   Bootstrap 3.4.1 base rules + openreview-web styles (global.scss,
+   components/forum.scss, components/note-content.scss, utils/_mixins.scss).
+   Always light, like openreview.net.
+   ====================================================================== */
+@media (max-width: 767px) { html { font-size: 14px; } } /* openreview.net does this on phones */
+.or-root {
+  max-width: 1140px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.875rem; line-height: 1.42857143; color: #333; text-align: left;
+}
+.or-root *, .or-root *::before, .or-root *::after { box-sizing: border-box; }
+.or-root a { color: #3e6775; background-color: transparent; text-decoration: none; }
+.or-root a:hover, .or-root a:focus { color: #3f6978; text-decoration: none; }
+.or-root b, .or-root strong { font-weight: 700; }
+.or-root small { font-size: 85%; }
+.or-root mark { padding: 0.2em; background-color: #fcf8e3; color: #000; }
+.or-root sub, .or-root sup { position: relative; font-size: 75%; line-height: 0; vertical-align: baseline; }
+.or-root sup { top: -0.5em; }
+.or-root sub { bottom: -0.25em; }
+.or-root abbr[title] { border-bottom: 0; text-decoration: underline dotted; cursor: help; }
+.or-root img { vertical-align: middle; border: 0; }
+.or-root hr {
+  box-sizing: content-box; height: 0; margin-top: 1.5rem; margin-bottom: 1.5rem;
+  border: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+.or-root h1, .or-root h2, .or-root h3, .or-root h4, .or-root h5, .or-root h6 { font-family: inherit; font-weight: 500; line-height: 1.1; color: inherit; }
+.or-root h1, .or-root h2, .or-root h3 { margin-top: 20px; margin-bottom: 10px; color: #2c3a4a; }
+.or-root h4, .or-root h5, .or-root h6 { margin-top: 10px; margin-bottom: 10px; }
+.or-root h1 { font-size: 2.25rem; }
+.or-root h2 { font-size: 1.875rem; }
+.or-root h3 { font-size: 1.5rem; }
+.or-root h4 { font-size: 1rem; font-weight: 700; color: #8c1b13; }
+.or-root h5 { font-size: 14px; }
+.or-root h6 { font-size: 12px; }
+.or-root p { margin: 0 0 10px; }
+.or-root ul, .or-root ol { margin-top: 0; margin-bottom: 10px; }
+.or-root ul ul, .or-root ul ol, .or-root ol ul, .or-root ol ol { margin-bottom: 0; }
+.or-root dl { margin-top: 0; margin-bottom: 20px; }
+.or-root dt, .or-root dd { line-height: 1.42857143; }
+.or-root dt { font-weight: 700; }
+.or-root dd { margin-left: 0; }
+.or-root blockquote { margin: 0 0 20px; padding: 10px 20px; font-size: 17.5px; border-left: 5px solid #eee; }
+.or-root blockquote p:last-child, .or-root blockquote ul:last-child, .or-root blockquote ol:last-child { margin-bottom: 0; }
+.or-root code, .or-root kbd, .or-root pre, .or-root samp { font-family: Menlo, Monaco, Consolas, "Courier New", monospace; }
+.or-root code { padding: 2px 4px; font-size: 90%; color: #c7254e; background-color: #f9f2f4; border-radius: 4px; }
+.or-root kbd { padding: 2px 4px; font-size: 90%; color: #fff; background-color: #333; border-radius: 3px; box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.25); }
+.or-root pre {
+  display: block; overflow: auto; margin: 0 0 10px; padding: 9.5px;
+  font-size: 13px; line-height: 1.42857143; color: #333; word-break: break-all; word-wrap: break-word;
+  background-color: #f5f5f5; border: 1px solid #ccc; border-radius: 0;
+}
+.or-root pre code { padding: 0; font-size: inherit; color: inherit; white-space: pre-wrap; background-color: transparent; border-radius: 0; }
+.or-root table { border-collapse: collapse; border-spacing: 0; background-color: transparent; }
+.or-root td, .or-root th { padding: 0; }
+.or-root th { text-align: left; }
+.or-root caption { padding-top: 8px; padding-bottom: 8px; color: #777; text-align: left; }
+.or-root summary { display: list-item; cursor: pointer; }
+
+/* forum reply card */
+.or-root .note { position: relative; padding: 0.5rem; border: 1px solid #eee; border-radius: 2px; }
+.or-root .note.depth-even { background-color: #fffdfa; }
+.or-root .note h4 { color: #2c3a4a; line-height: 1.25rem; padding-top: 3px; margin-top: 0; margin-bottom: 0.125rem; margin-right: 0.5rem; }
+.or-root .note .heading { display: flex; justify-content: space-between; }
+.or-root .note .subheading { margin-bottom: 0.25rem; }
+.or-root .note .subheading > span {
+  display: inline-block; height: 16px; padding-left: 0.5rem; padding-right: 0.5rem;
+  font-size: 0.75rem; line-height: 15px;
+}
+.or-root .note .subheading .signatures,
+.or-root .note .subheading .invitation,
+.or-root .note .subheading .created-date { color: #616161; font-weight: 400; }
+.or-root .note .subheading .invitation { padding-left: 0; }
+.or-root .note .subheading .signatures { padding-left: 0.25rem; }
+.or-root .note .subheading .glyph { width: 11px; height: 11px; margin-right: 0.25rem; vertical-align: -1px; }
+.or-root .note .subheading .highlight { padding: 0 4px; border-radius: 2px; background-color: #3e6775; color: #fff; }
+.or-root .note .note-content-container { position: relative; }
+.or-root .note .note-content { margin: 0; }
+
+/* note content (note-content.scss + markdown-content-styles mixin) */
+.or-root .note-content { font-size: 0.75rem; line-height: 1.125rem; margin-top: 0.125rem; margin-bottom: 0.125rem; }
+.or-root .note-content li { padding: 0.125rem 0; }
+.or-root .note-content strong { font-weight: 700; color: #8c1b13; padding-right: 0.25rem; }
+.or-root .note-content .note-content-value { white-space: pre-wrap; overflow-wrap: break-word; }
+.or-root .note-content .note-content-value.markdown-rendered { white-space: normal; overflow-wrap: break-word; }
+.or-root .note-content .note-content-value.markdown-rendered h1,
+.or-root .note-content .note-content-value.markdown-rendered h2,
+.or-root .note-content .note-content-value.markdown-rendered h3,
+.or-root .note-content .note-content-value.markdown-rendered h4,
+.or-root .note-content .note-content-value.markdown-rendered h5,
+.or-root .note-content .note-content-value.markdown-rendered h6 { color: #2c3a4a; margin-top: 0; margin-bottom: 0.5rem; }
+.or-root .note-content .note-content-value.markdown-rendered h1 { font-size: 1.375rem; font-weight: 700; }
+.or-root .note-content .note-content-value.markdown-rendered h2 { font-size: 1.25rem; }
+.or-root .note-content .note-content-value.markdown-rendered h3 { font-size: 1rem; }
+.or-root .note-content .note-content-value.markdown-rendered h4,
+.or-root .note-content .note-content-value.markdown-rendered h5,
+.or-root .note-content .note-content-value.markdown-rendered h6 { font-size: 0.75rem; font-weight: 400; }
+.or-root .note-content .note-content-value.markdown-rendered p { margin-bottom: 0.5rem; }
+.or-root .note-content .note-content-value.markdown-rendered strong { color: #2c3a4a; padding-right: 0; }
+.or-root .note-content .note-content-value.markdown-rendered ol,
+.or-root .note-content .note-content-value.markdown-rendered ul { padding-left: 1.5rem; margin-bottom: 0.5rem; }
+.or-root .note-content .note-content-value.markdown-rendered ol li,
+.or-root .note-content .note-content-value.markdown-rendered ul li { padding: 0; }
+.or-root .note-content .note-content-value.markdown-rendered ol li p,
+.or-root .note-content .note-content-value.markdown-rendered ul li p { margin-bottom: 0.125rem; }
+.or-root .note-content .note-content-value.markdown-rendered ol ol,
+.or-root .note-content .note-content-value.markdown-rendered ol ul,
+.or-root .note-content .note-content-value.markdown-rendered ul ol,
+.or-root .note-content .note-content-value.markdown-rendered ul ul { margin-bottom: 0.125rem; }
+.or-root .note-content .note-content-value.markdown-rendered hr { margin: 0.5rem 0; }
+.or-root .note-content .note-content-value.markdown-rendered code { color: #8c1b13; }
+.or-root .note-content .note-content-value.markdown-rendered pre { padding: 0.25rem 0.5rem; margin-bottom: 0.5rem; }
+.or-root .note-content .note-content-value.markdown-rendered pre code { font-size: 0.75rem; color: #333; }
+.or-root .note-content .note-content-value.markdown-rendered img.icon { width: 1rem; height: 1rem; }
+.or-root .note-content .note-content-value.markdown-rendered blockquote { font-size: 0.75rem; padding: 0.25rem 0.5rem; margin-bottom: 0.5rem; border-left-color: #ccc; }
+.or-root .note-content .note-content-value.markdown-rendered blockquote p { margin-bottom: 0; }
+.or-root .note-content .note-content-value.markdown-rendered table { max-width: 100%; margin-bottom: 0.5rem; }
+.or-root .note-content .note-content-value.markdown-rendered table thead > tr > th { vertical-align: bottom; border-top: 0; border-bottom: 2px solid #ddd; }
+.or-root .note-content .note-content-value.markdown-rendered table tr > td,
+.or-root .note-content .note-content-value.markdown-rendered table tr > th { padding: 0.25rem; vertical-align: top; border-top: 1px solid #ddd; }
+</style>
+
+<script>
+  /* MathJax configuration, copied from openreview-web lib/mathjax-config.js */
+  window.MathJax = {
+    loader: { load: ['ui/safe'] },
+    options: {
+      ignoreHtmlClass: 'disable-tex-rendering'
+    },
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    },
+    chtml: {
+      scale: 1,
+      minScale: 0.5,
+      matchFontHeight: true,
+      mtextInheritFont: false,
+      merrorInheritFont: true,
+      mathmlSpacing: false,
+      skipAttributes: {},
+      exFactor: 0.5,
+      displayAlign: 'left',
+      displayIndent: '0'
+    },
+    startup: {
+      typeset: false,
+      ready: function () {
+        MathJax.startup.defaultReady();
+        var safe = MathJax.startup.document.safe;
+        safe.filterAttributes.set('fontfamily', 'filterFamily');
+        safe.filterMethods.filterFamily = function (_safe, family) { return family.split(/;/)[0]; };
+      }
+    }
+  };
+</script>
+<!-- Same versions openreview.net loads (openreview-web package-lock.json and app/MathjaxScript.js) -->
+<script src="https://cdn.jsdelivr.net/npm/marked@15.0.6/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.17/dist/purify.min.js"></script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml-full.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <h1>OpenReview Preview</h1>
+      <p>Write your response in Markdown and LaTeX and see it the way reviewers will see it on openreview.net.</p>
+    </div>
+    <div class="controls">
+      <fieldset class="seg">
+        <legend class="sr-only">Field type</legend>
+        <label title="Most comment and rebuttal fields have Markdown enabled"><input type="radio" name="mode" value="markdown" checked><span>Markdown field</span></label>
+        <label title="Fields without Markdown: plain text with links detected automatically"><input type="radio" name="mode" value="plain"><span>Plain-text field</span></label>
+      </fieldset>
+      <label class="switch"><input type="checkbox" id="live" checked><span class="track" aria-hidden="true"></span>Live preview</label>
+      <button type="button" class="btn quiet" id="loadExample">Load example</button>
+      <button type="button" class="btn quiet" id="clearText">Clear</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <button type="button" class="compile" id="compile" title="Render the preview (Ctrl+Enter or &#8984;+Enter)" aria-keyshortcuts="Control+Enter Meta+Enter">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.6v10.8L13 8z" fill="currentColor"/></svg>
+      OpenReview Compile
+    </button>
+
+    <section class="pane pane-source" aria-labelledby="sourceHeading">
+      <div class="pane-head">
+        <h2 id="sourceHeading">Your comment</h2>
+        <span class="meta" id="cursorPos">Ln 1, Col 1</span>
+      </div>
+      <div class="source-body">
+        <div class="field">
+          <label class="field-label" for="title">Title <span class="opt">(optional)</span></label>
+          <div class="title-row">
+            <input class="input" id="title" type="text" autocomplete="off" spellcheck="true" placeholder="e.g. Response to Reviewer XyZ1">
+            <button type="button" class="icon-btn" id="copyTitle" title="Copy title" aria-label="Copy title">
+              <svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5V3A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="field grow">
+          <label class="field-label" for="editor">Comment</label>
+          <textarea class="editor" id="editor" spellcheck="true" placeholder="Paste or write your response. Markdown and LaTeX ($...$ and $$...$$) work the same way as on OpenReview. Your draft is saved in this browser."></textarea>
+        </div>
+      </div>
+      <div class="source-foot">
+        <div class="budget">
+          <div class="budget-line">
+            <span class="remaining" id="remaining">Characters remaining: 5,000</span>
+            <span class="meta" id="usage">0 of 5,000 used</span>
+          </div>
+          <div class="meter" id="meter" aria-hidden="true"><span id="meterFill"></span></div>
+        </div>
+        <label class="limit">Limit <input type="number" id="limit" min="0" max="1000000" step="100" value="5000" inputmode="numeric"></label>
+        <button type="button" class="btn solid" id="copyComment">
+          <svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3.5" y="2.5" width="9" height="12" rx="1.5"/><path d="M6 2.5V2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v.5M6 7h4M6 10h4"/></svg>
+          Copy to OpenReview
+        </button>
+      </div>
+    </section>
+
+    <section class="pane pane-preview" aria-labelledby="previewHeading">
+      <div class="pane-head">
+        <h2 id="previewHeading">On OpenReview</h2>
+        <span class="status" id="status" role="status"><span class="dot"></span>Loading renderer</span>
+      </div>
+      <div class="preview-scroll" id="previewScroll">
+        <div class="or-root">
+          <div class="note depth-even" id="note">
+            <div class="heading"><h4 id="noteTitle"><span>Official Comment by Authors</span></h4></div>
+            <div class="subheading"><span class="invitation highlight" style="background-color:#bbf;color:#2c3a4a">Official Comment</span><span class="signatures">by Authors</span><span class="created-date"><svg class="glyph" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2.5h8a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1zM1 5h10M3.5 1v2.5M8.5 1v2.5" fill="none" stroke="currentColor" stroke-width="1.1"/></svg><span id="noteDate"></span></span></div>
+            <div class="note-content-container">
+              <div class="note-content">
+                <div id="valueHost"><strong class="note-content-field disable-tex-rendering">Comment:</strong> <div class="note-content-value markdown-rendered" id="valueEl"><em>Loading the OpenReview renderer&hellip;</em></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="pipeline-note">Rendered in your browser with openreview.net&rsquo;s own setup: marked 15.0.6 with OpenReview&rsquo;s custom renderer, DOMPurify 3.4.17 with its tag allowlist, and MathJax 3.2.2 (tex-chtml-full) with its configuration, as found in <a href="https://github.com/openreview/openreview-web" target="_blank" rel="noopener noreferrer">openreview-web</a>.</p>
+      </div>
+      <section class="checks" id="checks" aria-labelledby="checksHeading">
+        <div class="checks-head">
+          <h3 id="checksHeading">Math check</h3>
+          <span class="checks-summary" id="checksSummary"><span class="dot"></span><span class="txt">Checks start once MathJax has loaded.</span></span>
+          <button type="button" class="btn small" id="fixAll" hidden>Fix all</button>
+          <button type="button" class="icon-btn small" id="checksToggle" aria-expanded="true" aria-controls="checksList" title="Hide the list">
+            <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <ul class="checks-list" id="checksList"></ul>
+      </section>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+<noscript><p style="padding:20px">This tool needs JavaScript to render the preview.</p></noscript>
+
+<script type="text/plain" id="example-text">
+Thank you for the detailed review. We address each point below.
+
+**W1. Why does adaptive rank help?** For each module $m \in \{\text{vision}, \text{language}\}$ with input $\bm{x}$, the update is $\Delta W_m = B_m A_m$ with rank $r_m$, and we minimize
+
+$$
+\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{task}} + \lambda \sum_m \|B_m A_m\|_F^2 .
+$$
+
+**W2. Derivation of Eq. (4).** Stacking both modules gives
+
+$$
+\begin{aligned}
+\Delta W &= B A \\
+         &= \sum_{i=1}^{r} b_i a_i^\top .
+\end{aligned}
+$$
+
+**W3. Notation.** $\theta^*$ is the optimum and $\hat{\theta}^*$ is our estimate.
+
+| Method | Rank | Acc. (%) |
+|---|---|---|
+| LoRA | 16 | 71.2 |
+| Ours | adaptive | **73.9** |
+
+We will add these clarifications to the revision.
+</script>
+
+<script>
+(function () {
+  'use strict';
+
+  /* --------------------------------------------------------------------
+   * Rendering settings mirrored from openreview-web
+   * (github.com/openreview/openreview-web):
+   *   app/AppInit.js             DOMPurify config and hook
+   *   client/view.js             setupMarked(): custom renderer and options
+   *   lib/utils.js               allowedHtmlTags
+   *   components/NoteContent.js  Markdown fields: DOMPurify.sanitize(marked(value));
+   *                              plain fields: autolink, then DOMPurify; value trimmed first
+   *   components/EditorComponents/TextAreaWidget.js   "Characters remaining" counter
+   * -------------------------------------------------------------------- */
+  var ALLOWED_TAGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'div', 'span', 'blockquote', 'pre', 'hr',
+    'section', 'article', 'header', 'footer', 'figure', 'figcaption', 'details', 'summary',
+    'a', 'b', 'i', 'em', 'strong', 'u', 's', 'strike', 'del', 'ins', 'sub', 'sup', 'small', 'mark',
+    'code', 'kbd', 'samp', 'var', 'abbr', 'cite', 'q', 'br', 'wbr', 'ul', 'ol', 'li', 'dl', 'dt', 'dd',
+    'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption', 'colgroup', 'col', 'img'];
+  var URL_REGEX = /(?:(?:https?):\/\/)(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:[a-z\u00a1-\uffff0-9](?:[a-z\u00a1-\uffff0-9-]{0,61}[a-z\u00a1-\uffff0-9])?)(?:\.[a-z\u00a1-\uffff0-9](?:[a-z\u00a1-\uffff0-9-]{0,61}[a-z\u00a1-\uffff0-9])?)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*[^.,()"'\s])?/gi;
+  var PROFILE_REGEX = /(?:.)?(~[^\d\s_]+(?:_[^\d\s_]+)*[0-9]+)/gi;
+  var WARN_BELOW = 150; // OpenReview highlights the counter when fewer than 150 characters remain
+
+  /* MathJax 3.2.2 defaults used when it searches the page for math */
+  var SKIP_TAGS = /^(?:script|noscript|style|textarea|pre|code|annotation|annotation-xml)$/i;
+  var IGNORE_CLASS = /(?:^| )disable-tex-rendering(?: |$)/;
+  var PROCESS_CLASS = /(?:^| )mathjax_process(?: |$)/;
+
+  var STORE = 'orp.v1.';
+  var PUA_OPEN = 0xE000, PUA_CLOSE = 0xE800, PUA_LIMIT = 0x800;
+  var PUA_RE = /[\uE000-\uEFFF]/g;
+  var PUNCT_OR_SPACE = (function () {
+    try { return new RegExp('[\\s\\p{P}\\p{S}]', 'u'); } catch (e) { return /[\s!-\/:-@\[-`{-~\u00a1-\u00bf\u2010-\u205e]/; }
+  })();
+  var IS_MAC = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent || '');
+  var UNDO_KEY = IS_MAC ? '\u2318Z' : 'Ctrl+Z';
+  var EXAMPLE_TITLE = 'Response to Reviewer XyZ1';
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var SEV_RANK = { bad: 0, warn: 1, info: 2 };
+
+  var BS_EFFECT = {
+    '|': 'the double bars \u2016 become single bars',
+    ',': 'the thin space turns into a comma',
+    ';': 'the space turns into a semicolon',
+    ':': 'the space turns into a colon',
+    '!': 'the negative space turns into an exclamation mark',
+    '%': 'the rest of the equation becomes a TeX comment',
+    '&': 'it becomes an alignment character',
+    '#': 'it becomes a TeX parameter character',
+    '$': 'it ends the math early',
+    '_': 'the literal underscore becomes a subscript (or a TeX error)'
+  };
+  var SIUNITX = ['siunitx is not available; write the unit directly, e.g. ', c('5\\ \\mathrm{ms}'), '.'];
+  var CITES = ['Citations are not available in MathJax; put the reference in the text.'];
+  var REFS = ['Cross-references are not available; write \u201cEq. (3)\u201d in the text.'];
+  var MACRO_HINTS = {
+    '\\bm': ['Use ', c('\\boldsymbol{x}'), ' instead.'],
+    '\\mathbbm': ['Use ', c('\\mathbb{1}'), ' instead.'],
+    '\\mathds': ['Use ', c('\\mathbb{1}'), ' instead.'],
+    '\\argmin': ['Write ', c('\\operatorname{argmin}'), ' instead.'],
+    '\\argmax': ['Write ', c('\\operatorname{argmax}'), ' instead.'],
+    '\\SI': SIUNITX, '\\si': SIUNITX, '\\num': SIUNITX,
+    '\\textsc': ['Text-mode styling is not available; use ', c('\\text{...}'), '.'],
+    '\\cite': CITES, '\\citep': CITES, '\\citet': CITES,
+    '\\ref': REFS, '\\cref': REFS, '\\Cref': REFS, '\\autoref': REFS,
+    '\\vspace': ['Vertical spacing is not available in MathJax.']
+  };
+
+  function c(text) { return { code: text }; }
+  function $(id) { return document.getElementById(id); }
+
+  var els = {
+    editor: $('editor'), title: $('title'), copyTitle: $('copyTitle'), compile: $('compile'),
+    copyComment: $('copyComment'), limit: $('limit'), remaining: $('remaining'), usage: $('usage'),
+    meter: $('meter'), meterFill: $('meterFill'), cursorPos: $('cursorPos'), live: $('live'),
+    loadExample: $('loadExample'), clearText: $('clearText'), status: $('status'),
+    note: $('note'), noteTitle: $('noteTitle'), noteDate: $('noteDate'),
+    valueHost: $('valueHost'), valueEl: $('valueEl'), previewScroll: $('previewScroll'),
+    checks: $('checks'), checksSummary: $('checksSummary'), checksList: $('checksList'),
+    fixAll: $('fixAll'), checksToggle: $('checksToggle'), toast: $('toast')
+  };
+  var modeInputs = document.querySelectorAll('input[name="mode"]');
+  var EXAMPLE = $('example-text').textContent.replace(/^\s*\n/, '').replace(/\s+$/, '');
+
+  /* ---------------- storage ---------------- */
+  function load(key, fallback) {
+    try { var v = window.localStorage.getItem(STORE + key); return v === null ? fallback : v; } catch (e) { return fallback; }
+  }
+  function store(key, value) {
+    try { window.localStorage.setItem(STORE + key, value); } catch (e) { /* storage unavailable */ }
+  }
+  function parseLimit(v, fallback) {
+    var n = parseInt(v, 10);
+    return isFinite(n) && n >= 0 ? Math.min(n, 1000000) : fallback;
+  }
+
+  var state = {
+    mode: load('mode', 'markdown') === 'plain' ? 'plain' : 'markdown',
+    live: load('live', '1') !== '0',
+    limit: parseLimit(load('limit', '5000'), 5000),
+    ready: false, mathReady: false, failed: false, mathFailed: false,
+    renderId: 0, dirty: true, rendering: false, analysis: null
+  };
+
+  var savedText = load('text', null);
+  els.editor.value = savedText === null ? EXAMPLE : savedText;
+  els.title.value = load('title', savedText === null ? EXAMPLE_TITLE : '');
+  els.limit.value = String(state.limit);
+  els.live.checked = state.live;
+  Array.prototype.forEach.call(modeInputs, function (r) { r.checked = r.value === state.mode; });
+
+  var markedFn = null, analysisDoc = null, mirror = null;
+  var escapeBox = document.createElement('div');
+  var mjChain = Promise.resolve();
+  var renderTimer = 0, saveTimer = 0, toastTimer = 0;
+
+  /* ---------------- OpenReview pipeline ---------------- */
+  function asText(s) { escapeBox.textContent = s; return escapeBox.innerHTML; } // = $('<div />').text(s).html()
+
+  function setupPipeline() {
+    var ns = window.marked;
+    markedFn = typeof ns.marked === 'function' ? ns.marked : ns;
+    var Renderer = ns.Renderer || markedFn.Renderer;
+    var renderer = new Renderer();
+    renderer.image = function (token) {
+      var href = token.href || '', title = token.title, text = token.text;
+      if (href.indexOf('/images/') === 0) {
+        var titleAttr = title ? 'title="' + title + '" ' : '';
+        var classAttr = /_icon\.svg$/.test(href) ? 'class="icon" ' : '';
+        return '<img src="https://openreview.net' + href + '" alt="' + text + '" ' + titleAttr + classAttr + '/>';
+      }
+      return asText('<img src="' + href + '" alt="' + text + '" title="' + title + '">');
+    };
+    renderer.checkbox = function (token) { return token.checked ? '[x]' : '[ ]'; };
+    renderer.html = function (token) { return asText(token.text); };
+    markedFn.setOptions({
+      baseUrl: null, breaks: false, gfm: true, headerIds: false,
+      langPrefix: 'language-', mangle: false, renderer: renderer
+    });
+    window.DOMPurify.setConfig({ ALLOWED_TAGS: ALLOWED_TAGS });
+    window.DOMPurify.addHook('afterSanitizeAttributes', function (node) {
+      if (node.tagName === 'A') {
+        node.setAttribute('target', '_blank');
+        node.setAttribute('rel', 'noopener noreferrer');
+      }
+      if (typeof node.removeAttribute === 'function') {
+        node.removeAttribute('style');
+        node.removeAttribute('action');
+        node.removeAttribute('formaction');
+      }
+    });
+  }
+
+  function prettyTildeId(id) { return id.substring(1).replace(/_|\d+/g, ' ').trim(); }
+
+  function autoLinkContent(value) {
+    var intermediate = value.replace(URL_REGEX, function (match) {
+      var url = match.indexOf('https://openreview.net') === 0 ? match.replace('https://openreview.net', '') : match;
+      return '<a href="' + url + '" target="_blank" rel="nofollow">' + url + '</a>';
+    });
+    return intermediate.replace(PROFILE_REGEX, function (fullMatch, match) {
+      if (fullMatch !== match && /\S/.test(fullMatch.charAt(0))) return fullMatch;
+      return ' <a href="/profile?id=' + match + '" target="_blank">' + prettyTildeId(match) + '</a>';
+    });
+  }
+
+  function pipelineHTML(text, mode) {
+    return mode === 'markdown'
+      ? window.DOMPurify.sanitize(markedFn(text))
+      : window.DOMPurify.sanitize(autoLinkContent(text));
+  }
+
+  function fixRelativeUrls(root) {
+    Array.prototype.forEach.call(root.querySelectorAll('a[href]'), function (a) {
+      var href = a.getAttribute('href');
+      if (/^\/(?!\/)/.test(href)) a.setAttribute('href', 'https://openreview.net' + href);
+    });
+  }
+
+  /* ---------------- rendering ---------------- */
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function forumDate(d) {
+    return pad(d.getDate()) + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear() + ', ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  }
+
+  function setNoteTitle(title) {
+    var node = document.createElement(title ? 'strong' : 'span');
+    node.textContent = title || 'Official Comment by Authors';
+    els.noteTitle.textContent = '';
+    els.noteTitle.appendChild(node);
+  }
+
+  function scheduleRender() {
+    state.dirty = true;
+    updateStatus();
+    if (!state.live) return;
+    clearTimeout(renderTimer);
+    renderTimer = setTimeout(renderNow, 250);
+  }
+
+  function renderNow() {
+    clearTimeout(renderTimer);
+    if (!state.ready) { updateStatus(); return; }
+    var id = ++state.renderId;
+    var src = els.editor.value, text = src.trim(), mode = state.mode, title = els.title.value.trim();
+    var html = text ? pipelineHTML(text, mode) : '';
+    state.dirty = false;
+    state.rendering = true;
+    updateStatus();
+
+    var swap = function () {
+      if (id !== state.renderId) return null;
+      if (state.mathReady) MathJax.typesetClear([els.valueEl, els.noteTitle]);
+      setNoteTitle(title);
+      var el = document.createElement(mode === 'markdown' ? 'div' : 'span');
+      el.className = mode === 'markdown' ? 'note-content-value markdown-rendered' : 'note-content-value';
+      el.id = 'valueEl';
+      if (text) {
+        el.innerHTML = html;
+        fixRelativeUrls(el);
+      } else {
+        el.innerHTML = '<em>Nothing to preview</em>';
+      }
+      els.valueHost.replaceChild(el, els.valueEl);
+      els.valueEl = el;
+      els.noteDate.textContent = forumDate(new Date());
+      return el;
+    };
+
+    if (!state.mathReady) {
+      swap();
+      state.rendering = false;
+      updateStatus();
+      renderChecks(null);
+      return;
+    }
+    mjChain = mjChain.then(function () {
+      var el = swap();
+      if (!el) return null;
+      return MathJax.typesetPromise([el, els.noteTitle]).then(function () {
+        if (id !== state.renderId) return;
+        state.rendering = false;
+        updateStatus();
+        var a = null;
+        try {
+          a = analyzeAll(src, mode);
+          addTexIssues(a, el);
+        } catch (err) {
+          if (window.console) console.error(err);
+        }
+        state.analysis = a;
+        renderChecks(a);
+      });
+    }).catch(function (err) {
+      if (window.console) console.error(err);
+      state.rendering = false;
+      updateStatus();
+    });
+  }
+
+  function compile() {
+    renderNow();
+    flash(els.note);
+  }
+
+  function flash(node) {
+    node.classList.remove('flash');
+    void node.offsetWidth;
+    node.classList.add('flash');
+  }
+
+  function updateStatus() {
+    var text, cls = '';
+    if (state.failed) { text = 'Renderer did not load'; cls = 'bad'; }
+    else if (!state.ready) { text = 'Loading renderer'; }
+    else if (state.dirty && !state.live) { text = 'Out of date'; cls = 'warn'; }
+    else if (state.rendering || state.dirty) { text = 'Updating'; cls = 'info'; }
+    else if (!state.mathReady) { text = state.mathFailed ? 'MathJax did not load' : 'Loading MathJax'; cls = state.mathFailed ? 'bad' : ''; }
+    else { text = state.live ? 'Live' : 'Up to date'; cls = 'ok'; }
+    els.status.textContent = '';
+    els.status.appendChild(el('span', 'dot ' + cls));
+    els.status.appendChild(document.createTextNode(text));
+  }
+
+  /* ---------------- counter (same rule as OpenReview's CharCounter) ---------------- */
+  function fmt(n) { return n.toLocaleString('en-US'); }
+  function updateCounter() {
+    var value = els.editor.value.trim();
+    var len = value.length, limit = state.limit, rem = limit - len;
+    var level = limit > 0 ? (rem < 1 ? 'danger' : rem < WARN_BELOW ? 'warning' : '') : '';
+    var words = len ? value.split(/\s+/).length : 0;
+    els.remaining.textContent = limit > 0 ? 'Characters remaining: ' + fmt(rem) : fmt(len) + (len === 1 ? ' character' : ' characters');
+    els.remaining.className = 'remaining ' + level;
+    els.meter.className = 'meter ' + level;
+    els.meterFill.style.width = (limit > 0 ? Math.min(100, (len / limit) * 100) : 0) + '%';
+    els.usage.textContent = (limit > 0 ? fmt(len) + ' of ' + fmt(limit) + ' used, ' : '') + fmt(words) + (words === 1 ? ' word' : ' words');
+  }
+
+  function updateCursor() {
+    var v = els.editor.value, p = els.editor.selectionStart || 0;
+    var before = v.slice(0, p);
+    els.cursorPos.textContent = 'Ln ' + before.split('\n').length + ', Col ' + (p - before.lastIndexOf('\n'));
+  }
+
+  /* ---------------- analysis: find equations that Markdown breaks ---------------- */
+  function texJax() {
+    var list = MathJax.startup.document.inputJax;
+    for (var i = 0; i < list.length; i++) if (list[i].name === 'TeX') return list[i];
+    return list[0];
+  }
+
+  function inertDoc() {
+    if (!analysisDoc) analysisDoc = document.implementation.createHTMLDocument('analysis');
+    return analysisDoc;
+  }
+
+  // Blank out code spans and fenced code blocks so their $ signs are not treated as math.
+  function maskCode(text) {
+    var out = text.split('');
+    function blank(a, b) { for (var i = a; i < b; i++) { if (out[i] !== '\n') out[i] = ' '; } }
+    var lines = text.split('\n'), offset = 0, fence = null, fenceStart = 0;
+    for (var li = 0; li < lines.length; li++) {
+      var line = lines[li];
+      var m = /^ {0,3}(`{3,}|~{3,})/.exec(line);
+      if (fence === null) {
+        if (m && !(m[1].charAt(0) === '`' && line.slice(m[0].length).indexOf('`') >= 0)) { fence = m[1]; fenceStart = offset; }
+      } else if (m && m[1].charAt(0) === fence.charAt(0) && m[1].length >= fence.length && /^ {0,3}(?:`+|~+)[ \t]*$/.test(line)) {
+        blank(fenceStart, offset + line.length);
+        fence = null;
+      }
+      offset += line.length + 1;
+    }
+    if (fence !== null) blank(fenceStart, text.length);
+    var s = out.join(''), re = /(`+)((?:(?!\n[ \t]*\n)[\s\S])*?[^`])\1(?!`)/g, mm;
+    while ((mm = re.exec(s))) {
+      if (mm.index > 0 && s.charAt(mm.index - 1) === '\\') { re.lastIndex = mm.index + 1; continue; }
+      blank(mm.index, mm.index + mm[0].length);
+    }
+    return out.join('');
+  }
+
+  // Where MathJax would find math if the text were not processed as Markdown first.
+  function findRegions(text) {
+    // "\\$5" is a Markdown-escaped literal dollar on OpenReview, not the start of math
+    var masked = maskCode(text).replace(/\\\\\$(?=\d)/g, '\\\\ ');
+    var items = texJax().findMath([masked]);
+    var regions = [], covered = new Uint8Array(text.length + 1);
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i], s = it.start.n, e = it.end.n;
+      covered.fill(1, s, e);
+      var raw = text.slice(s, e);
+      if (it.display === null || it.display === undefined) {
+        if (raw === '\\$') regions.push({ kind: 'dollar', start: s, end: e, raw: raw, open: '', close: '' });
+        continue;
+      }
+      regions.push({ kind: 'math', start: s, end: e, raw: raw, open: it.open || '', close: it.close || '' });
+    }
+    var unmatched = [];
+    for (var j = 0; j < masked.length; j++) {
+      if (masked.charAt(j) === '$' && !covered[j]) {
+        unmatched.push(j);
+        if (masked.charAt(j + 1) === '$') j++;
+      }
+    }
+    if (regions.length > PUA_LIMIT) regions.length = PUA_LIMIT;
+    return { regions: regions, unmatched: unmatched };
+  }
+
+  // Mark each region with private-use characters so it can be tracked through marked + DOMPurify.
+  function withSentinels(text, regions) {
+    var out = '', last = 0;
+    for (var k = 0; k < regions.length; k++) {
+      var r = regions[k];
+      out += text.slice(last, r.start) + String.fromCharCode(PUA_OPEN + k) + text.slice(r.start, r.end) + String.fromCharCode(PUA_CLOSE + k);
+      last = r.end;
+    }
+    return out + text.slice(last);
+  }
+
+  // The text chunks MathJax searches (same walk as MathJax's HTMLDomStrings):
+  // any element other than <br>/<wbr> ends a chunk, so math cannot span tags.
+  function domStrings(root) {
+    var strings = [], cur = '';
+    function push() { if (/\S/.test(cur)) strings.push(cur); cur = ''; }
+    function walk(node, ignore) {
+      for (var n = node.firstChild; n; n = n.nextSibling) {
+        if (n.nodeType === 3) {
+          if (!ignore) cur += n.nodeValue;
+        } else if (n.nodeType === 1) {
+          var tag = n.nodeName.toLowerCase();
+          if (tag === 'br') { if (!ignore) cur += '\n'; continue; }
+          if (tag === 'wbr') continue;
+          push();
+          var cls = n.getAttribute('class') || '';
+          var proc = PROCESS_CLASS.test(cls);
+          if (n.firstChild && (proc || !SKIP_TAGS.test(tag))) {
+            walk(n, (ignore || IGNORE_CLASS.test(cls)) && !proc);
+            push();
+          }
+        }
+      }
+    }
+    walk(root, false);
+    push();
+    return strings;
+  }
+
+  function betweenText(all, oc, cc) {
+    var a = all.indexOf(String.fromCharCode(oc));
+    if (a < 0) return '';
+    var b = all.indexOf(String.fromCharCode(cc), a + 1);
+    if (b < 0) b = Math.min(all.length, a + 240);
+    return all.slice(a + 1, b).replace(PUA_RE, '');
+  }
+
+  function splitCause(box, oc, cc) {
+    var doc = box.ownerDocument, so = String.fromCharCode(oc), sc = String.fromCharCode(cc);
+    var walker = doc.createTreeWalker(box, 4 /* NodeFilter.SHOW_TEXT */, null, false);
+    var a = null, ai = 0, b = null, bi = 0, n;
+    while ((n = walker.nextNode())) {
+      if (!a) { var i = n.nodeValue.indexOf(so); if (i >= 0) { a = n; ai = i; } }
+      if (a) { var j = n.nodeValue.indexOf(sc); if (j >= 0) { b = n; bi = j; break; } }
+    }
+    if (!a || !b) return 'other';
+    var range = doc.createRange();
+    range.setStart(a, ai);
+    range.setEnd(b, bi + 1);
+    var tags = {}, common = range.commonAncestorContainer;
+    Array.prototype.forEach.call(range.cloneContents().querySelectorAll('*'), function (e) { tags[e.nodeName.toLowerCase()] = true; });
+    [a, b].forEach(function (x) { for (var p = x.parentNode; p && p !== common; p = p.parentNode) tags[p.nodeName.toLowerCase()] = true; });
+    if (tags.em || tags.strong) return 'emphasis';
+    if (tags.del || tags.s) return 'strike';
+    if (tags.a) return 'link';
+    if (tags.td || tags.th || tags.tr) return 'table';
+    if (tags.code) return 'code';
+    if (tags.p || tags.li || tags.ul || tags.ol || tags.blockquote || tags.pre || tags.hr ||
+        tags.h1 || tags.h2 || tags.h3 || tags.h4 || tags.h5 || tags.h6) return 'block';
+    return 'other';
+  }
+
+  // Run the regions through the real pipeline and see what MathJax would get for each.
+  function structure(text, regions, mode) {
+    var jax = texJax();
+    var box = inertDoc().createElement('div');
+    box.innerHTML = pipelineHTML(withSentinels(text, regions), mode);
+    var strs = domStrings(box);
+    var where = {};
+    for (var si = 0; si < strs.length; si++) {
+      var s = strs[si];
+      for (var i = 0; i < s.length; i++) {
+        var code = s.charCodeAt(i);
+        if (code >= PUA_OPEN && code < PUA_CLOSE + PUA_LIMIT) where[code] = [si, i];
+      }
+    }
+    var all = box.textContent;
+    var finds = strs.map(function (str) {
+      return jax.findMath([str]).filter(function (m) { return m.display !== null && m.display !== undefined; });
+    });
+    var exact = {};
+    var per = regions.map(function (r, k) {
+      var oc = PUA_OPEN + k, cc = PUA_CLOSE + k, o = where[oc], cl = where[cc];
+      if (!o || !cl) {
+        var hasOpen = all.indexOf(String.fromCharCode(oc)) >= 0, hasClose = all.indexOf(String.fromCharCode(cc)) >= 0;
+        return { status: hasOpen && hasClose ? 'code' : 'lost', shown: betweenText(all, oc, cc) };
+      }
+      if (o[0] !== cl[0]) return { status: 'split', cause: splitCause(box, oc, cc), shown: betweenText(all, oc, cc) };
+      var seg = strs[o[0]].slice(o[1] + 1, cl[1]);
+      if (r.kind === 'dollar') {
+        var pos = o[1] + 1;
+        var stray = finds[o[0]].some(function (m) { return m.start.n <= pos && pos < m.end.n; });
+        return { status: 'ok', seg: seg, stray: stray };
+      }
+      var hit = finds[o[0]].some(function (m) { return m.start.n === o[1] + 1 && m.end.n === cl[1]; });
+      if (hit) exact[o[0] + ':' + (o[1] + 1)] = k;
+      return { status: hit ? 'ok' : 'notfound', seg: seg.replace(PUA_RE, '') };
+    });
+    var order = [];
+    finds.forEach(function (list, idx) {
+      list.forEach(function (m) {
+        var k = exact[idx + ':' + m.start.n];
+        order.push(k === undefined ? -1 : k);
+      });
+    });
+    return { per: per, order: order };
+  }
+
+  var TEXTLIKE = /^(?:text|textrm|textit|textbf|texttt|textsf|textnormal|textup|mbox|hbox|operatorname\*?|mathrm|mathit|mathbf|mathtt|mathsf)$/;
+
+  // Marks the characters of raw that sit inside a text-like group such as \text{...},
+  // where \_ is a literal underscore rather than a Markdown escape.
+  function textGroupMask(raw) {
+    var inside = new Uint8Array(raw.length + 1), stack = [], depth = 0, i = 0, m;
+    while (i < raw.length) {
+      if (raw.charAt(i) === '\\') {
+        m = /^\\([A-Za-z]+\*?)\s*\{/.exec(raw.slice(i, i + 40));
+        if (m && TEXTLIKE.test(m[1])) {
+          i += m[0].length;
+          stack.push(true);
+          depth++;
+          continue;
+        }
+        m = /^\\(?:[A-Za-z]+|[\s\S])/.exec(raw.slice(i, i + 40));
+        var len = m ? m[0].length : 1;
+        for (var z = 0; z < len; z++) inside[i + z] = depth > 0 ? 1 : 0;
+        i += len;
+        continue;
+      }
+      var ch = raw.charAt(i);
+      if (ch === '{') stack.push(false);
+      else if (ch === '}' && stack.length && stack.pop()) depth--;
+      inside[i] = depth > 0 ? 1 : 0;
+      i++;
+    }
+    return inside;
+  }
+
+  // Backslash runs that Markdown changes in a way that alters the TeX.
+  function backslashIssues(raw, r) {
+    var out = [], re = /\\+/g, m, mask = null;
+    while ((m = re.exec(raw))) {
+      var run = m[0].length, at = m.index, ch = raw.charAt(at + run);
+      if (r && ((at === 0 && r.open.charAt(0) === '\\') || (at + run === raw.length - 1 && r.close.charAt(0) === '\\'))) continue;
+      if (ch && run % 2 === 1 && '{}|,;:!%&#$'.indexOf(ch) >= 0) out.push({ kind: 'escape', ch: ch });
+      else if (run === 2 && (ch === '' || /[\s\[A-Za-z0-9]/.test(ch))) out.push({ kind: 'newline' });
+      else if (ch === '_' && run % 2 === 1 && Math.floor(run / 2) % 2 === 0) {
+        if (!mask) mask = textGroupMask(raw);
+        if (mask[at + run]) out.push({ kind: 'escape', ch: '_' });
+      }
+    }
+    return out;
+  }
+
+  function plainIssues(raw) { return /<(?=[A-Za-z\/!?])/.test(raw) ? [{ kind: 'lt' }] : []; }
+
+  // Rewrite one equation so that, after Markdown, MathJax receives what the author meant.
+  function fixMarkdownMath(raw, cause) {
+    var s = raw.replace(/\n[ \t]*(?=\n)/g, ''); // blank lines would end the paragraph
+    if (cause === 'table') s = s.replace(/\\\|/g, '\\Vert ').replace(/\|/g, '\\vert ');
+    var textMask = textGroupMask(s);
+    var out = '', i = 0, n = s.length, lineStart = false;
+    while (i < n) {
+      var ch = s.charAt(i);
+      if (ch === '\n') { out += ch; lineStart = true; i++; continue; }
+      if (lineStart) {
+        if (ch === ' ' || ch === '\t') { out += ch; i++; continue; }
+        lineStart = false;
+        var rest = s.slice(i);
+        var om = /^1([.)])(?=[ \t\n]|$)/.exec(rest);
+        if (om) { out += '1\\' + om[1]; i += 2; continue; }
+        if (/^(?:[-+](?=[ \t\n]|$)|#{1,6}(?=[ \t\n]|$)|>|=+[ \t]*(?:\n|$)|-(?:[ \t]*-)+[ \t]*(?:\n|$))/.test(rest)) {
+          out += '\\' + ch; i++; continue;
+        }
+      }
+      if (ch === '\\') {
+        var j = i;
+        while (j < n && s.charAt(j) === '\\') j++;
+        var run = j - i, next = s.charAt(j), keep = run;
+        if (next && run % 2 === 1 && '{}|,;:!%&#$'.indexOf(next) >= 0) keep = run * 2;
+        else if (run === 2 && (next === '' || /[\s\[A-Za-z0-9]/.test(next))) keep = 4;
+        else if (run === 1 && ((i === 0 && (next === '(' || next === '[')) || (j === n - 1 && (next === ')' || next === ']')))) keep = 2;
+        else if (next === '_' && run % 2 === 1 && Math.floor(run / 2) % 2 === 0 && textMask[j]) keep = run * 2;
+        out += new Array(keep + 1).join('\\');
+        i = j;
+        if (keep % 2 === 1 && next && /[!-\/:-@\[-`{-~]/.test(next)) { out += next; i++; } // already escaped for Markdown
+        continue;
+      }
+      if (ch === '_') {
+        var prev = i > 0 ? s.charAt(i - 1) : '', after = s.charAt(i + 1);
+        if (after && !/\s/.test(after) && (prev === '' || PUNCT_OR_SPACE.test(prev))) { out += '\\_'; i++; continue; }
+      }
+      if (ch === '*' || ch === '~' || ch === '`') { out += '\\' + ch; i++; continue; }
+      out += ch;
+      i++;
+    }
+    return out;
+  }
+
+  function fixPlainMath(raw) { return raw.replace(/<(?=[A-Za-z\/!?])/g, '< '); }
+
+  // Apply edits (each tied to region k) and return the new text and the shifted regions.
+  function applyEdits(text, regions, edits) {
+    var sorted = edits.slice().sort(function (x, y) { return x.start - y.start; });
+    var out = '', last = 0, delta = 0, moved = {}, shifts = [];
+    sorted.forEach(function (e) {
+      out += text.slice(last, e.start) + e.text;
+      moved[e.k] = { start: e.start + delta, raw: e.raw };
+      delta += e.text.length - (e.end - e.start);
+      shifts.push({ end: e.end, delta: delta });
+      last = e.end;
+    });
+    out += text.slice(last);
+    var shifted = regions.map(function (q, idx) {
+      var mv = moved[idx];
+      if (mv) return { kind: q.kind, start: mv.start, end: mv.start + mv.raw.length, raw: mv.raw, open: q.open, close: q.close };
+      var d = 0;
+      for (var i = 0; i < shifts.length; i++) { if (shifts[i].end <= q.start) d = shifts[i].delta; }
+      return { kind: q.kind, start: q.start + d, end: q.end + d, raw: q.raw, open: q.open, close: q.close };
+    });
+    return { text: out, regions: shifted };
+  }
+
+  function regionOK(p, r, mode) {
+    if (!p) return false;
+    if (r.kind === 'dollar') return p.status === 'ok' && !p.stray;
+    if (p.status !== 'ok') return false;
+    if (mode === 'markdown') return backslashIssues(r.raw, r).length === 0;
+    return squash(p.seg) === squash(r.raw) && plainIssues(r.raw).length === 0;
+  }
+
+  // Run the pipeline again with the edits applied and report which regions now render as written.
+  function verifyEdits(text, regions, edits, mode, ks) {
+    var out = {};
+    try {
+      var applied = applyEdits(text, regions, edits);
+      var st = structure(applied.text, applied.regions, mode);
+      ks.forEach(function (k) { out[k] = regionOK(st.per[k], applied.regions[k], mode); });
+    } catch (e) { /* not verified */ }
+    return out;
+  }
+
+  function tableSpans(text) {
+    var spans = [];
+    try {
+      markedFn.walkTokens(markedFn.lexer(text), function (t) {
+        if (t.type !== 'table' || !t.raw) return;
+        var at = text.indexOf(t.raw);
+        if (at >= 0) spans.push([at, at + t.raw.length]);
+      });
+    } catch (e) { /* ignore */ }
+    return spans;
+  }
+
+  function squash(s) { return String(s).replace(/\s+/g, ' ').trim(); }
+  function oneLine(s, max) {
+    var t = squash(s);
+    max = max || 160;
+    return t.length > max ? t.slice(0, max - 1) + '\u2026' : t;
+  }
+  function insideRegion(regions, pos) {
+    for (var i = 0; i < regions.length; i++) {
+      if (regions[i].kind === 'math' && regions[i].start <= pos && pos < regions[i].end) return true;
+    }
+    return false;
+  }
+  function lineAround(text, pos) {
+    var a = text.lastIndexOf('\n', pos - 1) + 1, b = text.indexOf('\n', pos);
+    return text.slice(a, b < 0 ? text.length : b);
+  }
+
+  function structuralMessage(p, r, mode) {
+    if (p.status === 'code') return ['This equation ends up inside a code block (4-space indent or backticks), so it shows as raw text.'];
+    if (p.status === 'lost') {
+      return mode === 'markdown'
+        ? ['Markdown processing swallows part of this equation.']
+        : ['Part of this equation is read as an HTML tag and disappears. Put a space after ', c('<'), '.'];
+    }
+    if (p.status === 'notfound') {
+      if (mode === 'markdown' && r.open.charAt(0) === '\\') {
+        return ['Markdown removes the backslash from ', c(r.open), ' and ', c(r.close), ', so MathJax never sees the delimiters.'];
+      }
+      return ['After processing, the ', c('$'), ' signs pair up differently (often because of a broken equation nearby), so this is not typeset as written.'];
+    }
+    if (mode === 'plain') return ['An HTML tag inside the equation cuts it apart. Put a space after ', c('<'), '.'];
+    switch (p.cause) {
+      case 'emphasis': return ['Markdown reads ', c('_'), ' or ', c('*'), ' as italics or bold and cuts the equation apart.'];
+      case 'strike': return ['Markdown reads ', c('~'), ' as strikethrough and cuts the equation apart.'];
+      case 'link': return ['Part of the equation turns into a link, which cuts it apart.'];
+      case 'table': return ['A ', c('|'), ' inside the equation splits the table cell. Use ', c('\\vert'), ' or ', c('\\Vert'), ' instead.'];
+      case 'code': return ['A backtick inside the equation starts a code span.'];
+      case 'block': return ['A blank line, or a line starting with ', c('-'), ', ', c('+'), ', ', c('#'), ', ', c('>'), ' or ', c('1.'), ', starts a new Markdown block inside the equation.'];
+      default: return ['Markdown formatting cuts this equation apart.'];
+    }
+  }
+
+  function patternMessage(pats, mode) {
+    if (mode === 'plain') return ['In a plain-text field, ', c('<'), ' followed by a letter is read as an HTML tag. Put a space after ', c('<'), '.'];
+    var parts = ['Markdown drops a backslash: '], seen = {}, first = true;
+    pats.forEach(function (p) {
+      var key = p.kind === 'newline' ? 'nl' : (p.ch === '{' || p.ch === '}') ? 'brace' : p.ch;
+      if (seen[key]) return;
+      seen[key] = true;
+      if (!first) parts.push('; ');
+      first = false;
+      if (key === 'nl') parts.push(c('\\\\'), ' becomes ', c('\\'), ', so the line break is lost');
+      else if (key === 'brace') parts.push(c('\\{'), ' and ', c('\\}'), ' lose their backslash, so the braces disappear');
+      else parts.push(c('\\' + p.ch), ' becomes ', c(p.ch), ', so ' + BS_EFFECT[p.ch]);
+    });
+    parts.push('.');
+    return parts;
+  }
+
+  function analyzeAll(src, mode) {
+    var text = src.trim();
+    var lead = src.length - src.replace(/^\s+/, '').length;
+    var res = { src: src, text: text, lead: lead, mode: mode, regions: [], order: [], issues: [], mathCount: 0, fixAllEdits: [] };
+    if (!text) return res;
+    var found = findRegions(text), regions = found.regions;
+    var st = structure(text, regions, mode);
+    var tables = mode === 'markdown' ? tableSpans(text) : [];
+    res.regions = regions;
+    res.order = st.order;
+
+    var flagged = [];
+    for (var k = 0; k < regions.length; k++) {
+      var r = regions[k], p = st.per[k], item = null;
+      if (r.kind === 'dollar') {
+        if (mode === 'markdown' && p.stray) {
+          flagged.push({ k: k, p: p, sev: 'warn', label: 'Becomes math',
+            msg: ['On OpenReview ', c('\\$'), ' turns into ', c('$'), ' and pairs with another ', c('$'), ', so the text in between is typeset as math.'],
+            edit: { start: r.start, end: r.end, text: '\\\\$', raw: '\\\\$' } });
+        }
+        continue;
+      }
+      res.mathCount++;
+      var inTable = r.raw.indexOf('|') >= 0 && tables.some(function (sp) { return sp[0] <= r.start && r.start < sp[1]; });
+      var pats = mode === 'markdown' ? backslashIssues(r.raw, r) : plainIssues(r.raw);
+      if (p.status !== 'ok') {
+        item = { sev: 'bad', label: 'Won\u2019t render',
+          msg: inTable && p.status !== 'notfound' ? structuralMessage({ status: 'split', cause: 'table' }, r, mode) : structuralMessage(p, r, mode) };
+      } else if (pats.length) {
+        item = { sev: 'warn', label: 'Renders differently', msg: patternMessage(pats, mode) };
+      } else if (mode === 'plain' && squash(p.seg) !== squash(r.raw)) {
+        item = { sev: 'warn', label: 'Renders differently', msg: ['HTML processing changes part of this equation.'] };
+      }
+      if (!item) continue;
+      item.k = k;
+      item.p = p;
+      if (mode === 'plain') {
+        var fp = fixPlainMath(r.raw);
+        item.edit = { start: r.start, end: r.end, text: fp, raw: fp };
+      } else if (p.status === 'code') {
+        var ls = text.lastIndexOf('\n', r.start - 1) + 1, prefix = text.slice(ls, r.start);
+        if (/^[ \t]+$/.test(prefix) && (prefix.length >= 4 || prefix.indexOf('\t') >= 0)) {
+          item.edit = { start: ls, end: r.end, text: r.raw, raw: r.raw, label: 'Remove indent' };
+          item.msg = item.msg.concat([' Remove the indentation before it.']);
+        }
+      } else {
+        var fm = fixMarkdownMath(r.raw, inTable ? 'table' : p.cause);
+        item.edit = { start: r.start, end: r.end, text: fm, raw: fm };
+      }
+      flagged.push(item);
+    }
+
+    // Verify each fix on its own, then all fixes together (neighbouring equations can interact).
+    var edits = [], ks = [], byK = {};
+    flagged.forEach(function (f) {
+      byK[f.k] = f;
+      ks.push(f.k);
+      if (f.edit && f.edit.text !== text.slice(f.edit.start, f.edit.end)) {
+        f.edit.k = f.k;
+        edits.push(f.edit);
+        f.solo = !!verifyEdits(text, regions, [f.edit], mode, [f.k])[f.k];
+      } else {
+        f.edit = null;
+        f.solo = false;
+      }
+    });
+    var joint = edits.length ? verifyEdits(text, regions, edits, mode, ks) : {};
+    flagged.forEach(function (f) {
+      var r = regions[f.k], jointOK = !!joint[f.k];
+      var msg = f.msg;
+      if (!f.edit && jointOK) msg = msg.concat([' Fix all takes care of this one too.']);
+      res.issues.push({
+        sev: f.sev, label: f.label, msg: msg, start: r.start, end: r.end, raw: r.raw,
+        seen: r.kind === 'dollar' ? null : (f.p.seg != null ? f.p.seg : f.p.shown),
+        seenLabel: f.p.status === 'ok' ? 'MathJax gets' : 'Reviewers see',
+        edit: f.edit && (f.solo || jointOK) ? f.edit : null,
+        solo: !!(f.edit && f.solo), joint: jointOK
+      });
+    });
+    var jointEdits = edits.filter(function (e) { return joint[e.k]; });
+    res.fixAllEdits = jointEdits.length ? jointEdits : edits.filter(function (e) { return byK[e.k].solo; });
+
+    if (found.unmatched.length) {
+      var u = found.unmatched;
+      res.issues.push({
+        sev: 'info', label: 'Unmatched $',
+        msg: u.length === 1
+          ? ['This ', c('$'), ' has no closing ', c('$'), ' (or the braces after it do not balance), so the text shows as typed.']
+          : [u.length + ' ', c('$'), ' signs have no closing partner (or unbalanced braces), so that text shows as typed. The line link goes to the first one.'],
+        start: u[0], end: u[0] + 1, raw: lineAround(text, u[0]), seen: null, edit: null
+      });
+    }
+    if (mode === 'markdown') formattingIssues(res);
+    return res;
+  }
+
+  function formattingIssues(res) {
+    var tokens;
+    try { tokens = markedFn.lexer(res.text); } catch (e) { return; }
+    var text = res.text, cursor = 0, html = [], images = [];
+    markedFn.walkTokens(tokens, function (t) {
+      if (t.type !== 'html' && t.type !== 'image') return;
+      var raw = t.raw || '';
+      if (!raw.trim()) return;
+      var at = text.indexOf(raw, cursor);
+      if (at < 0) at = text.indexOf(raw);
+      if (at >= 0) cursor = at + raw.length;
+      if (at >= 0 && insideRegion(res.regions, at)) return;
+      if (t.type === 'html') html.push({ at: at, raw: raw.trim() });
+      else if ((t.href || '').indexOf('/images/') !== 0) images.push({ at: at, raw: raw });
+    });
+    if (html.length) {
+      var h = html[0];
+      res.issues.push({
+        sev: 'info', label: 'Shown as text',
+        msg: ['OpenReview prints HTML such as ', c(oneLine(h.raw, 28)), ' literally', html.length > 1 ? ' (' + html.length + ' places)' : '', '. Use Markdown instead; a blank line starts a new paragraph.'],
+        start: h.at, end: h.at + h.raw.length, raw: null, seen: null, edit: null
+      });
+    }
+    if (images.length) {
+      var im = images[0];
+      res.issues.push({
+        sev: 'info', label: 'Image not shown',
+        msg: ['OpenReview shows Markdown images as text', images.length > 1 ? ' (' + images.length + ' places)' : '', '. Link to the figure instead, e.g. ', c('[Figure 3](https://...)'), '.'],
+        start: im.at, end: im.at + im.raw.length, raw: null, seen: null, edit: null
+      });
+    }
+  }
+
+  // TeX errors and undefined commands, read from what MathJax actually typeset.
+  function texProblems(item) {
+    var out = [], hasError = false;
+    if (!item.root || typeof item.root.walkTree !== 'function') return out;
+    item.root.walkTree(function (node) {
+      if (node.isKind('merror')) {
+        var msg = node.attributes.get('data-mjx-error');
+        if (msg && !hasError) { hasError = true; out.push({ type: 'error', msg: String(msg) }); }
+      } else if (node.isKind('mtext') && node.attributes.get('mathcolor') === 'red') {
+        var t = node.childNodes.map(function (ch) { return typeof ch.getText === 'function' ? ch.getText() : ''; }).join('');
+        if (/^\\[A-Za-z@]+\*?$/.test(t)) out.push({ type: 'unknown', name: t });
+      }
+    });
+    return out;
+  }
+
+  function addTexIssues(res, valueEl) {
+    if (!res || !res.text) return;
+    var items;
+    try { items = MathJax.startup.document.getMathItemsWithin([valueEl]); } catch (e) { return; }
+    items = items.filter(function (m) { return m.display !== null && m.display !== undefined; });
+    var mapped = res.order.length === items.length;
+    var unknown = {}, names = [];
+    items.forEach(function (item, i) {
+      var k = mapped ? res.order[i] : -1;
+      var r = k >= 0 ? res.regions[k] : null;
+      texProblems(item).forEach(function (pb) {
+        if (pb.type === 'error') {
+          res.issues.push({
+            sev: 'bad', label: 'TeX error', msg: [pb.msg.replace(/\.?$/, '.')],
+            start: r ? r.start : -1, end: r ? r.end : -1, raw: r ? r.raw : item.math, seen: null, edit: null, el: item.typesetRoot
+          });
+        } else {
+          if (!unknown[pb.name]) { unknown[pb.name] = { count: 0, r: r, el: item.typesetRoot }; names.push(pb.name); }
+          unknown[pb.name].count++;
+        }
+      });
+    });
+    names.forEach(function (name) {
+      var u = unknown[name];
+      res.issues.push({
+        sev: 'bad', label: 'Unknown command',
+        msg: ['MathJax does not define ', c(name), ', so it shows in red', u.count > 1 ? ' (' + u.count + ' places)' : '', '. ']
+          .concat(MACRO_HINTS[name] || ['Macros defined in your paper are not available on OpenReview.']),
+        start: u.r ? u.r.start : -1, end: u.r ? u.r.end : -1, raw: u.r ? u.r.raw : null, seen: null, edit: null, el: u.el
+      });
+    });
+  }
+
+  /* ---------------- checks panel ---------------- */
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function appendParts(node, parts) {
+    parts.forEach(function (p) {
+      if (p == null || p === '') return;
+      node.appendChild(typeof p === 'string' ? document.createTextNode(p) : el('code', null, p.code));
+    });
+  }
+  function signed(n) {
+    var a = Math.abs(n);
+    return (n < 0 ? '\u2212' : '+') + a + (a === 1 ? ' char' : ' chars');
+  }
+  function lineOf(a, pos) { return a.src.slice(0, a.lead + pos).split('\n').length; }
+
+  function setSummary(sev, text) {
+    els.checksSummary.textContent = '';
+    els.checksSummary.appendChild(el('span', 'dot ' + (sev || '')));
+    els.checksSummary.appendChild(el('span', 'txt', text));
+  }
+
+  function renderChecks(a) {
+    var list = els.checksList;
+    list.textContent = '';
+    els.fixAll.hidden = true;
+    if (!a) {
+      setSummary('', state.mathFailed ? 'MathJax did not load, so checks are off.' : state.mathReady ? 'Checks run after each preview.' : 'Checks start once MathJax has loaded.');
+      return;
+    }
+    if (!a.text) { setSummary('', 'Nothing to check yet.'); return; }
+    var issues = a.issues.slice().sort(function (x, y) {
+      return (SEV_RANK[x.sev] - SEV_RANK[y.sev]) || ((x.start < 0 ? 1e9 : x.start) - (y.start < 0 ? 1e9 : y.start));
+    });
+    a.sorted = issues;
+    if (!issues.length) {
+      setSummary('ok', a.mathCount === 0 ? 'No equations found.' : a.mathCount === 1 ? 'The equation renders as written.' : 'All ' + a.mathCount + ' equations render as written.');
+      return;
+    }
+    var eqs = a.mathCount ? ' (' + a.mathCount + (a.mathCount === 1 ? ' equation checked)' : ' equations checked)') : '';
+    setSummary(issues[0].sev, issues.length + (issues.length === 1 ? ' issue' : ' issues') + eqs);
+    var edits = a.fixAllEdits || [];
+    if (edits.length) {
+      var delta = edits.reduce(function (sum, e) { return sum + e.text.length - (e.end - e.start); }, 0);
+      els.fixAll.textContent = '';
+      els.fixAll.appendChild(document.createTextNode(edits.length === 1 ? 'Apply fix ' : 'Fix all ' + edits.length + ' '));
+      els.fixAll.appendChild(el('span', 'delta', signed(delta)));
+      els.fixAll.hidden = false;
+    }
+    issues.forEach(function (it) { list.appendChild(issueRow(a, it)); });
+  }
+
+  function issueRow(a, it) {
+    var li = el('li', 'issue'), main = el('div', 'issue-main'), top = el('div', 'issue-top');
+    top.appendChild(el('span', 'badge ' + it.sev, it.label));
+    if (it.start >= 0) {
+      var loc = el('button', 'loc', 'Line ' + lineOf(a, it.start));
+      loc.type = 'button';
+      loc.title = 'Select it in the editor';
+      loc.addEventListener('click', function () { reveal(a, it); });
+      top.appendChild(loc);
+    } else if (it.el) {
+      var spot = el('button', 'loc', 'Show in preview');
+      spot.type = 'button';
+      spot.addEventListener('click', function () { spotlight(it.el); });
+      top.appendChild(spot);
+    }
+    main.appendChild(top);
+    var msg = el('p', 'issue-msg');
+    appendParts(msg, it.msg);
+    main.appendChild(msg);
+    var rows = [];
+    if (it.raw) rows.push(['You wrote', it.raw]);
+    if (it.seen != null && it.seen !== '' && squash(it.seen) !== squash(it.raw || '')) rows.push([it.seenLabel, it.seen]);
+    if (it.edit && it.edit.raw !== it.raw) rows.push(['Fixed version', it.edit.raw]);
+    if (rows.length) {
+      var box = el('div', 'issue-code');
+      rows.forEach(function (row) {
+        var d = el('div');
+        d.appendChild(el('span', 'k', row[0]));
+        var code = el('code', null, oneLine(row[1]));
+        code.title = row[1];
+        d.appendChild(code);
+        box.appendChild(d);
+      });
+      main.appendChild(box);
+    }
+    li.appendChild(main);
+    if (it.edit && it.solo) {
+      var b = el('button', 'btn small fix');
+      b.type = 'button';
+      b.title = 'Rewrite this so OpenReview renders it as written';
+      b.appendChild(document.createTextNode((it.edit.label || 'Fix') + ' '));
+      b.appendChild(el('span', 'delta', signed(it.edit.text.length - (it.edit.end - it.edit.start))));
+      b.addEventListener('click', function () { applyFix(it); });
+      li.appendChild(b);
+    } else if (it.edit && it.joint) {
+      li.appendChild(el('span', 'joint', 'Fixed by Fix all'));
+    }
+    return li;
+  }
+
+  /* ---------------- editor helpers ---------------- */
+  var MIRROR_PROPS = ['boxSizing', 'paddingTop', 'paddingLeft', 'paddingBottom', 'borderTopWidth', 'borderRightWidth',
+    'borderBottomWidth', 'borderLeftWidth', 'borderStyle', 'fontFamily', 'fontSize', 'fontWeight', 'fontStyle',
+    'lineHeight', 'letterSpacing', 'wordSpacing', 'tabSize', 'textIndent', 'textTransform'];
+
+  function caretTop(pos) {
+    var ta = els.editor, cs = window.getComputedStyle(ta);
+    if (!mirror) {
+      mirror = document.createElement('div');
+      mirror.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(mirror);
+    }
+    MIRROR_PROPS.forEach(function (p) { mirror.style[p] = cs[p]; });
+    var scrollbar = ta.offsetWidth - ta.clientWidth - parseFloat(cs.borderLeftWidth) - parseFloat(cs.borderRightWidth);
+    mirror.style.paddingRight = (parseFloat(cs.paddingRight) + Math.max(0, scrollbar)) + 'px';
+    mirror.style.width = ta.offsetWidth + 'px';
+    mirror.style.position = 'absolute';
+    mirror.style.visibility = 'hidden';
+    mirror.style.left = '-9999px';
+    mirror.style.top = '0';
+    mirror.style.height = 'auto';
+    mirror.style.overflow = 'hidden';
+    mirror.style.whiteSpace = 'pre-wrap';
+    mirror.style.overflowWrap = 'break-word';
+    mirror.style.wordWrap = 'break-word';
+    mirror.textContent = ta.value.slice(0, pos);
+    var mark = document.createElement('span');
+    mark.textContent = '\u200b';
+    mirror.appendChild(mark);
+    return mark.offsetTop;
+  }
+
+  function selectRange(s, e) {
+    var ta = els.editor;
+    try { ta.focus({ preventScroll: true }); } catch (err) { ta.focus(); }
+    ta.setSelectionRange(s, e);
+    ta.scrollTop = Math.max(0, caretTop(s) - ta.clientHeight / 3);
+    updateCursor();
+  }
+
+  function spotlight(node) {
+    if (!node || !document.body.contains(node)) return;
+    var sc = els.previewScroll;
+    if (window.getComputedStyle(sc).overflowY === 'visible') {
+      node.scrollIntoView({ block: 'center' });
+    } else {
+      var r = node.getBoundingClientRect(), sr = sc.getBoundingClientRect();
+      sc.scrollTop += (r.top - sr.top) - sc.clientHeight / 3;
+    }
+    node.classList.add('spot');
+    setTimeout(function () { node.classList.remove('spot'); }, 1600);
+  }
+
+  function reveal(a, it) {
+    if (els.editor.value === a.src) selectRange(a.lead + it.start, a.lead + Math.max(it.start, it.end));
+    if (it.el) spotlight(it.el);
+  }
+
+  // Replace text through the browser's editing commands so Ctrl+Z / Cmd+Z still works.
+  function replaceRange(s, e, str) {
+    var ta = els.editor, before = ta.value;
+    if (s === e && !str) return;
+    var expected = before.slice(0, s) + str + before.slice(e), keep = ta.scrollTop, ok = false;
+    ta.focus();
+    ta.setSelectionRange(s, e);
+    try { ok = str ? document.execCommand('insertText', false, str) : document.execCommand('delete', false, null); } catch (err) { ok = false; }
+    if (!ok || ta.value !== expected) {
+      ta.value = expected;
+      ta.setSelectionRange(s + str.length, s + str.length);
+      onEditorInput();
+    }
+    ta.scrollTop = keep;
+  }
+
+  function refreshAfterChange() {
+    renderNow();
+    toast('The text changed after the last check, so the checks were refreshed. Try again.');
+  }
+
+  function applyFix(it) {
+    var a = state.analysis;
+    if (!a || els.editor.value !== a.src) { refreshAfterChange(); return; }
+    replaceRange(a.lead + it.edit.start, a.lead + it.edit.end, it.edit.text);
+    renderNow();
+    toast('Fixed. Press ' + UNDO_KEY + ' in the editor to undo.');
+  }
+
+  function applyAll() {
+    var a = state.analysis;
+    if (!a || els.editor.value !== a.src) { refreshAfterChange(); return; }
+    var fixes = (a.fixAllEdits || []).slice().sort(function (x, y) { return y.start - x.start; });
+    var text = a.src, floor = Infinity, count = 0;
+    fixes.forEach(function (f) {
+      var s = a.lead + f.start, e = a.lead + f.end;
+      if (e > floor) return;
+      text = text.slice(0, s) + f.text + text.slice(e);
+      floor = s;
+      count++;
+    });
+    if (!count) return;
+    replaceRange(0, a.src.length, text);
+    renderNow();
+    toast('Fixed ' + count + (count === 1 ? ' equation' : ' equations') + '. Press ' + UNDO_KEY + ' in the editor to undo.');
+  }
+
+  /* ---------------- clipboard, toast, saving ---------------- */
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { if (document.execCommand('copy')) resolve(); else reject(new Error('copy failed')); } catch (e) { reject(e); }
+      document.body.removeChild(ta);
+    });
+  }
+
+  function copyFailed() { toast('Copy failed. Select the text and press ' + (IS_MAC ? '\u2318C' : 'Ctrl+C') + '.'); }
+
+  function copyComment() {
+    var text = els.editor.value.trim(); // OpenReview trims the value before rendering and counting
+    if (!text) { toast('Nothing to copy yet.'); return; }
+    copyText(text).then(function () {
+      var over = state.limit > 0 ? text.length - state.limit : 0;
+      toast(over > 0
+        ? 'Copied, but it is ' + fmt(over) + ' characters over the ' + fmt(state.limit) + ' limit. Shorten it before posting.'
+        : 'Copied ' + fmt(text.length) + ' characters. Paste them into the OpenReview comment box.');
+    }, copyFailed);
+  }
+
+  function toast(msg) {
+    els.toast.textContent = msg;
+    els.toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { els.toast.classList.remove('show'); }, 3600);
+  }
+
+  function saveNow() { store('text', els.editor.value); store('title', els.title.value); }
+  function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveNow, 300); }
+
+  function onEditorInput() {
+    updateCounter();
+    updateCursor();
+    scheduleSave();
+    scheduleRender();
+  }
+
+  /* ---------------- events ---------------- */
+  els.editor.addEventListener('input', onEditorInput);
+  ['keyup', 'click', 'select', 'focus'].forEach(function (type) { els.editor.addEventListener(type, updateCursor); });
+  els.title.addEventListener('input', function () { scheduleSave(); scheduleRender(); });
+  els.compile.addEventListener('click', compile);
+  els.copyComment.addEventListener('click', copyComment);
+  els.copyTitle.addEventListener('click', function () {
+    var t = els.title.value.trim();
+    if (!t) { toast('The title is empty.'); return; }
+    copyText(t).then(function () { toast('Title copied.'); }, copyFailed);
+  });
+  els.live.addEventListener('change', function () {
+    state.live = els.live.checked;
+    store('live', state.live ? '1' : '0');
+    if (state.live) renderNow(); else updateStatus();
+  });
+  Array.prototype.forEach.call(modeInputs, function (r) {
+    r.addEventListener('change', function () {
+      if (!r.checked) return;
+      state.mode = r.value === 'plain' ? 'plain' : 'markdown';
+      store('mode', state.mode);
+      renderNow();
+    });
+  });
+  els.limit.addEventListener('input', function () {
+    state.limit = parseLimit(els.limit.value, 0);
+    store('limit', String(state.limit));
+    updateCounter();
+  });
+  els.loadExample.addEventListener('click', function () {
+    if (els.editor.value === EXAMPLE) { toast('The example is already loaded.'); return; }
+    var hadText = els.editor.value.trim().length > 0;
+    replaceRange(0, els.editor.value.length, EXAMPLE);
+    if (!els.title.value.trim()) { els.title.value = EXAMPLE_TITLE; scheduleSave(); }
+    renderNow();
+    toast(hadText ? 'Example loaded. Press ' + UNDO_KEY + ' in the editor to get your text back.' : 'Example loaded.');
+  });
+  els.clearText.addEventListener('click', function () {
+    if (!els.editor.value) return;
+    replaceRange(0, els.editor.value.length, '');
+    renderNow();
+    toast('Cleared. Press ' + UNDO_KEY + ' in the editor to undo.');
+  });
+  els.fixAll.addEventListener('click', applyAll);
+  els.checksToggle.addEventListener('click', function () {
+    var collapsed = !els.checks.classList.contains('collapsed');
+    els.checks.classList.toggle('collapsed', collapsed);
+    els.checksList.hidden = collapsed;
+    els.checksToggle.setAttribute('aria-expanded', String(!collapsed));
+    els.checksToggle.title = collapsed ? 'Show the list' : 'Hide the list';
+  });
+  document.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); compile(); }
+  });
+  window.addEventListener('pagehide', saveNow);
+  window.addEventListener('beforeunload', saveNow);
+
+  /* ---------------- start ---------------- */
+  function waitFor(test, timeout) {
+    return new Promise(function (resolve, reject) {
+      var started = Date.now();
+      (function tick() {
+        var ok = false;
+        try { ok = !!test(); } catch (e) { ok = false; }
+        if (ok) { resolve(); return; }
+        if (Date.now() - started > timeout) { reject(new Error('timeout')); return; }
+        setTimeout(tick, 40);
+      })();
+    });
+  }
+
+  updateCounter();
+  updateCursor();
+  setNoteTitle(els.title.value.trim());
+  els.noteDate.textContent = forumDate(new Date());
+  updateStatus();
+
+  waitFor(function () {
+    return window.marked && (typeof window.marked.marked === 'function' || typeof window.marked === 'function') &&
+      window.DOMPurify && typeof window.DOMPurify.sanitize === 'function';
+  }, 20000).then(function () {
+    setupPipeline();
+    state.ready = true;
+    renderNow();
+  }, function () {
+    state.failed = true;
+    updateStatus();
+    els.valueEl.innerHTML = '<em>Could not load the renderer from cdn.jsdelivr.net. Check your connection and reload the page.</em>';
+  });
+
+  waitFor(function () { return window.MathJax && MathJax.startup && MathJax.startup.promise; }, 30000)
+    .then(function () { return MathJax.startup.promise; })
+    .then(function () {
+      state.mathReady = true;
+      if (state.ready) renderNow();
+    }, function () {
+      state.mathFailed = true;
+      updateStatus();
+      renderChecks(null);
+    });
+
+  // Small hook for debugging from the browser console.
+  window.ORPreview = {
+    analyze: function (src, mode) { return analyzeAll(src == null ? els.editor.value : src, mode || state.mode); },
+    fixMarkdownMath: fixMarkdownMath,
+    render: renderNow,
+    state: state
+  };
+})();
+</script>
+</body>
+</html>
