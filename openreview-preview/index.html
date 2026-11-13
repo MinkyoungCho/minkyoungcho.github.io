@@ -264,7 +264,7 @@ button { cursor: pointer; }
 }
 
 /* ---------- preview pane ---------- */
-.preview-scroll { flex: 1; min-height: 0; overflow: auto; padding: 20px; background: #f7f6f4; }
+.preview-scroll { position: relative; flex: 1; min-height: 0; overflow: auto; padding: 20px; background: #f7f6f4; }
 .pipeline-note { max-width: 1140px; margin: 14px 2px 0; font: 12px/1.5 var(--font-ui); color: #666; }
 .pipeline-note a { color: #3e6775; }
 
@@ -335,7 +335,7 @@ button { cursor: pointer; }
   .pane-source .pane-head, .pane-preview .pane-head { padding-left: 16px; padding-right: 16px; }
   .source-body { padding: 14px 16px 12px; }
   .source-foot { padding-left: 16px; padding-right: 16px; }
-  .editor { min-height: 46vh; }
+  .editor-host { min-height: 46vh; }
   .preview-scroll { overflow: visible; padding: 16px; }
   .checks { max-height: none; }
   .checks-list { overflow: visible; }
@@ -462,6 +462,79 @@ button { cursor: pointer; }
 .or-root .note-content .note-content-value.markdown-rendered table thead > tr > th { vertical-align: bottom; border-top: 0; border-bottom: 2px solid #ddd; }
 .or-root .note-content .note-content-value.markdown-rendered table tr > td,
 .or-root .note-content .note-content-value.markdown-rendered table tr > th { padding: 0.25rem; vertical-align: top; border-top: 1px solid #ddd; }
+
+/* ---------- reviewer tabs ---------- */
+.pane-source .tabs-head { padding-left: 8px; align-items: stretch; }
+.tabs { display: flex; align-items: stretch; gap: 2px; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  flex: none; display: inline-flex; align-items: center; gap: 7px;
+  padding: 0 12px; margin-bottom: -1px;
+  border: 0; border-bottom: 2px solid transparent; background: none;
+  color: var(--ink-2); font-size: 13.5px; font-weight: 500; white-space: nowrap;
+}
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--accent); }
+.tab:focus-visible, .tab-add:focus-visible { outline: 2px solid var(--focus); outline-offset: -4px; border-radius: 8px; }
+.tab .count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; font-size: 11px; font-weight: 600; line-height: 18px; text-align: center; }
+.tab .count.bad { background: var(--bad-bg); color: var(--bad); }
+.tab .count.warn { background: var(--warn-bg); color: var(--warn); }
+.tab-add {
+  flex: none; align-self: center; display: inline-grid; place-items: center;
+  width: 28px; height: 28px; margin-left: 6px; padding: 0;
+  border: 1px dashed var(--rule-strong); border-radius: 7px; background: none; color: var(--ink-2);
+}
+.tab-add:hover { color: var(--ink); border-color: var(--ink-3); }
+.tab-add svg { width: 14px; height: 14px; }
+.field-row { display: flex; gap: 10px; }
+.reviewer-field { flex: none; width: 128px; }
+.title-field { flex: 1; min-width: 0; }
+.label-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.panels, .draft-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.draft-panel { gap: 14px; }
+.editor-host { flex: 1; min-height: 0; display: flex; }
+.editor-host .editor { flex: 1; }
+.head-right { display: flex; align-items: center; gap: 12px; }
+.btn:disabled { opacity: 0.6; cursor: progress; }
+.checks-target {
+  flex: none; max-width: 140px; overflow: hidden; text-overflow: ellipsis; padding: 0 8px; border-radius: 999px;
+  background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--rule);
+  font-size: 12px; font-weight: 600; line-height: 20px; color: var(--ink-2); white-space: nowrap;
+}
+
+/* ---------- one card per reviewer (the preview area is always light) ---------- */
+.cards { display: flex; flex-direction: column; gap: 26px; }
+.card-wrap { max-width: 1140px; }
+.card-wrap:not(.active) { cursor: pointer; }
+.card-meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 12px; margin: 0 2px 6px; font: 12.5px/1.4 var(--font-ui); color: #5f6b76; }
+.card-pick { padding: 0; border: 0; background: none; font: 600 12.5px/1.4 var(--font-ui); color: #2c3a4a; }
+.card-pick:hover { text-decoration: underline; text-underline-offset: 2px; }
+.card-pick:focus-visible { outline: 2px solid #3e6775; outline-offset: 2px; border-radius: 3px; }
+.card-wrap.active .card-pick { color: #8c1b13; }
+.card-count { font-variant-numeric: tabular-nums; }
+.card-count.warning, .card-flags.warn { color: #8a5a00; font-weight: 600; }
+.card-count.danger, .card-flags.bad { color: #b3261e; font-weight: 600; }
+.card-wrap .or-root .note { transition: box-shadow 0.15s; }
+.card-wrap.active .or-root .note { box-shadow: 0 0 0 2px rgba(140, 27, 19, 0.3); }
+.card-wrap:not(.active):hover .or-root .note { box-shadow: 0 0 0 2px rgba(62, 103, 117, 0.25); }
+
+/* ---------- PDF export: print only the cards, one reviewer per page ---------- */
+@media print {
+  @page { margin: 14mm 12mm; }
+  html { font-size: 16px; }
+  html, body { height: auto !important; background: #fff !important; }
+  .topbar, .pane-source, .compile, .checks, .toast, .pane-head, .card-meta, .pipeline-note, noscript { display: none !important; }
+  .app, .workspace, .pane-preview { display: block !important; height: auto !important; min-height: 0 !important; border: 0 !important; background: none !important; }
+  .preview-scroll { overflow: visible !important; padding: 0 !important; background: none !important; }
+  .cards { display: block !important; }
+  .card-wrap { max-width: none; }
+  .card-wrap.is-empty { display: none !important; }
+  .card-wrap.print-break { break-before: page; page-break-before: always; }
+  .card-wrap .or-root .note { box-shadow: none !important; animation: none !important; }
+  .or-root .spot { outline: none !important; }
+  .or-root { max-width: none; }
+  .or-root, .or-root * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
 </style>
 
 <script>
@@ -507,7 +580,7 @@ button { cursor: pointer; }
   <header class="topbar">
     <div class="brand">
       <h1>OpenReview Preview</h1>
-      <p>Write your response in Markdown and LaTeX and see it the way reviewers will see it on openreview.net.</p>
+      <p>Write one response per reviewer in Markdown and LaTeX and see each the way reviewers will on openreview.net.</p>
     </div>
     <div class="controls">
       <fieldset class="seg">
@@ -516,36 +589,24 @@ button { cursor: pointer; }
         <label title="Fields without Markdown: plain text with links detected automatically"><input type="radio" name="mode" value="plain"><span>Plain-text field</span></label>
       </fieldset>
       <label class="switch"><input type="checkbox" id="live" checked><span class="track" aria-hidden="true"></span>Live preview</label>
-      <button type="button" class="btn quiet" id="loadExample">Load example</button>
-      <button type="button" class="btn quiet" id="clearText">Clear</button>
+      <button type="button" class="btn quiet" id="loadExample" title="Load an example into the current tab">Load example</button>
+      <button type="button" class="btn quiet" id="clearText" title="Clear the current response">Clear</button>
     </div>
   </header>
 
   <main class="workspace">
-    <button type="button" class="compile" id="compile" title="Render the preview (Ctrl+Enter or &#8984;+Enter)" aria-keyshortcuts="Control+Enter Meta+Enter">
+    <button type="button" class="compile" id="compile" title="Render every response (Ctrl+Enter or &#8984;+Enter)" aria-keyshortcuts="Control+Enter Meta+Enter">
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.6v10.8L13 8z" fill="currentColor"/></svg>
       OpenReview Compile
     </button>
 
     <section class="pane pane-source" aria-labelledby="sourceHeading">
-      <div class="pane-head">
-        <h2 id="sourceHeading">Your comment</h2>
-        <span class="meta" id="cursorPos">Ln 1, Col 1</span>
+      <div class="pane-head tabs-head">
+        <h2 id="sourceHeading" class="sr-only">Your responses</h2>
+        <div class="tabs" id="tabs" role="tablist" aria-label="Responses by reviewer"></div>
       </div>
       <div class="source-body">
-        <div class="field">
-          <label class="field-label" for="title">Title <span class="opt">(optional)</span></label>
-          <div class="title-row">
-            <input class="input" id="title" type="text" autocomplete="off" spellcheck="true" placeholder="e.g. Response to Reviewer XyZ1">
-            <button type="button" class="icon-btn" id="copyTitle" title="Copy title" aria-label="Copy title">
-              <svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5V3A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg>
-            </button>
-          </div>
-        </div>
-        <div class="field grow">
-          <label class="field-label" for="editor">Comment</label>
-          <textarea class="editor" id="editor" spellcheck="true" placeholder="Paste or write your response. Markdown and LaTeX ($...$ and $$...$$) work the same way as on OpenReview. Your draft is saved in this browser."></textarea>
-        </div>
+        <div class="panels" id="panels"></div>
       </div>
       <div class="source-foot">
         <div class="budget">
@@ -566,25 +627,22 @@ button { cursor: pointer; }
     <section class="pane pane-preview" aria-labelledby="previewHeading">
       <div class="pane-head">
         <h2 id="previewHeading">On OpenReview</h2>
-        <span class="status" id="status" role="status"><span class="dot"></span>Loading renderer</span>
+        <div class="head-right">
+          <span class="status" id="status" role="status"><span class="dot"></span>Loading renderer</span>
+          <button type="button" class="btn small" id="exportPdf" title="Save every response as one PDF, one reviewer per page (opens the print dialog)">
+            <svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5v7M5 6.8l3 3 3-3M3 11.5v1A1.5 1.5 0 0 0 4.5 14h7a1.5 1.5 0 0 0 1.5-1.5v-1"/></svg>
+            Export PDF
+          </button>
+        </div>
       </div>
       <div class="preview-scroll" id="previewScroll">
-        <div class="or-root">
-          <div class="note depth-even" id="note">
-            <div class="heading"><h4 id="noteTitle"><span>Official Comment by Authors</span></h4></div>
-            <div class="subheading"><span class="invitation highlight" style="background-color:#bbf;color:#2c3a4a">Official Comment</span><span class="signatures">by Authors</span><span class="created-date"><svg class="glyph" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2.5h8a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1zM1 5h10M3.5 1v2.5M8.5 1v2.5" fill="none" stroke="currentColor" stroke-width="1.1"/></svg><span id="noteDate"></span></span></div>
-            <div class="note-content-container">
-              <div class="note-content">
-                <div id="valueHost"><strong class="note-content-field disable-tex-rendering">Comment:</strong> <div class="note-content-value markdown-rendered" id="valueEl"><em>Loading the OpenReview renderer&hellip;</em></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="cards" id="cards"></div>
         <p class="pipeline-note">Rendered in your browser with openreview.net&rsquo;s own setup: marked 15.0.6 with OpenReview&rsquo;s custom renderer, DOMPurify 3.4.17 with its tag allowlist, and MathJax 3.2.2 (tex-chtml-full) with its configuration, as found in <a href="https://github.com/openreview/openreview-web" target="_blank" rel="noopener noreferrer">openreview-web</a>.</p>
       </div>
       <section class="checks" id="checks" aria-labelledby="checksHeading">
         <div class="checks-head">
           <h3 id="checksHeading">Math check</h3>
+          <span class="checks-target" id="checksTarget"></span>
           <span class="checks-summary" id="checksSummary"><span class="dot"></span><span class="txt">Checks start once MathJax has loaded.</span></span>
           <button type="button" class="btn small" id="fixAll" hidden>Fix all</button>
           <button type="button" class="icon-btn small" id="checksToggle" aria-expanded="true" aria-controls="checksList" title="Hide the list">
@@ -697,16 +755,19 @@ We will add these clarifications to the revision.
 
   function c(text) { return { code: text }; }
   function $(id) { return document.getElementById(id); }
+  var DEFAULT_REVIEWERS = ['hvH1', 'kJUx', 'ztgN'];
+  var COPY_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5V3A1.5 1.5 0 0 0 9 1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg>';
+  var TRASH_SVG = '<svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h10M6.5 4.5V3a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1.5M4.5 4.5l.6 8.6a1 1 0 0 0 1 .9h3.8a1 1 0 0 0 1-.9l.6-8.6"/></svg>';
+  var CAL_SVG = '<svg class="glyph" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2.5h8a1 1 0 0 1 1 1V10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1zM1 5h10M3.5 1v2.5M8.5 1v2.5" fill="none" stroke="currentColor" stroke-width="1.1"/></svg>';
 
   var els = {
-    editor: $('editor'), title: $('title'), copyTitle: $('copyTitle'), compile: $('compile'),
-    copyComment: $('copyComment'), limit: $('limit'), remaining: $('remaining'), usage: $('usage'),
-    meter: $('meter'), meterFill: $('meterFill'), cursorPos: $('cursorPos'), live: $('live'),
-    loadExample: $('loadExample'), clearText: $('clearText'), status: $('status'),
-    note: $('note'), noteTitle: $('noteTitle'), noteDate: $('noteDate'),
-    valueHost: $('valueHost'), valueEl: $('valueEl'), previewScroll: $('previewScroll'),
-    checks: $('checks'), checksSummary: $('checksSummary'), checksList: $('checksList'),
-    fixAll: $('fixAll'), checksToggle: $('checksToggle'), toast: $('toast')
+    tabs: $('tabs'), panels: $('panels'),
+    compile: $('compile'), copyComment: $('copyComment'), limit: $('limit'), remaining: $('remaining'),
+    usage: $('usage'), meter: $('meter'), meterFill: $('meterFill'),
+    live: $('live'), loadExample: $('loadExample'), clearText: $('clearText'), status: $('status'),
+    exportPdf: $('exportPdf'), cards: $('cards'), previewScroll: $('previewScroll'),
+    checks: $('checks'), checksTarget: $('checksTarget'), checksSummary: $('checksSummary'),
+    checksList: $('checksList'), fixAll: $('fixAll'), checksToggle: $('checksToggle'), toast: $('toast')
   };
   var modeInputs = document.querySelectorAll('input[name="mode"]');
   var EXAMPLE = $('example-text').textContent.replace(/^\s*\n/, '').replace(/\s+$/, '');
@@ -728,12 +789,8 @@ We will add these clarifications to the revision.
     live: load('live', '1') !== '0',
     limit: parseLimit(load('limit', '5000'), 5000),
     ready: false, mathReady: false, failed: false, mathFailed: false,
-    renderId: 0, dirty: true, rendering: false, analysis: null
+    drafts: [], active: null, seq: 0
   };
-
-  var savedText = load('text', null);
-  els.editor.value = savedText === null ? EXAMPLE : savedText;
-  els.title.value = load('title', savedText === null ? EXAMPLE_TITLE : '');
   els.limit.value = String(state.limit);
   els.live.checked = state.live;
   Array.prototype.forEach.call(modeInputs, function (r) { r.checked = r.value === state.mode; });
@@ -741,7 +798,51 @@ We will add these clarifications to the revision.
   var markedFn = null, analysisDoc = null, mirror = null;
   var escapeBox = document.createElement('div');
   var mjChain = Promise.resolve();
-  var renderTimer = 0, saveTimer = 0, toastTimer = 0;
+  var saveTimer = 0, toastTimer = 0, savedDocTitle = null;
+
+  function defaultTitle(reviewer) { return 'Response to Reviewer' + (reviewer ? ' ' + reviewer : ''); }
+  function newId() { state.seq += 1; return 'd' + Date.now().toString(36) + state.seq; }
+
+  // Saved drafts, or one tab per default reviewer. A single draft saved by the
+  // previous (one-response) version of this page is moved into the matching tab.
+  function initialDrafts() {
+    var saved = null;
+    try { saved = JSON.parse(load('drafts', 'null')); } catch (e) { saved = null; }
+    if (saved && saved.length) {
+      return saved.map(function (d) {
+        var reviewer = String(d.reviewer || '');
+        return {
+          id: String(d.id || newId()), reviewer: reviewer,
+          title: d.title == null ? defaultTitle(reviewer) : String(d.title),
+          titleAuto: d.titleAuto !== false, text: String(d.text || '')
+        };
+      });
+    }
+    var drafts = DEFAULT_REVIEWERS.map(function (rv) {
+      return { id: newId(), reviewer: rv, title: defaultTitle(rv), titleAuto: true, text: '' };
+    });
+    var oldText = load('text', null), oldTitle = load('title', '') || '';
+    if (oldText && oldText.trim() && oldText !== EXAMPLE) {
+      var m = /Reviewer\s+([A-Za-z0-9]{2,12})/.exec(oldTitle), target = null;
+      if (m) drafts.forEach(function (d) { if (d.reviewer === m[1]) target = d; });
+      if (!target) {
+        target = { id: newId(), reviewer: m ? m[1] : '', title: '', titleAuto: false, text: '' };
+        drafts.unshift(target);
+      }
+      target.text = oldText;
+      target.title = oldTitle || defaultTitle(target.reviewer);
+      target.titleAuto = target.title === defaultTitle(target.reviewer);
+    }
+    return drafts;
+  }
+
+  function saveDrafts() {
+    store('drafts', JSON.stringify(state.drafts.map(function (d) {
+      return { id: d.id, reviewer: d.reviewer, title: d.title, titleAuto: d.titleAuto, text: d.ta ? d.ta.value : d.text };
+    })));
+    if (state.active) store('active', state.active);
+  }
+  function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveDrafts, 300); }
 
   /* ---------------- OpenReview pipeline ---------------- */
   function asText(s) { escapeBox.textContent = s; return escapeBox.innerHTML; } // = $('<div />').text(s).html()
@@ -806,90 +907,357 @@ We will add these clarifications to the revision.
     });
   }
 
+  /* ---------------- drafts, tabs and cards ---------------- */
+  function draftById(id) {
+    for (var i = 0; i < state.drafts.length; i++) if (state.drafts[i].id === id) return state.drafts[i];
+    return null;
+  }
+  function activeDraft() { return draftById(state.active); }
+  function editor() { var d = activeDraft(); return d ? d.ta : null; }
+  function reviewerName(d) { return d.reviewer || 'New reviewer'; }
+
+  // Each reviewer gets its own Reviewer, Title and Comment fields. Nothing is swapped between
+  // tabs, so the browser's page-wide undo history can never write into another reviewer's draft.
+  function makePanel(d) {
+    var panel = el('div', 'draft-panel');
+    panel.id = 'panel-' + d.id;
+    panel.setAttribute('role', 'tabpanel');
+    panel.setAttribute('aria-labelledby', 'tab-' + d.id);
+    panel.hidden = true;
+    panel.innerHTML =
+      '<div class="field-row">' +
+        '<div class="field reviewer-field"><label class="field-label" for="reviewer-' + d.id + '">Reviewer</label>' +
+          '<input class="input reviewer-input" id="reviewer-' + d.id + '" type="text" autocomplete="off" spellcheck="false" placeholder="e.g. hvH1"></div>' +
+        '<div class="field title-field"><label class="field-label" for="title-' + d.id + '">Title</label>' +
+          '<div class="title-row"><input class="input title-input" id="title-' + d.id + '" type="text" autocomplete="off" spellcheck="true" placeholder="Response to Reviewer ...">' +
+          '<button type="button" class="icon-btn copy-title" title="Copy title" aria-label="Copy title">' + COPY_SVG + '</button>' +
+          '<button type="button" class="icon-btn remove-draft" title="Remove this reviewer" aria-label="Remove this reviewer">' + TRASH_SVG + '</button></div></div>' +
+      '</div>' +
+      '<div class="field grow"><div class="label-row"><label class="field-label" for="editor-' + d.id + '">Comment</label>' +
+        '<span class="meta cursor-pos">Ln 1, Col 1</span></div>' +
+        '<div class="editor-host"><textarea class="editor" id="editor-' + d.id + '" spellcheck="true"></textarea></div></div>';
+    els.panels.appendChild(panel);
+    d.panel = panel;
+    d.reviewerInput = panel.querySelector('.reviewer-input');
+    d.titleInput = panel.querySelector('.title-input');
+    d.cursorEl = panel.querySelector('.cursor-pos');
+    d.ta = panel.querySelector('textarea');
+    d.ta.placeholder = 'Paste or write your response to this reviewer. Markdown and LaTeX ($...$ and $$...$$) work the same way as on OpenReview. Drafts are saved in this browser.';
+    d.ta.value = d.text;
+    d.reviewerInput.value = d.reviewer;
+    d.titleInput.value = d.title;
+    d.ta.addEventListener('input', function () { onEditorInput(d); });
+    ['keyup', 'click', 'select', 'focus'].forEach(function (type) { d.ta.addEventListener(type, updateCursor); });
+    d.reviewerInput.addEventListener('input', function () { onReviewerInput(d); });
+    d.titleInput.addEventListener('input', function () { onTitleInput(d); });
+    panel.querySelector('.copy-title').addEventListener('click', function () { copyTitle(d); });
+    panel.querySelector('.remove-draft').addEventListener('click', function () { removeDraft(d); });
+  }
+
+  function onReviewerInput(d) {
+    d.reviewer = d.reviewerInput.value.trim();
+    if (d.titleAuto) { d.title = defaultTitle(d.reviewer); d.titleInput.value = d.title; }
+    if (d.id === state.active) els.checksTarget.textContent = reviewerName(d);
+    updateTabBadge(d);
+    updateCardMeta(d);
+    scheduleSave();
+    scheduleRender(d);
+  }
+
+  function onTitleInput(d) {
+    d.title = d.titleInput.value;
+    d.titleAuto = d.title === defaultTitle(d.reviewer);
+    scheduleSave();
+    scheduleRender(d);
+  }
+
+  function copyTitle(d) {
+    var t = d.title.trim();
+    if (!t) { toast('The title is empty.'); return; }
+    copyText(t).then(function () { toast('Title copied.'); }, copyFailed);
+  }
+
+  function noteMarkup() {
+    return '<div class="note depth-even">' +
+      '<div class="heading"><h4 class="note-title"></h4></div>' +
+      '<div class="subheading"><span class="invitation highlight" style="background-color:#bbf;color:#2c3a4a">Official Comment</span>' +
+      '<span class="signatures">by Authors</span><span class="created-date">' + CAL_SVG + '<span class="note-date"></span></span></div>' +
+      '<div class="note-content-container"><div class="note-content"><div class="value-host">' +
+      '<strong class="note-content-field disable-tex-rendering">Comment:</strong> ' +
+      '<div class="note-content-value markdown-rendered"><em>Loading the OpenReview renderer\u2026</em></div>' +
+      '</div></div></div></div>';
+  }
+
+  function createCard(d) {
+    var wrap = el('section', 'card-wrap');
+    wrap.setAttribute('data-id', d.id);
+    var meta = el('div', 'card-meta');
+    var pick = el('button', 'card-pick');
+    pick.type = 'button';
+    pick.title = 'Edit this response';
+    var count = el('span', 'card-count'), flags = el('span', 'card-flags');
+    meta.appendChild(pick);
+    meta.appendChild(count);
+    meta.appendChild(flags);
+    var root = el('div', 'or-root');
+    root.innerHTML = noteMarkup();
+    wrap.appendChild(meta);
+    wrap.appendChild(root);
+    wrap.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('a')) return;
+      var viaLabel = e.target === pick || pick.contains(e.target);
+      if (state.active !== d.id || viaLabel) selectDraft(d.id, { focus: viaLabel, scroll: false });
+    });
+    d.card = {
+      wrap: wrap, pick: pick, count: count, flags: flags,
+      note: root.querySelector('.note'), title: root.querySelector('.note-title'),
+      date: root.querySelector('.note-date'), host: root.querySelector('.value-host'),
+      value: root.querySelector('.note-content-value')
+    };
+    return wrap;
+  }
+
+  function mountDraft(d) {
+    d.renderId = 0;
+    d.dirty = true;
+    d.rendering = false;
+    d.analysis = null;
+    d.timer = 0;
+    makePanel(d);
+    els.cards.appendChild(createCard(d));
+    setNoteTitle(d.card.title, d.title.trim());
+    d.card.date.textContent = forumDate(new Date());
+    updateCardMeta(d);
+  }
+
+  function draftInfo(d) {
+    var len = d.ta.value.trim().length, over = state.limit > 0 && len > state.limit;
+    var issues = d.analysis ? d.analysis.issues.filter(function (i) { return i.sev !== 'info'; }) : [];
+    var bad = issues.some(function (i) { return i.sev === 'bad'; });
+    var parts = [fmt(len) + (state.limit > 0 ? ' of ' + fmt(state.limit) : '') + ' characters'];
+    if (issues.length) parts.push(issues.length + (issues.length === 1 ? ' math issue' : ' math issues'));
+    if (over) parts.push('over the limit');
+    return { len: len, over: over, issues: issues, sev: bad || over ? 'bad' : issues.length ? 'warn' : '', summary: parts.join(', ') };
+  }
+
+  function updateCardMeta(d) {
+    var info = draftInfo(d), limit = state.limit, rem = limit - info.len, n = info.issues.length;
+    d.card.pick.textContent = d.reviewer ? 'Reviewer ' + d.reviewer : 'New reviewer';
+    d.card.count.textContent = limit > 0 ? fmt(info.len) + ' / ' + fmt(limit) : fmt(info.len) + (info.len === 1 ? ' character' : ' characters');
+    d.card.count.className = 'card-count' + (limit > 0 ? (rem < 1 ? ' danger' : rem < WARN_BELOW ? ' warning' : '') : '');
+    d.card.flags.textContent = n ? n + (n === 1 ? ' math issue' : ' math issues') : '';
+    d.card.flags.className = 'card-flags' + (n ? (info.issues.some(function (i) { return i.sev === 'bad'; }) ? ' bad' : ' warn') : '');
+    d.card.wrap.classList.toggle('is-empty', info.len === 0);
+  }
+
+  function updateTabBadge(d) {
+    var tab = document.getElementById('tab-' + d.id);
+    if (!tab) return;
+    var info = draftInfo(d), badge = tab.querySelector('.count');
+    var text = info.issues.length ? String(info.issues.length) : info.over ? '!' : '';
+    tab.querySelector('.tab-name').textContent = reviewerName(d);
+    tab.title = reviewerName(d) + ': ' + info.summary;
+    if (!text) {
+      if (badge) tab.removeChild(badge);
+      return;
+    }
+    if (!badge) { badge = el('span', 'count'); tab.appendChild(badge); }
+    badge.textContent = text;
+    badge.className = 'count ' + info.sev;
+  }
+
+  function renderTabs() {
+    els.tabs.textContent = '';
+    state.drafts.forEach(function (d) {
+      var on = d.id === state.active;
+      var tab = el('button', 'tab');
+      tab.type = 'button';
+      tab.id = 'tab-' + d.id;
+      tab.setAttribute('role', 'tab');
+      tab.setAttribute('aria-selected', on ? 'true' : 'false');
+      tab.tabIndex = on ? 0 : -1;
+      tab.appendChild(el('span', 'tab-name', reviewerName(d)));
+      tab.addEventListener('click', function () { selectDraft(d.id, { focus: true }); });
+      tab.addEventListener('keydown', onTabKey);
+      els.tabs.appendChild(tab);
+      updateTabBadge(d);
+    });
+    var add = el('button', 'tab-add');
+    add.type = 'button';
+    add.title = 'Add a reviewer';
+    add.setAttribute('aria-label', 'Add a reviewer');
+    add.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3.5v9M3.5 8h9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+    add.addEventListener('click', addDraft);
+    els.tabs.appendChild(add);
+  }
+
+  function onTabKey(e) {
+    var n = state.drafts.length, i = 0, j;
+    for (var k = 0; k < n; k++) if (state.drafts[k].id === state.active) i = k;
+    if (e.key === 'ArrowRight') j = (i + 1) % n;
+    else if (e.key === 'ArrowLeft') j = (i - 1 + n) % n;
+    else if (e.key === 'Home') j = 0;
+    else if (e.key === 'End') j = n - 1;
+    else return;
+    e.preventDefault();
+    selectDraft(state.drafts[j].id, { focus: false });
+    var tab = document.getElementById('tab-' + state.drafts[j].id);
+    if (tab) tab.focus();
+  }
+
+  function selectDraft(id, opts) {
+    opts = opts || {};
+    var d = draftById(id);
+    if (!d) return;
+    state.drafts.forEach(function (x) {
+      x.panel.hidden = x !== d;
+      x.card.wrap.classList.toggle('active', x === d);
+    });
+    state.active = d.id;
+    els.checksTarget.textContent = reviewerName(d);
+    renderTabs();
+    updateCounter();
+    updateCursor();
+    renderChecks(d.analysis);
+    if (opts.scroll !== false) scrollCardIntoView(d);
+    if (opts.focus) { try { d.ta.focus({ preventScroll: true }); } catch (e) { d.ta.focus(); } }
+    store('active', d.id);
+  }
+
+  function scrollCardIntoView(d) {
+    var sc = els.previewScroll;
+    if (window.getComputedStyle(sc).overflowY === 'visible') return;
+    var top = d.card.wrap.offsetTop - 12;
+    if (top < sc.scrollTop || top > sc.scrollTop + sc.clientHeight - 80) sc.scrollTop = Math.max(0, top);
+  }
+
+  function addDraft() {
+    var d = { id: newId(), reviewer: '', title: defaultTitle(''), titleAuto: true, text: '' };
+    state.drafts.push(d);
+    mountDraft(d);
+    selectDraft(d.id, { focus: false });
+    d.reviewerInput.focus();
+    saveDrafts();
+    renderDraft(d);
+  }
+
+  function removeDraft(d) {
+    if (!d || !draftById(d.id)) return;
+    var name = d.reviewer ? 'Reviewer ' + d.reviewer : 'this reviewer';
+    if (d.ta.value.trim() && !window.confirm('Remove the response to ' + name + '? Its draft will be deleted.')) return;
+    var idx = state.drafts.indexOf(d), wrap = d.card.wrap;
+    d.renderId++;
+    clearTimeout(d.timer);
+    wrap.parentNode.removeChild(wrap);
+    d.panel.parentNode.removeChild(d.panel);
+    if (state.mathReady) mjChain = mjChain.then(function () { MathJax.typesetClear([wrap]); });
+    state.drafts.splice(idx, 1);
+    if (!state.drafts.length) {
+      var blank = { id: newId(), reviewer: '', title: defaultTitle(''), titleAuto: true, text: '' };
+      state.drafts.push(blank);
+      mountDraft(blank);
+      renderDraft(blank);
+    }
+    state.active = null;
+    selectDraft(state.drafts[Math.min(idx, state.drafts.length - 1)].id, { focus: false });
+    saveDrafts();
+    updateStatus();
+    toast('Removed the response to ' + name + '.');
+  }
+
   /* ---------------- rendering ---------------- */
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function forumDate(d) {
     return pad(d.getDate()) + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear() + ', ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
   }
 
-  function setNoteTitle(title) {
+  function setNoteTitle(h4, title) {
     var node = document.createElement(title ? 'strong' : 'span');
     node.textContent = title || 'Official Comment by Authors';
-    els.noteTitle.textContent = '';
-    els.noteTitle.appendChild(node);
+    h4.textContent = '';
+    h4.appendChild(node);
   }
 
-  function scheduleRender() {
-    state.dirty = true;
+  function scheduleRender(d) {
+    d.dirty = true;
     updateStatus();
     if (!state.live) return;
-    clearTimeout(renderTimer);
-    renderTimer = setTimeout(renderNow, 250);
+    clearTimeout(d.timer);
+    d.timer = setTimeout(function () { renderDraft(d); }, 250);
   }
 
-  function renderNow() {
-    clearTimeout(renderTimer);
-    if (!state.ready) { updateStatus(); return; }
-    var id = ++state.renderId;
-    var src = els.editor.value, text = src.trim(), mode = state.mode, title = els.title.value.trim();
+  function renderDraft(d) {
+    clearTimeout(d.timer);
+    if (!state.ready) { updateStatus(); return Promise.resolve(); }
+    var id = ++d.renderId;
+    var src = d.ta.value, text = src.trim(), mode = state.mode, title = d.title.trim();
     var html = text ? pipelineHTML(text, mode) : '';
-    state.dirty = false;
-    state.rendering = true;
+    d.dirty = false;
+    d.rendering = true;
     updateStatus();
 
     var swap = function () {
-      if (id !== state.renderId) return null;
-      if (state.mathReady) MathJax.typesetClear([els.valueEl, els.noteTitle]);
-      setNoteTitle(title);
-      var el = document.createElement(mode === 'markdown' ? 'div' : 'span');
-      el.className = mode === 'markdown' ? 'note-content-value markdown-rendered' : 'note-content-value';
-      el.id = 'valueEl';
+      if (id !== d.renderId || !d.card.wrap.parentNode) return null;
+      if (state.mathReady) MathJax.typesetClear([d.card.value, d.card.title]);
+      setNoteTitle(d.card.title, title);
+      var node = document.createElement(mode === 'markdown' ? 'div' : 'span');
+      node.className = mode === 'markdown' ? 'note-content-value markdown-rendered' : 'note-content-value';
       if (text) {
-        el.innerHTML = html;
-        fixRelativeUrls(el);
+        node.innerHTML = html;
+        fixRelativeUrls(node);
       } else {
-        el.innerHTML = '<em>Nothing to preview</em>';
+        node.innerHTML = '<em>Nothing to preview</em>';
       }
-      els.valueHost.replaceChild(el, els.valueEl);
-      els.valueEl = el;
-      els.noteDate.textContent = forumDate(new Date());
-      return el;
+      d.card.host.replaceChild(node, d.card.value);
+      d.card.value = node;
+      d.card.date.textContent = forumDate(new Date());
+      return node;
     };
 
     if (!state.mathReady) {
       swap();
-      state.rendering = false;
+      d.rendering = false;
       updateStatus();
-      renderChecks(null);
-      return;
+      updateCardMeta(d);
+      if (d.id === state.active) renderChecks(null);
+      return Promise.resolve();
     }
     mjChain = mjChain.then(function () {
-      var el = swap();
-      if (!el) return null;
-      return MathJax.typesetPromise([el, els.noteTitle]).then(function () {
-        if (id !== state.renderId) return;
-        state.rendering = false;
-        updateStatus();
+      var node = swap();
+      if (!node) return null;
+      return MathJax.typesetPromise([node, d.card.title]).then(function () {
+        if (id !== d.renderId) return;
+        d.rendering = false;
         var a = null;
         try {
           a = analyzeAll(src, mode);
-          addTexIssues(a, el);
+          addTexIssues(a, node);
         } catch (err) {
           if (window.console) console.error(err);
         }
-        state.analysis = a;
-        renderChecks(a);
+        d.analysis = a;
+        updateStatus();
+        updateCardMeta(d);
+        updateTabBadge(d);
+        if (d.id === state.active) renderChecks(a);
       });
     }).catch(function (err) {
       if (window.console) console.error(err);
-      state.rendering = false;
+      d.rendering = false;
       updateStatus();
     });
+    return mjChain;
+  }
+
+  function renderAll() {
+    state.drafts.forEach(function (d) { renderDraft(d); });
+    return mjChain;
   }
 
   function compile() {
-    renderNow();
-    flash(els.note);
+    renderAll();
+    var d = activeDraft();
+    if (d) flash(d.card.note);
   }
 
   function flash(node) {
@@ -900,10 +1268,12 @@ We will add these clarifications to the revision.
 
   function updateStatus() {
     var text, cls = '';
+    var dirty = state.drafts.some(function (d) { return d.dirty; });
+    var busy = state.drafts.some(function (d) { return d.rendering; });
     if (state.failed) { text = 'Renderer did not load'; cls = 'bad'; }
     else if (!state.ready) { text = 'Loading renderer'; }
-    else if (state.dirty && !state.live) { text = 'Out of date'; cls = 'warn'; }
-    else if (state.rendering || state.dirty) { text = 'Updating'; cls = 'info'; }
+    else if (dirty && !state.live) { text = 'Out of date'; cls = 'warn'; }
+    else if (busy || dirty) { text = 'Updating'; cls = 'info'; }
     else if (!state.mathReady) { text = state.mathFailed ? 'MathJax did not load' : 'Loading MathJax'; cls = state.mathFailed ? 'bad' : ''; }
     else { text = state.live ? 'Live' : 'Up to date'; cls = 'ok'; }
     els.status.textContent = '';
@@ -914,7 +1284,9 @@ We will add these clarifications to the revision.
   /* ---------------- counter (same rule as OpenReview's CharCounter) ---------------- */
   function fmt(n) { return n.toLocaleString('en-US'); }
   function updateCounter() {
-    var value = els.editor.value.trim();
+    var d = activeDraft();
+    if (!d) return;
+    var value = d.ta.value.trim();
     var len = value.length, limit = state.limit, rem = limit - len;
     var level = limit > 0 ? (rem < 1 ? 'danger' : rem < WARN_BELOW ? 'warning' : '') : '';
     var words = len ? value.split(/\s+/).length : 0;
@@ -926,9 +1298,10 @@ We will add these clarifications to the revision.
   }
 
   function updateCursor() {
-    var v = els.editor.value, p = els.editor.selectionStart || 0;
-    var before = v.slice(0, p);
-    els.cursorPos.textContent = 'Ln ' + before.split('\n').length + ', Col ' + (p - before.lastIndexOf('\n'));
+    var d = activeDraft();
+    if (!d) return;
+    var p = d.ta.selectionStart || 0, before = d.ta.value.slice(0, p);
+    d.cursorEl.textContent = 'Ln ' + before.split('\n').length + ', Col ' + (p - before.lastIndexOf('\n'));
   }
 
   /* ---------------- analysis: find equations that Markdown breaks ---------------- */
@@ -1607,7 +1980,7 @@ We will add these clarifications to the revision.
     'lineHeight', 'letterSpacing', 'wordSpacing', 'tabSize', 'textIndent', 'textTransform'];
 
   function caretTop(pos) {
-    var ta = els.editor, cs = window.getComputedStyle(ta);
+    var ta = editor(), cs = window.getComputedStyle(ta);
     if (!mirror) {
       mirror = document.createElement('div');
       mirror.setAttribute('aria-hidden', 'true');
@@ -1634,7 +2007,7 @@ We will add these clarifications to the revision.
   }
 
   function selectRange(s, e) {
-    var ta = els.editor;
+    var ta = editor();
     try { ta.focus({ preventScroll: true }); } catch (err) { ta.focus(); }
     ta.setSelectionRange(s, e);
     ta.scrollTop = Math.max(0, caretTop(s) - ta.clientHeight / 3);
@@ -1655,13 +2028,14 @@ We will add these clarifications to the revision.
   }
 
   function reveal(a, it) {
-    if (els.editor.value === a.src) selectRange(a.lead + it.start, a.lead + Math.max(it.start, it.end));
+    var d = activeDraft();
+    if (d && d.ta.value === a.src) selectRange(a.lead + it.start, a.lead + Math.max(it.start, it.end));
     if (it.el) spotlight(it.el);
   }
 
   // Replace text through the browser's editing commands so Ctrl+Z / Cmd+Z still works.
   function replaceRange(s, e, str) {
-    var ta = els.editor, before = ta.value;
+    var d = activeDraft(), ta = d.ta, before = ta.value;
     if (s === e && !str) return;
     var expected = before.slice(0, s) + str + before.slice(e), keep = ta.scrollTop, ok = false;
     ta.focus();
@@ -1670,27 +2044,28 @@ We will add these clarifications to the revision.
     if (!ok || ta.value !== expected) {
       ta.value = expected;
       ta.setSelectionRange(s + str.length, s + str.length);
-      onEditorInput();
+      onEditorInput(d);
     }
     ta.scrollTop = keep;
   }
 
   function refreshAfterChange() {
-    renderNow();
+    var d = activeDraft();
+    if (d) renderDraft(d);
     toast('The text changed after the last check, so the checks were refreshed. Try again.');
   }
 
   function applyFix(it) {
-    var a = state.analysis;
-    if (!a || els.editor.value !== a.src) { refreshAfterChange(); return; }
+    var d = activeDraft(), a = d && d.analysis;
+    if (!a || d.ta.value !== a.src) { refreshAfterChange(); return; }
     replaceRange(a.lead + it.edit.start, a.lead + it.edit.end, it.edit.text);
-    renderNow();
+    renderDraft(d);
     toast('Fixed. Press ' + UNDO_KEY + ' in the editor to undo.');
   }
 
   function applyAll() {
-    var a = state.analysis;
-    if (!a || els.editor.value !== a.src) { refreshAfterChange(); return; }
+    var d = activeDraft(), a = d && d.analysis;
+    if (!a || d.ta.value !== a.src) { refreshAfterChange(); return; }
     var fixes = (a.fixAllEdits || []).slice().sort(function (x, y) { return y.start - x.start; });
     var text = a.src, floor = Infinity, count = 0;
     fixes.forEach(function (f) {
@@ -1702,11 +2077,11 @@ We will add these clarifications to the revision.
     });
     if (!count) return;
     replaceRange(0, a.src.length, text);
-    renderNow();
+    renderDraft(d);
     toast('Fixed ' + count + (count === 1 ? ' equation' : ' equations') + '. Press ' + UNDO_KEY + ' in the editor to undo.');
   }
 
-  /* ---------------- clipboard, toast, saving ---------------- */
+  /* ---------------- clipboard, toast, input ---------------- */
   function copyText(text) {
     if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
     return new Promise(function (resolve, reject) {
@@ -1725,13 +2100,14 @@ We will add these clarifications to the revision.
   function copyFailed() { toast('Copy failed. Select the text and press ' + (IS_MAC ? '\u2318C' : 'Ctrl+C') + '.'); }
 
   function copyComment() {
-    var text = els.editor.value.trim(); // OpenReview trims the value before rendering and counting
+    var d = activeDraft();
+    var text = d ? d.ta.value.trim() : ''; // OpenReview trims the value before rendering and counting
     if (!text) { toast('Nothing to copy yet.'); return; }
     copyText(text).then(function () {
-      var over = state.limit > 0 ? text.length - state.limit : 0;
+      var over = state.limit > 0 ? text.length - state.limit : 0, who = d.reviewer ? ' for ' + d.reviewer : '';
       toast(over > 0
         ? 'Copied, but it is ' + fmt(over) + ' characters over the ' + fmt(state.limit) + ' limit. Shorten it before posting.'
-        : 'Copied ' + fmt(text.length) + ' characters. Paste them into the OpenReview comment box.');
+        : 'Copied ' + fmt(text.length) + ' characters' + who + '. Paste them into the OpenReview comment box.');
     }, copyFailed);
   }
 
@@ -1742,57 +2118,88 @@ We will add these clarifications to the revision.
     toastTimer = setTimeout(function () { els.toast.classList.remove('show'); }, 3600);
   }
 
-  function saveNow() { store('text', els.editor.value); store('title', els.title.value); }
-  function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveNow, 300); }
-
-  function onEditorInput() {
-    updateCounter();
-    updateCursor();
+  function onEditorInput(d) {
+    d.text = d.ta.value;
+    if (d.id === state.active) { updateCounter(); updateCursor(); }
+    updateCardMeta(d);
+    updateTabBadge(d);
     scheduleSave();
-    scheduleRender();
+    scheduleRender(d);
+  }
+
+  /* ---------------- PDF export (browser print dialog -> Save as PDF) ---------------- */
+  function nonEmptyDrafts() { return state.drafts.filter(function (d) { return d.ta.value.trim(); }); }
+
+  function updatePrintBreaks() {
+    var first = true;
+    state.drafts.forEach(function (d) {
+      var empty = !d.ta.value.trim();
+      d.card.wrap.classList.toggle('is-empty', empty);
+      d.card.wrap.classList.toggle('print-break', !empty && !first);
+      if (!empty) first = false;
+    });
+  }
+
+  function preparePrint() {
+    updatePrintBreaks();
+    if (savedDocTitle === null) savedDocTitle = document.title;
+    var names = nonEmptyDrafts().map(function (d) { return d.reviewer || 'reviewer'; });
+    document.title = 'OpenReview responses' + (names.length ? ' - ' + names.join(', ') : '');
+  }
+
+  function restoreTitle() {
+    if (savedDocTitle !== null) { document.title = savedDocTitle; savedDocTitle = null; }
+  }
+
+  function exportPdf() {
+    if (!nonEmptyDrafts().length) { toast('Nothing to export yet. Write at least one response first.'); return; }
+    if (!state.ready || !state.mathReady) { toast('The renderer is still loading. Try again in a moment.'); return; }
+    els.exportPdf.disabled = true;
+    renderAll().then(function () {
+      els.exportPdf.disabled = false;
+      preparePrint();
+      window.print();
+      setTimeout(restoreTitle, 1500);
+    }, function () { els.exportPdf.disabled = false; });
   }
 
   /* ---------------- events ---------------- */
-  els.editor.addEventListener('input', onEditorInput);
-  ['keyup', 'click', 'select', 'focus'].forEach(function (type) { els.editor.addEventListener(type, updateCursor); });
-  els.title.addEventListener('input', function () { scheduleSave(); scheduleRender(); });
   els.compile.addEventListener('click', compile);
   els.copyComment.addEventListener('click', copyComment);
-  els.copyTitle.addEventListener('click', function () {
-    var t = els.title.value.trim();
-    if (!t) { toast('The title is empty.'); return; }
-    copyText(t).then(function () { toast('Title copied.'); }, copyFailed);
-  });
+  els.exportPdf.addEventListener('click', exportPdf);
   els.live.addEventListener('change', function () {
     state.live = els.live.checked;
     store('live', state.live ? '1' : '0');
-    if (state.live) renderNow(); else updateStatus();
+    if (state.live) renderAll(); else updateStatus();
   });
   Array.prototype.forEach.call(modeInputs, function (r) {
     r.addEventListener('change', function () {
       if (!r.checked) return;
       state.mode = r.value === 'plain' ? 'plain' : 'markdown';
       store('mode', state.mode);
-      renderNow();
+      renderAll();
     });
   });
   els.limit.addEventListener('input', function () {
     state.limit = parseLimit(els.limit.value, 0);
     store('limit', String(state.limit));
     updateCounter();
+    state.drafts.forEach(function (d) { updateCardMeta(d); updateTabBadge(d); });
   });
   els.loadExample.addEventListener('click', function () {
-    if (els.editor.value === EXAMPLE) { toast('The example is already loaded.'); return; }
-    var hadText = els.editor.value.trim().length > 0;
-    replaceRange(0, els.editor.value.length, EXAMPLE);
-    if (!els.title.value.trim()) { els.title.value = EXAMPLE_TITLE; scheduleSave(); }
-    renderNow();
+    var d = activeDraft();
+    if (!d) return;
+    if (d.ta.value === EXAMPLE) { toast('The example is already loaded in this tab.'); return; }
+    var hadText = d.ta.value.trim().length > 0;
+    replaceRange(0, d.ta.value.length, EXAMPLE);
+    renderDraft(d);
     toast(hadText ? 'Example loaded. Press ' + UNDO_KEY + ' in the editor to get your text back.' : 'Example loaded.');
   });
   els.clearText.addEventListener('click', function () {
-    if (!els.editor.value) return;
-    replaceRange(0, els.editor.value.length, '');
-    renderNow();
+    var d = activeDraft();
+    if (!d || !d.ta.value) return;
+    replaceRange(0, d.ta.value.length, '');
+    renderDraft(d);
     toast('Cleared. Press ' + UNDO_KEY + ' in the editor to undo.');
   });
   els.fixAll.addEventListener('click', applyAll);
@@ -1806,8 +2213,10 @@ We will add these clarifications to the revision.
   document.addEventListener('keydown', function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); compile(); }
   });
-  window.addEventListener('pagehide', saveNow);
-  window.addEventListener('beforeunload', saveNow);
+  window.addEventListener('beforeprint', preparePrint);
+  window.addEventListener('afterprint', restoreTitle);
+  window.addEventListener('pagehide', saveDrafts);
+  window.addEventListener('beforeunload', saveDrafts);
 
   /* ---------------- start ---------------- */
   function waitFor(test, timeout) {
@@ -1823,11 +2232,12 @@ We will add these clarifications to the revision.
     });
   }
 
-  updateCounter();
-  updateCursor();
-  setNoteTitle(els.title.value.trim());
-  els.noteDate.textContent = forumDate(new Date());
+  state.drafts = initialDrafts();
+  state.drafts.forEach(mountDraft);
+  var startId = load('active', '');
+  selectDraft(draftById(startId) ? startId : state.drafts[0].id, { focus: false, scroll: false });
   updateStatus();
+  saveDrafts();
 
   waitFor(function () {
     return window.marked && (typeof window.marked.marked === 'function' || typeof window.marked === 'function') &&
@@ -1835,18 +2245,20 @@ We will add these clarifications to the revision.
   }, 20000).then(function () {
     setupPipeline();
     state.ready = true;
-    renderNow();
+    renderAll();
   }, function () {
     state.failed = true;
     updateStatus();
-    els.valueEl.innerHTML = '<em>Could not load the renderer from cdn.jsdelivr.net. Check your connection and reload the page.</em>';
+    state.drafts.forEach(function (d) {
+      d.card.value.innerHTML = '<em>Could not load the renderer from cdn.jsdelivr.net. Check your connection and reload the page.</em>';
+    });
   });
 
   waitFor(function () { return window.MathJax && MathJax.startup && MathJax.startup.promise; }, 30000)
     .then(function () { return MathJax.startup.promise; })
     .then(function () {
       state.mathReady = true;
-      if (state.ready) renderNow();
+      if (state.ready) renderAll();
     }, function () {
       state.mathFailed = true;
       updateStatus();
@@ -1855,9 +2267,15 @@ We will add these clarifications to the revision.
 
   // Small hook for debugging from the browser console.
   window.ORPreview = {
-    analyze: function (src, mode) { return analyzeAll(src == null ? els.editor.value : src, mode || state.mode); },
+    analyze: function (src, mode) { var d = activeDraft(); return analyzeAll(src == null ? (d ? d.ta.value : '') : src, mode || state.mode); },
     fixMarkdownMath: fixMarkdownMath,
-    render: renderNow,
+    render: function () { var d = activeDraft(); return d ? renderDraft(d) : Promise.resolve(); },
+    renderAll: renderAll,
+    select: function (i) { var d = state.drafts[i]; if (d) selectDraft(d.id, { focus: true }); },
+    preparePrint: preparePrint,
+    idle: function () {
+      return state.ready && state.mathReady && state.drafts.every(function (d) { return !d.rendering && !d.dirty; });
+    },
     state: state
   };
 })();
